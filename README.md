@@ -10,6 +10,7 @@ https://github.com/microsoft/vcpkg
 
 And then , I will show how to build this project by Cmake GUI . You can see the operation instruction in the follow picture . Good luck to you building it .
 
+https://github.com/1393650770/CpuRayTracingRenderer/blob/main/image/operation_instruction_picture.png
 
 
 ## ① My Math Library --- TinyGlm
