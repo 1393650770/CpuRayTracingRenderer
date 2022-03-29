@@ -22,24 +22,6 @@ CMAKE_AR:FILEPATH=D:/Visual Stadio/VC/Tools/MSVC/14.29.30133/bin/Hostx64/x64/lib
 // else will be ignored.
 CMAKE_CONFIGURATION_TYPES:STRING=Debug;Release;MinSizeRel;RelWithDebInfo
 
-//Flags used by the CXX compiler during all build types.
-CMAKE_CXX_FLAGS:STRING=/DWIN32 /D_WINDOWS /EHsc
-
-//Flags used by the CXX compiler during DEBUG builds.
-CMAKE_CXX_FLAGS_DEBUG:STRING=/Zi /Ob0 /Od /RTC1
-
-//Flags used by the CXX compiler during MINSIZEREL builds.
-CMAKE_CXX_FLAGS_MINSIZEREL:STRING=/O1 /Ob1 /DNDEBUG
-
-//Flags used by the CXX compiler during RELEASE builds.
-CMAKE_CXX_FLAGS_RELEASE:STRING=/O2 /Ob2 /DNDEBUG
-
-//Flags used by the CXX compiler during RELWITHDEBINFO builds.
-CMAKE_CXX_FLAGS_RELWITHDEBINFO:STRING=/Zi /O2 /Ob1 /DNDEBUG
-
-//Libraries linked by default with all C++ applications.
-CMAKE_CXX_STANDARD_LIBRARIES:STRING=kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib
-
 //Flags used by the C compiler during all build types.
 CMAKE_C_FLAGS:STRING=/DWIN32 /D_WINDOWS
 
@@ -230,12 +212,6 @@ X_VCPKG_APPLOCAL_DEPS_INSTALL:BOOL=OFF
 // serialization.
 X_VCPKG_APPLOCAL_DEPS_SERIALIZED:BOOL=OFF
 
-//Path to a program.
-Z_VCPKG_BUILTIN_POWERSHELL_PATH:FILEPATH=C:/Windows/System32/WindowsPowerShell/v1.0/powershell.exe
-
-//Path to a program.
-Z_VCPKG_PWSH_PATH:FILEPATH=Z_VCPKG_PWSH_PATH-NOTFOUND
-
 //The directory which contains the installed libraries for each
 // triplet
 _VCPKG_INSTALLED_DIR:PATH=D:/LearnOpenGL/CpuRayTracingRenderer/CpuRayTracingRenderer/vcpkg/installed
@@ -261,18 +237,8 @@ CMAKE_COMMAND:INTERNAL=D:/CMake/bin/cmake.exe
 CMAKE_CPACK_COMMAND:INTERNAL=D:/CMake/bin/cpack.exe
 //Path to ctest program executable.
 CMAKE_CTEST_COMMAND:INTERNAL=D:/CMake/bin/ctest.exe
-//ADVANCED property for variable: CMAKE_CXX_FLAGS
-CMAKE_CXX_FLAGS-ADVANCED:INTERNAL=1
-//ADVANCED property for variable: CMAKE_CXX_FLAGS_DEBUG
-CMAKE_CXX_FLAGS_DEBUG-ADVANCED:INTERNAL=1
-//ADVANCED property for variable: CMAKE_CXX_FLAGS_MINSIZEREL
-CMAKE_CXX_FLAGS_MINSIZEREL-ADVANCED:INTERNAL=1
-//ADVANCED property for variable: CMAKE_CXX_FLAGS_RELEASE
-CMAKE_CXX_FLAGS_RELEASE-ADVANCED:INTERNAL=1
-//ADVANCED property for variable: CMAKE_CXX_FLAGS_RELWITHDEBINFO
-CMAKE_CXX_FLAGS_RELWITHDEBINFO-ADVANCED:INTERNAL=1
-//ADVANCED property for variable: CMAKE_CXX_STANDARD_LIBRARIES
-CMAKE_CXX_STANDARD_LIBRARIES-ADVANCED:INTERNAL=1
+//Result of TRY_COMPILE
+CMAKE_C_ABI_COMPILED:INTERNAL=FALSE
 //ADVANCED property for variable: CMAKE_C_FLAGS
 CMAKE_C_FLAGS-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_C_FLAGS_DEBUG
@@ -383,8 +349,6 @@ VCPKG_MANIFEST_INSTALL:INTERNAL=OFF
 VCPKG_VERBOSE-ADVANCED:INTERNAL=1
 //Making sure VCPKG_MANIFEST_MODE doesn't change
 Z_VCPKG_CHECK_MANIFEST_MODE:INTERNAL=OFF
-//The path to the PowerShell implementation to use.
-Z_VCPKG_POWERSHELL_PATH:INTERNAL=C:/Windows/System32/WindowsPowerShell/v1.0/powershell.exe
 //Vcpkg root directory
 Z_VCPKG_ROOT_DIR:INTERNAL=D:/LearnOpenGL/CpuRayTracingRenderer/CpuRayTracingRenderer/vcpkg
 

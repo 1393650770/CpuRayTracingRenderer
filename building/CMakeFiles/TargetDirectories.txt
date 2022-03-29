@@ -1,3 +1,0 @@
-D:/LearnOpenGL/CpuRayTracingRenderer/CpuRayTracingRenderer/building/CMakeFiles/CpuRayTracingRenderer.dir
-D:/LearnOpenGL/CpuRayTracingRenderer/CpuRayTracingRenderer/building/CMakeFiles/ALL_BUILD.dir
-D:/LearnOpenGL/CpuRayTracingRenderer/CpuRayTracingRenderer/building/CMakeFiles/ZERO_CHECK.dir

@@ -4,6 +4,5 @@
     <CustomBuild Include="D:\LearnOpenGL\CpuRayTracingRenderer\CpuRayTracingRenderer\CMakeLists.txt" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
   </ItemGroup>
 </Project>

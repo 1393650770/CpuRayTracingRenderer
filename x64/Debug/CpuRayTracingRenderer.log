@@ -1,13 +1,6 @@
 ﻿  main.cpp
-D:\LearnOpenGL\CpuRayTracingRenderer\CpuRayTracingRenderer\TinyGlm.h(278,1): error C2106: “=”: 左操作数必须为左值
-D:\LearnOpenGL\CpuRayTracingRenderer\CpuRayTracingRenderer\TinyGlm.h(272): message : 在编译 类 模板 成员函数“TinyGlm::vec4<T> TinyGlm::operator *(const TinyGlm::mat4<T> &,const TinyGlm::vec4<T> &)”时
-          with
-          [
-              T=float
-          ]
-D:\LearnOpenGL\CpuRayTracingRenderer\CpuRayTracingRenderer\main.cpp(66): message : 查看对正在编译的函数 模板 实例化“TinyGlm::vec4<T> TinyGlm::operator *(const TinyGlm::mat4<T> &,const TinyGlm::vec4<T> &)”的引用
-          with
-          [
-              T=float
-          ]
-D:\LearnOpenGL\CpuRayTracingRenderer\CpuRayTracingRenderer\main.cpp(61): message : 查看对正在编译的 类 模板 实例化“TinyGlm::mat4<float>”的引用
+D:\LearnOpenGL\CpuRayTracingRenderer\CpuRayTracingRenderer\main.cpp(15,53): warning C4244: “return”: 从“double”转换到“float”，可能丢失数据
+D:\LearnOpenGL\CpuRayTracingRenderer\CpuRayTracingRenderer\main.cpp(23,38): warning C4244: “参数”: 从“double”转换到“const float”，可能丢失数据
+D:\LearnOpenGL\CpuRayTracingRenderer\CpuRayTracingRenderer\main.cpp(35,12): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+D:\LearnOpenGL\CpuRayTracingRenderer\CpuRayTracingRenderer\main.cpp(37,12): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+  CpuRayTracingRenderer.vcxproj -> D:\LearnOpenGL\CpuRayTracingRenderer\CpuRayTracingRenderer\x64\Debug\CpuRayTracingRenderer.exe

@@ -1,7 +1,38 @@
-﻿  main.cpp
-  正在生成代码
-  3 of 58 functions ( 5.2%) were compiled, the rest were copied from previous compilation.
-    0 functions were new in current compilation
-    0 functions had inline decision re-evaluated but remain unchanged
-  已完成代码的生成
-  CpuRayTracingRenderer.vcxproj -> D:\LearnOpenGL\CpuRayTracingRenderer\CpuRayTracingRenderer\x64\Release\CpuRayTracingRenderer.exe
+﻿  Intersection.cpp
+D:\LearnOpenGL\CpuRayTracingRenderer\CpuRayTracingRenderer\Object.h(18,24): error C3646: “GetIntersection”: 未知重写说明符
+D:\LearnOpenGL\CpuRayTracingRenderer\CpuRayTracingRenderer\Object.h(18,45): error C2065: “ray”: 未声明的标识符
+D:\LearnOpenGL\CpuRayTracingRenderer\CpuRayTracingRenderer\Object.h(18,40): error C2275: “Ray”: 将此类型用作表达式非法
+D:\LearnOpenGL\CpuRayTracingRenderer\CpuRayTracingRenderer\Ray.h(6): message : 参见“Ray”的声明
+D:\LearnOpenGL\CpuRayTracingRenderer\CpuRayTracingRenderer\Object.h(18,48): error C2096: "Intersection": 无法使用带圆括号的初始值设定项初始化数据成员
+D:\LearnOpenGL\CpuRayTracingRenderer\CpuRayTracingRenderer\Object.h(18,48): error C2433: “Obj::Object::Intersection”: 不允许在数据声明中使用“virtual”
+D:\LearnOpenGL\CpuRayTracingRenderer\CpuRayTracingRenderer\Object.h(18,48): error C4430: 缺少类型说明符 - 假定为 int。注意: C++ 不支持默认 int
+D:\LearnOpenGL\CpuRayTracingRenderer\CpuRayTracingRenderer\Object.h(18,48): fatal error C1903: 无法从以前的错误中恢复；正在停止编译
+  main.cpp
+D:\LearnOpenGL\CpuRayTracingRenderer\CpuRayTracingRenderer\Intersection.h(17,2): error C2653: “Obj”: 不是类或命名空间名称
+D:\LearnOpenGL\CpuRayTracingRenderer\CpuRayTracingRenderer\Intersection.h(17,13): error C2143: 语法错误: 缺少“;”(在“*”的前面)
+D:\LearnOpenGL\CpuRayTracingRenderer\CpuRayTracingRenderer\Intersection.h(17,13): error C4430: 缺少类型说明符 - 假定为 int。注意: C++ 不支持默认 int
+D:\LearnOpenGL\CpuRayTracingRenderer\CpuRayTracingRenderer\Intersection.h(17,18): error C2238: 意外的标记位于“;”之前
+D:\LearnOpenGL\CpuRayTracingRenderer\CpuRayTracingRenderer\main.cpp(12,53): warning C4244: “return”: 从“double”转换到“float”，可能丢失数据
+D:\LearnOpenGL\CpuRayTracingRenderer\CpuRayTracingRenderer\main.cpp(19,38): warning C4244: “参数”: 从“double”转换到“const float”，可能丢失数据
+D:\LearnOpenGL\CpuRayTracingRenderer\CpuRayTracingRenderer\main.cpp(28,25): warning C4018: “<”: 有符号/无符号不匹配
+D:\LearnOpenGL\CpuRayTracingRenderer\CpuRayTracingRenderer\main.cpp(29,26): warning C4018: “<”: 有符号/无符号不匹配
+D:\LearnOpenGL\CpuRayTracingRenderer\CpuRayTracingRenderer\main.cpp(31,12): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+D:\LearnOpenGL\CpuRayTracingRenderer\CpuRayTracingRenderer\main.cpp(33,12): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+D:\LearnOpenGL\CpuRayTracingRenderer\CpuRayTracingRenderer\main.cpp(43,13): error C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  Object.cpp
+D:\LearnOpenGL\CpuRayTracingRenderer\CpuRayTracingRenderer\Intersection.h(17,2): error C2653: “Obj”: 不是类或命名空间名称
+D:\LearnOpenGL\CpuRayTracingRenderer\CpuRayTracingRenderer\Intersection.h(17,13): error C2143: 语法错误: 缺少“;”(在“*”的前面)
+D:\LearnOpenGL\CpuRayTracingRenderer\CpuRayTracingRenderer\Intersection.h(17,13): error C4430: 缺少类型说明符 - 假定为 int。注意: C++ 不支持默认 int
+D:\LearnOpenGL\CpuRayTracingRenderer\CpuRayTracingRenderer\Intersection.h(17,18): error C2238: 意外的标记位于“;”之前
+  Scene.cpp
+D:\LearnOpenGL\CpuRayTracingRenderer\CpuRayTracingRenderer\Scene.cpp(3,22): error C2572: “Scene::Scene”: 重定义默认参数 : 参数 1
+D:\LearnOpenGL\CpuRayTracingRenderer\CpuRayTracingRenderer\Scene.h(11): message : 参见“Scene::Scene”的声明
+D:\LearnOpenGL\CpuRayTracingRenderer\CpuRayTracingRenderer\Scene.cpp(3,36): error C2572: “Scene::Scene”: 重定义默认参数 : 参数 2
+D:\LearnOpenGL\CpuRayTracingRenderer\CpuRayTracingRenderer\Scene.h(11): message : 参见“Scene::Scene”的声明
+  Sphere.cpp
+D:\LearnOpenGL\CpuRayTracingRenderer\CpuRayTracingRenderer\Intersection.h(17,2): error C2653: “Obj”: 不是类或命名空间名称
+D:\LearnOpenGL\CpuRayTracingRenderer\CpuRayTracingRenderer\Intersection.h(17,13): error C2143: 语法错误: 缺少“;”(在“*”的前面)
+D:\LearnOpenGL\CpuRayTracingRenderer\CpuRayTracingRenderer\Intersection.h(17,13): error C4430: 缺少类型说明符 - 假定为 int。注意: C++ 不支持默认 int
+D:\LearnOpenGL\CpuRayTracingRenderer\CpuRayTracingRenderer\Intersection.h(17,18): error C2238: 意外的标记位于“;”之前
+D:\LearnOpenGL\CpuRayTracingRenderer\CpuRayTracingRenderer\Sphere.cpp(64,9): error C2039: "obj": 不是 "Intersection" 的成员
+D:\LearnOpenGL\CpuRayTracingRenderer\CpuRayTracingRenderer\Intersection.h(7): message : 参见“Intersection”的声明
