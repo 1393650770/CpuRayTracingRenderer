@@ -8,7 +8,7 @@ static char THIS_FILE[] = __FILE__;//注意__FILE__是双下划线
 #endif 
 
 
-Scene::Scene(int w , int h ):width(w),height(h)
+Scene::Scene(int w , int h ):width(w),height(h),eye_pos(TinyGlm::vec3<float>(0.0f,0.0f,0.0f))
 {
 }
 

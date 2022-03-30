@@ -3,12 +3,14 @@
 #include"Ray.h"
 #include"Sphere.h"
 #include"Scene.h"
+#include"InputHandle.h"
 #include"Renderer.h"
 #include<vector>
 #include<iostream>
 #include<fstream>
 #include<string>
 #include<stdio.h>
+
 
 #ifdef	_DEBUG
 #define _CRTDBG_MAP_ALLOC
@@ -31,10 +33,18 @@ int main(int argc, char* argv[])
 	EnableMemLeakCheck();
 	Scene scene(SceneWidth, SceneHeight);
 	Renderer render(scene.width, scene.height);
+	InputHandle input;
+
 	std::shared_ptr<Sphere>  sphere = std::make_shared<Sphere>(TinyGlm::vec3<float>(0, 0, -1), 0.5f);
 
 	scene.Add(sphere);
-	render.Render(scene);
+	while (input.is_runing)
+	{
+		input.ListenInput();
+
+		render.Render(scene);
+	}
+	
 
 	//delete sphere;
 	return 0;

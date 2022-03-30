@@ -10,18 +10,27 @@ MESSAGE( "this var key = ${CMAKE_TOOLCHAIN_FILE}.")
 project(CpuRayTracingRenderer)
 
 
-set(SOURCES
+set(STATIC_LIB_SOURCES
     src/TinyGlm.cpp
     src/Intersection.cpp
     src/Object.cpp
     src/Ray.cpp
     src/MessageQueue.cpp
-    src/Renderer.cpp
     src/Scene.cpp
     src/Sphere.cpp
+    src/IPostProcess.cpp
+    src/PostProcessHandle.cpp
 )
+
+set(EXECUTABLE_SOURCES
+    src/main.cpp
+    src/Renderer.cpp
+    src/SDLWindows.cpp
+    src/InputHandle.cpp
+)
+
 add_library(CpuRayTracingRenderer_library STATIC 
-    ${SOURCES}
+    ${STATIC_LIB_SOURCES}
 )
 target_include_directories(CpuRayTracingRenderer_library
     PUBLIC 
@@ -31,7 +40,7 @@ target_include_directories(CpuRayTracingRenderer_library
 
 find_package(SDL2 CONFIG REQUIRED)
 
-add_executable(CpuRayTracingRenderer  src/main.cpp)
+add_executable(CpuRayTracingRenderer  ${EXECUTABLE_SOURCES})
 
 target_link_libraries(CpuRayTracingRenderer
     PRIVATE 

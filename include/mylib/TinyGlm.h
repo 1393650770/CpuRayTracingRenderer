@@ -8,6 +8,14 @@
 namespace TinyGlm
 {
 	template<typename T>
+	class vec3;
+	template<typename T>
+	class vec4;
+	template<typename T>
+	class vec2;
+
+
+	template<typename T>
 	class vec4
 	{
 	public:
@@ -16,10 +24,16 @@ namespace TinyGlm
 		vec4(T _x, T _y, T _z, T _w);
 		vec4(T _x, T _y, T _z);
 		vec4(const vec4<T>& _vec4) = default;
+
 		vec4(vec4<T>&& _vec4) = default;
 
+		vec4(const vec3<T>& _vec3);
+		
 		template<typename U>
 		vec4(const vec4<U>& _vec4);
+
+		template<typename U>
+		vec4(const vec3<U>& _vec3);
 
 		template<typename U>
 		vec4(vec4<U>&& _vec4) noexcept;
@@ -704,6 +718,17 @@ namespace TinyGlm
 	}
 
 	template<typename T>
+	inline vec4<T>::vec4(const TinyGlm::vec3<T>& _vec3)
+	{
+		x = _vec3.x;
+		y = _vec3.y;
+		z = _vec3.z;
+		w = static_cast<T>(1.0f);
+	}
+
+
+
+	template<typename T>
 	TinyGlm::vec4<T>::~vec4()
 	{
 	}
@@ -718,7 +743,15 @@ namespace TinyGlm
 		w = static_cast<T>(_vec4.w);
 	}
 
-
+	template<typename T>
+	template<typename U>
+	TinyGlm::vec4<T>::vec4(const vec3<U>& _vec3)
+	{
+		x = static_cast<T>(_vec3.x);
+		y = static_cast<T>(_vec3.y);
+		z = static_cast<T>(_vec3.z);
+		w = static_cast<T>(1.0f);
+	}
 
 
 	template<typename T>

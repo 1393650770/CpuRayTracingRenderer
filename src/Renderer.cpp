@@ -2,7 +2,9 @@
 #include "Sphere.h"
 #include "Ray.h"
 #include "Scene.h"
+#include "SDLWindows.h"
 #include "TinyGlm.h"
+#include "PostProcessHandle.h"
 #include <thread>
 #include <queue>
 #include <mutex>
@@ -10,7 +12,7 @@
 #include "windows.h"
 #include <cmath>
 #include <iostream>
-#include<fstream>
+#include <fstream>
 
 float deg2rad(const float& deg) { return deg * 3.1415926f / 180.0; }
 
@@ -25,12 +27,14 @@ TinyGlm::vec3<float> Color(const Ray& ray, Sphere& sphere)
 }
 
 
-void RenderFrame( std::pair<int,int> x, std::pair<int, int> y, TinyGlm::vec3 <float>& eye_pos, Scene& scene, std::vector < TinyGlm::vec3 < float> >& framebuffer)
+void RenderFrame(std::pair<int, int> x, std::pair<int, int> y, Scene& scene, std::vector < TinyGlm::vec3 < float> >& framebuffer)
 {
+	
 	int m = 0;
-	int spp = 126;
+	int spp = 1;
 	float imageAspectRatio = scene.width / (float)scene.height;
 	float scale = tan(deg2rad(scene.fov * 0.5));
+	int int_X = 0, int_Y = 0;
 	for (int j = y.first; j < y.second; ++j) 
 	{
 		m = j * scene.width + x.first;
@@ -41,71 +45,54 @@ void RenderFrame( std::pair<int,int> x, std::pair<int, int> y, TinyGlm::vec3 <fl
 			float y = (1 - 2 * (j + 0.5) / (float)scene.height) * scale;
 
 			TinyGlm::vec3 < float> dir = TinyGlm::vec3 < float>(-x, y, 1).normalize();
-			for (int k = 0; k < spp; k++) {
+			for (int k = 0; k < spp; k++) 
+			{
+				framebuffer[m] = Color(Ray(scene.eye_pos, dir), *dynamic_cast<Sphere*>(scene.objlist[0].get()));
+			}			
 
-				framebuffer[m] = Color(Ray(eye_pos, dir), *dynamic_cast<Sphere*>(scene.objlist[0].get()));
-			}
+			/*TinyGlm::vec4<float> colorVec4(framebuffer[m].x, framebuffer[m].y, framebuffer[m].z, 1.0f);
+			sdlwindows.DrawPixel(i, j, colorVec4);*/
 			m++;
 		}
 	}
 }
 
 
-Renderer::Renderer(int scene_width, int scene_height)
+void Renderer::DrawBuffer(Scene& scene, std::vector<TinyGlm::vec3<float>>& framebuffer)
 {
-	SYSTEM_INFO sysInfo;
-	GetSystemInfo(&sysInfo);
-	cpu_core_num = sysInfo.dwNumberOfProcessors;
-	
-	int clip_num = std::sqrt(cpu_core_num*2);
-	int clip_disX = std::floor(scene_width / clip_num),clip_disY = std::floor(scene_height / clip_num);
-	int minAxisX = 0, maxAxisX = 0, minAxisY = 0, maxAxisY = 0;
-	for (size_t i = 0; i < clip_num; i++)
-	{
-		if (i + 1 == clip_num)
-		{
-			maxAxisX = scene_width;
-			maxAxisY = scene_height;
-		}
-		else
-		{
-			maxAxisX=minAxisX + clip_disX;
-			maxAxisY = maxAxisY + clip_disY;
-		}
-
-		scene_tile.push_back(std::make_pair(std::make_pair(minAxisX, maxAxisX), std::make_pair(minAxisY, maxAxisY)));
-		minAxisX = maxAxisX;
-		minAxisY = maxAxisY;
-	}
-}
-
-Renderer::~Renderer()
-{
-}
-
-void Renderer::Render(Scene& scene)
-{
-	auto start = std::chrono::system_clock::now();
-	std::vector < TinyGlm::vec3 < float> > framebuffer(scene.width * scene.height);
-	TinyGlm::vec3 < float> eye_pos(0, 0, 0);
 	std::vector<std::thread> thread_list;
 	for (size_t i = 0; i < scene_tile.size(); i++)
 	{
 		for (size_t j = 0; j < scene_tile.size(); j++)
 		{
-			thread_list.push_back(std::thread(RenderFrame,scene_tile[i].first , scene_tile[j].second, std::ref(eye_pos), std::ref(scene) , std::ref(framebuffer)));
+			thread_list.push_back(std::thread(RenderFrame, scene_tile[i].first, scene_tile[j].second,  std::ref(scene), std::ref(framebuffer)));
 		}
 	}
-	for (int i = 0; i < thread_list.size(); i++) 
+	for (int i = 0; i < thread_list.size(); i++)
 		thread_list[i].join();
-	//RenderFrame(std::make_pair(0, scene.width), std::make_pair(0, scene.height), eye_pos, scene, framebuffer);
+}
 
+void Renderer::DrawScreenPixel(std::vector<TinyGlm::vec3<float>>& framebuffer)
+{
+	int m = 0;
+	for (int j = 0; j < scene_height; ++j)
+	{
+		for (int i = 0; i < scene_width; ++i)
+		{
+			sdl_windows->DrawPixel(i, j, TinyGlm::vec4<float>(framebuffer[m]));
+			m++;
+		}
+	}
+}
+
+void Renderer::WriteToPPM(std::vector<TinyGlm::vec3<float>>& framebuffer)
+{
 	std::fstream fp;
 	fp.open(std::string("RayTracing.ppm"), std::fstream::binary | std::fstream::out);
 	if (fp.is_open())
 	{
-		fp << "P3\n" << scene.width << " " << scene.height << "\n255\n";
-		for (auto i = 0; i < scene.height * scene.width; ++i) {
+		fp << "P3\n" << scene_width << " " << scene_height << "\n255\n";
+		for (auto i = 0; i < scene_height * scene_width; ++i) {
 			int colorChar[3];
 			colorChar[0] = (int)(255 * framebuffer[i].x);
 			colorChar[1] = (int)(255 * framebuffer[i].y);
@@ -122,11 +109,69 @@ void Renderer::Render(Scene& scene)
 	}
 	fp.flush();
 	fp.close();
-	auto stop = std::chrono::system_clock::now();
-	std::cout << "Time taken: " << std::chrono::duration_cast<std::chrono::hours>(stop - start).count() << " hours\n";
-	std::cout << "          : " << std::chrono::duration_cast<std::chrono::minutes>(stop - start).count() << " minutes\n";
-	std::cout << "          : " << std::chrono::duration_cast<std::chrono::seconds>(stop - start).count() << " seconds\n";
+}
 
+Renderer::Renderer(int _scene_width, int _scene_height):scene_width(_scene_width), scene_height(_scene_height)
+{
+	framebuff_list.fill(std::vector<TinyGlm::vec3<float>>(scene_height * scene_width, TinyGlm::vec3<float>(0.0f, 0.0f, 0.0f)));
+
+	SYSTEM_INFO sysInfo;
+	GetSystemInfo(&sysInfo);
+	cpu_core_num = sysInfo.dwNumberOfProcessors;
+	bool is_init_success = true;
+	sdl_windows = new SDLWindows(is_init_success, _scene_width, _scene_height);
+	assert(is_init_success);
+
+	int clip_num = std::sqrt(cpu_core_num*2);
+	int clip_disX = std::floor(_scene_width / clip_num),clip_disY = std::floor(_scene_height / clip_num);
+	int minAxisX = 0, maxAxisX = 0, minAxisY = 0, maxAxisY = 0;
+	for (size_t i = 0; i < clip_num; i++)
+	{
+		if (i + 1 == clip_num)
+		{
+			maxAxisX = _scene_width;
+			maxAxisY = _scene_height;
+		}
+		else
+		{
+			maxAxisX=minAxisX + clip_disX;
+			maxAxisY = maxAxisY + clip_disY;
+		}
+
+		scene_tile.push_back(std::make_pair(std::make_pair(minAxisX, maxAxisX), std::make_pair(minAxisY, maxAxisY)));
+		minAxisX = maxAxisX;
+		minAxisY = maxAxisY;
+	}
+}
+
+Renderer::~Renderer()
+{
+	delete sdl_windows;
+}
+
+void Renderer::Render(Scene& scene,bool use_postprocess, PostProcessHandle* postpocess_handle)
+{
+	auto start = std::chrono::system_clock::now();
+	
+	//Draw buffer in one frame 
+	DrawBuffer(scene, framebuff_list[0]);
+
+	//Use PostProcess
+	if (use_postprocess)
+	{
+		std::copy(framebuff_list[0].begin(), framebuff_list[0].end(), framebuff_list[1].begin());
+		postpocess_handle->Execute(framebuff_list[1]);
+		DrawScreenPixel(framebuff_list[1]);
+	}
+	else
+	{
+		DrawScreenPixel(framebuff_list[0]);
+	}
+	sdl_windows->Refresh();
+
+	auto stop = std::chrono::system_clock::now();
+	std::cout << "FPS: " << int(1.0f/(float(std::chrono::duration_cast<std::chrono::milliseconds>(stop - start).count())/1000.0f)) << "\n";
+	std::cout << "          : " << std::chrono::duration_cast<std::chrono::milliseconds>(stop - start).count() << " milliseconds\n";
 }
 
 

@@ -4,7 +4,6 @@ Sphere::Sphere(const TinyGlm::vec3<float>& _center, float _radius) :center(_cent
 {
 }
 
-
 Sphere::~Sphere()
 {
 }
