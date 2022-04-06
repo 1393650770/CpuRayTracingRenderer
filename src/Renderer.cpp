@@ -1,4 +1,6 @@
 #include "Renderer.h"
+#include "PublicSingleton.h"
+#include "ThreadPool.h"
 #include "Sphere.h"
 #include "Ray.h"
 #include "Scene.h"
@@ -17,11 +19,18 @@
 float deg2rad(const float& deg) { return deg * 3.1415926f / 180.0; }
 
 
-TinyGlm::vec3<float> Color(const Ray& ray, Sphere& sphere)
+TinyGlm::vec3<float> Color(Ray& ray, Sphere& sphere)
 {
-	if (sphere.CheckIsIntersect(ray))
+	Intersection inter = sphere.GetIntersection(ray);
+	if (inter.hit)
 	{
-		return TinyGlm::vec3<float>(1.0f, 0.0f, 0.0f);
+		TinyGlm::vec3<float> N; 
+		TinyGlm::vec3<float> I;
+		int index=0;
+		TinyGlm::vec2<float> uv;
+		TinyGlm::vec2<float> st;
+		sphere.getSurfaceProperties(inter.coords, I, index, uv, N, st);
+		return TinyGlm::vec3<float>((1.0f+N.x)*0.5f, (1.0f + N.y) * 0.5f, (1.0f + N.z) * 0.5f);
 	}
 	return TinyGlm::vec3<float>(0.1f, 0.1f, 0.1f);
 }
@@ -49,7 +58,7 @@ void RenderFrame(std::pair<int, int> x, std::pair<int, int> y, Scene& scene, std
 			{
 				framebuffer[m] = Color(Ray(scene.eye_pos, dir), *dynamic_cast<Sphere*>(scene.objlist[0].get()));
 			}			
-
+			//std::cout << "x " << framebuffer[m].x << " y " << framebuffer[m].y << " z " << framebuffer[m].z << std::endl;
 			/*TinyGlm::vec4<float> colorVec4(framebuffer[m].x, framebuffer[m].y, framebuffer[m].z, 1.0f);
 			sdlwindows.DrawPixel(i, j, colorVec4);*/
 			m++;
@@ -60,16 +69,19 @@ void RenderFrame(std::pair<int, int> x, std::pair<int, int> y, Scene& scene, std
 
 void Renderer::DrawBuffer(Scene& scene, std::vector<TinyGlm::vec3<float>>& framebuffer)
 {
-	std::vector<std::thread> thread_list;
+	
 	for (size_t i = 0; i < scene_tile.size(); i++)
 	{
 		for (size_t j = 0; j < scene_tile.size(); j++)
 		{
-			thread_list.push_back(std::thread(RenderFrame, scene_tile[i].first, scene_tile[j].second,  std::ref(scene), std::ref(framebuffer)));
+			PublicSingleton<ThreadPool>::get_instance().SubmitMessage(RenderFrame, scene_tile[i].first, scene_tile[j].second, std::ref(scene), std::ref(framebuffer));
+			//thread_pool->SubmitMessage(RenderFrame, scene_tile[i].first, scene_tile[j].second, std::ref(scene), std::ref(framebuffer));
+
 		}
 	}
-	for (int i = 0; i < thread_list.size(); i++)
-		thread_list[i].join();
+	//PublicSingleton<ThreadPool>::get_instance().Join();
+	//thread_pool->CloseTheadPool();
+
 }
 
 void Renderer::DrawScreenPixel(std::vector<TinyGlm::vec3<float>>& framebuffer)
@@ -121,6 +133,8 @@ Renderer::Renderer(int _scene_width, int _scene_height):scene_width(_scene_width
 	bool is_init_success = true;
 	sdl_windows = new SDLWindows(is_init_success, _scene_width, _scene_height);
 	assert(is_init_success);
+	
+	//thread_pool->Init(cpu_core_num);
 
 	int clip_num = std::sqrt(cpu_core_num*2);
 	int clip_disX = std::floor(_scene_width / clip_num),clip_disY = std::floor(_scene_height / clip_num);
@@ -149,10 +163,10 @@ Renderer::~Renderer()
 	delete sdl_windows;
 }
 
-void Renderer::Render(Scene& scene,bool use_postprocess, PostProcessHandle* postpocess_handle)
+
+void Renderer::tick(Scene& scene,bool use_postprocess, PostProcessHandle* postpocess_handle)
 {
 	auto start = std::chrono::system_clock::now();
-	
 	//Draw buffer in one frame 
 	DrawBuffer(scene, framebuff_list[0]);
 

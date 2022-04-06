@@ -23,24 +23,22 @@ public:
     {
         std::lock_guard<std::mutex> lock(mut);
         que.push(mes);
-        condit.notify_one();
     };
-    T Pop(bool isBlocked = true)
+    T Pop(bool& result_bool)
     {
-
-        if (isBlocked)
+        if (que.empty())
         {
-            xtime abs_time = 5;
-            std::unique_lock<std::mutex> lock(mut);
-            if (condit.wait_until(lock, abs_time) == cv_status::no_timeout)
-            {
-                return nullptr;
-            }
+            result_bool = false;
+            return nullptr;
         }
+
+        std::unique_lock<std::mutex> lock(mut); 
+        
         T result;
-        result = que.front();
+        result = std::move(que.front());
         que.pop();
-        return result;
+        result_bool = true;
+        return std::move(result);
     }
 
     int32_t Size() 

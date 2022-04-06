@@ -4,6 +4,15 @@
     <ClCompile Include="D:\LearnOpenGL\CpuRayTracingRenderer\CpuRayTracingRenderer\src\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="D:\LearnOpenGL\CpuRayTracingRenderer\CpuRayTracingRenderer\src\Renderer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\LearnOpenGL\CpuRayTracingRenderer\CpuRayTracingRenderer\src\SDLWindows.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\LearnOpenGL\CpuRayTracingRenderer\CpuRayTracingRenderer\src\InputHandle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="D:\LearnOpenGL\CpuRayTracingRenderer\CpuRayTracingRenderer\CMakeLists.txt" />

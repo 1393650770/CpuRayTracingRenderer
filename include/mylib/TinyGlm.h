@@ -134,12 +134,25 @@ namespace TinyGlm
 		vec3<T> operator /(const vec3<T>& b) const;
 		vec3<T> operator *(const vec3<T>& b) const;
 		vec3<T> operator *(T& b) const;
+		vec3<T> operator *(const T& b) const;
 		template<typename U>
 		vec3<T> operator *(U& b) const;
 		vec3<T>& operator +=(const vec3<T>& _vec3);
 		vec3<T>& operator -=(const vec3<T>& _vec3);
 		vec3<T>& operator *=(const vec3<T>& _vec3);
 		vec3<T>& operator /=(const vec3<T>& _vec3);
+
+		static vec3<T> min(const vec3<T>& a, const vec3<T>& b)
+		{
+			return vec3<T>(std::min(a.x, b.x), std::min(a.y, b.y),
+				std::min(a.z, b.z));
+		};
+
+		static vec3<T> max(const vec3<T>& a, const vec3<T>& b)
+		{
+			return vec3<T>(std::max(a.x, b.x), std::max(a.y, b.y),
+				std::max(a.z, b.z));
+		};
 
 		template<typename U>
 		vec3<T>& operator *=(const U& t);
@@ -576,6 +589,12 @@ namespace TinyGlm
 
 	template<typename T>
 	TinyGlm::vec3<T> TinyGlm::vec3<T>::operator*(T& b) const
+	{
+		return vec3<T>(x * b, y * b, z * b);
+	}
+
+	template<typename T>
+	TinyGlm::vec3<T> TinyGlm::vec3<T>::operator*(const T& b) const
 	{
 		return vec3<T>(x * b, y * b, z * b);
 	}

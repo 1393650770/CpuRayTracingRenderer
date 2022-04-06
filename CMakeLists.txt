@@ -10,6 +10,7 @@ MESSAGE( "this var key = ${CMAKE_TOOLCHAIN_FILE}.")
 project(CpuRayTracingRenderer)
 
 
+
 set(STATIC_LIB_SOURCES
     src/TinyGlm.cpp
     src/Intersection.cpp
@@ -20,6 +21,12 @@ set(STATIC_LIB_SOURCES
     src/Sphere.cpp
     src/IPostProcess.cpp
     src/PostProcessHandle.cpp
+    src/Camera.cpp
+    src/Triangle.cpp
+    src/BVH.cpp
+    src/Bound.cpp
+    src/PublicSingleton.cpp
+    src/ThreadPool.cpp
 )
 
 set(EXECUTABLE_SOURCES
@@ -28,6 +35,12 @@ set(EXECUTABLE_SOURCES
     src/SDLWindows.cpp
     src/InputHandle.cpp
 )
+
+set(PROJECT_COPY_DIR 
+    Test/1.txt
+)
+
+
 
 add_library(CpuRayTracingRenderer_library STATIC 
     ${STATIC_LIB_SOURCES}
@@ -42,9 +55,27 @@ find_package(SDL2 CONFIG REQUIRED)
 
 add_executable(CpuRayTracingRenderer  ${EXECUTABLE_SOURCES})
 
+
+ADD_CUSTOM_COMMAND(TARGET CpuRayTracingRenderer
+          POST_BUILD
+          COMMAND 
+          ${CMAKE_COMMAND} 
+          -E 
+          copy 
+          "${PROJECT_COPY_DIR}"
+          "${CMAKE_CURRENT_BINARY_DIR}/shader" 
+)
+
+
+
 target_link_libraries(CpuRayTracingRenderer
     PRIVATE 
         CpuRayTracingRenderer_library
 )
 
 target_link_libraries(CpuRayTracingRenderer PRIVATE SDL2::SDL2 SDL2::SDL2main)
+
+#GET_TARGET_PROPERTY(EXCUTE_BUILD_DIR CpuRayTracingRenderer LOCATION)
+
+MESSAGE( "this var key = ${CMAKE_CURRENT_BINARY_DIR}.")
+

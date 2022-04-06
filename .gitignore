@@ -36,3 +36,4 @@ CpuRayTracingRenderer.dir/
 CpuRayTracingRenderer_library.dir/
 x64/
 .vs/
+CMakeFiles/

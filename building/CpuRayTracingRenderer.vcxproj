@@ -113,10 +113,18 @@
       <ProxyFileName>%(Filename)_p.c</ProxyFileName>
     </Midl>
     <PostBuildEvent>
-      <Message>
-      </Message>
+      <Message>	</Message>
       <Command>setlocal
 C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -noprofile -executionpolicy Bypass -file D:/LearnOpenGL/CpuRayTracingRenderer/CpuRayTracingRenderer/vcpkg/scripts/buildsystems/msbuild/applocal.ps1 -targetBinary D:/LearnOpenGL/CpuRayTracingRenderer/CpuRayTracingRenderer/building/Debug/CpuRayTracingRenderer.exe -installedDir D:/LearnOpenGL/CpuRayTracingRenderer/CpuRayTracingRenderer/vcpkg/installed/x64-windows/debug/bin -OutVariable out
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+D:\CMake\bin\cmake.exe -E copy Test/1.txt D:/LearnOpenGL/CpuRayTracingRenderer/CpuRayTracingRenderer/building/shader
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -167,10 +175,18 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <ProxyFileName>%(Filename)_p.c</ProxyFileName>
     </Midl>
     <PostBuildEvent>
-      <Message>
-      </Message>
+      <Message>	</Message>
       <Command>setlocal
 C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -noprofile -executionpolicy Bypass -file D:/LearnOpenGL/CpuRayTracingRenderer/CpuRayTracingRenderer/vcpkg/scripts/buildsystems/msbuild/applocal.ps1 -targetBinary D:/LearnOpenGL/CpuRayTracingRenderer/CpuRayTracingRenderer/building/Release/CpuRayTracingRenderer.exe -installedDir D:/LearnOpenGL/CpuRayTracingRenderer/CpuRayTracingRenderer/vcpkg/installed/x64-windows/bin -OutVariable out
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+D:\CMake\bin\cmake.exe -E copy Test/1.txt D:/LearnOpenGL/CpuRayTracingRenderer/CpuRayTracingRenderer/building/shader
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -221,10 +237,18 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <ProxyFileName>%(Filename)_p.c</ProxyFileName>
     </Midl>
     <PostBuildEvent>
-      <Message>
-      </Message>
+      <Message>	</Message>
       <Command>setlocal
 C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -noprofile -executionpolicy Bypass -file D:/LearnOpenGL/CpuRayTracingRenderer/CpuRayTracingRenderer/vcpkg/scripts/buildsystems/msbuild/applocal.ps1 -targetBinary D:/LearnOpenGL/CpuRayTracingRenderer/CpuRayTracingRenderer/building/MinSizeRel/CpuRayTracingRenderer.exe -installedDir D:/LearnOpenGL/CpuRayTracingRenderer/CpuRayTracingRenderer/vcpkg/installed/x64-windows/bin -OutVariable out
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+D:\CMake\bin\cmake.exe -E copy Test/1.txt D:/LearnOpenGL/CpuRayTracingRenderer/CpuRayTracingRenderer/building/shader
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -274,10 +298,18 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <ProxyFileName>%(Filename)_p.c</ProxyFileName>
     </Midl>
     <PostBuildEvent>
-      <Message>
-      </Message>
+      <Message>	</Message>
       <Command>setlocal
 C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -noprofile -executionpolicy Bypass -file D:/LearnOpenGL/CpuRayTracingRenderer/CpuRayTracingRenderer/vcpkg/scripts/buildsystems/msbuild/applocal.ps1 -targetBinary D:/LearnOpenGL/CpuRayTracingRenderer/CpuRayTracingRenderer/building/RelWithDebInfo/CpuRayTracingRenderer.exe -installedDir D:/LearnOpenGL/CpuRayTracingRenderer/CpuRayTracingRenderer/vcpkg/installed/x64-windows/bin -OutVariable out
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+D:\CMake\bin\cmake.exe -E copy Test/1.txt D:/LearnOpenGL/CpuRayTracingRenderer/CpuRayTracingRenderer/building/shader
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -359,7 +391,9 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="D:\LearnOpenGL\CpuRayTracingRenderer\CpuRayTracingRenderer\src\main.cpp" />
-    <ClCompile Include="SDLWindows.cpp" />
+    <ClCompile Include="D:\LearnOpenGL\CpuRayTracingRenderer\CpuRayTracingRenderer\src\Renderer.cpp" />
+    <ClCompile Include="D:\LearnOpenGL\CpuRayTracingRenderer\CpuRayTracingRenderer\src\SDLWindows.cpp" />
+    <ClCompile Include="D:\LearnOpenGL\CpuRayTracingRenderer\CpuRayTracingRenderer\src\InputHandle.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="D:\LearnOpenGL\CpuRayTracingRenderer\CpuRayTracingRenderer\building\ZERO_CHECK.vcxproj">
@@ -372,9 +406,6 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <Project>{3E9BA7E0-B12D-371F-AE2F-42FBB4EF79C0}</Project>
       <Name>CpuRayTracingRenderer_library</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="SDLWindows.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

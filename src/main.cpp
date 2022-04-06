@@ -1,16 +1,18 @@
 #include<SDL.h>
 #include"TinyGlm.h"
+#include"ThreadPool.h"
 #include"Ray.h"
 #include"Sphere.h"
 #include"Scene.h"
 #include"InputHandle.h"
 #include"Renderer.h"
+#include"PublicSingleton.h"
 #include<vector>
 #include<iostream>
 #include<fstream>
 #include<string>
 #include<stdio.h>
-
+#include<Windows.h>
 
 #ifdef	_DEBUG
 #define _CRTDBG_MAP_ALLOC
@@ -26,27 +28,35 @@ void EnableMemLeakCheck()
 	_CrtSetDbgFlag(_CrtSetDbgFlag(_CRTDBG_REPORT_FLAG) | _CRTDBG_LEAK_CHECK_DF);
 }
 
- int SceneWidth=800, SceneHeight = 400;
+ int SceneWidth=1440, SceneHeight = 720;
+
+ void InitThreadPool();
 
 int main(int argc, char* argv[])
 {
 	EnableMemLeakCheck();
+
 	Scene scene(SceneWidth, SceneHeight);
 	Renderer render(scene.width, scene.height);
 	InputHandle input;
 
+	//Init the Thread Pool
+	InitThreadPool();
+
 	std::shared_ptr<Sphere>  sphere = std::make_shared<Sphere>(TinyGlm::vec3<float>(0, 0, -1), 0.5f);
 
 	scene.Add(sphere);
+
+	scene.BuildBVH();
 	while (input.is_runing)
 	{
 		input.ListenInput();
 
-		render.Render(scene);
+		render.tick(scene);
 	}
 	
-
-	//delete sphere;
+	//Wait and close the Thread Pool
+	PublicSingleton<ThreadPool>::get_instance().CloseTheadPool();
 	return 0;
 }
 
@@ -130,4 +140,13 @@ void TestTinyGlm()
 	mat4 = matTest2.transpose();
 	std::cout << "mat4 transpose :" << mat4.val[0] << " " << mat4.val[5] << " " << mat4.val[10] << " " << mat4.val[15] << " " << mat4.val[12] << std::endl;
 
+}
+
+void InitThreadPool()
+{
+
+	SYSTEM_INFO sysInfo;
+	GetSystemInfo(&sysInfo);
+	int cpu_core_num = sysInfo.dwNumberOfProcessors;
+	PublicSingleton<ThreadPool>::get_instance().Init(cpu_core_num*2);
 }

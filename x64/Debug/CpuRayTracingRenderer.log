@@ -1,6 +1,0 @@
-﻿  main.cpp
-D:\LearnOpenGL\CpuRayTracingRenderer\CpuRayTracingRenderer\main.cpp(15,53): warning C4244: “return”: 从“double”转换到“float”，可能丢失数据
-D:\LearnOpenGL\CpuRayTracingRenderer\CpuRayTracingRenderer\main.cpp(23,38): warning C4244: “参数”: 从“double”转换到“const float”，可能丢失数据
-D:\LearnOpenGL\CpuRayTracingRenderer\CpuRayTracingRenderer\main.cpp(35,12): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
-D:\LearnOpenGL\CpuRayTracingRenderer\CpuRayTracingRenderer\main.cpp(37,12): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
-  CpuRayTracingRenderer.vcxproj -> D:\LearnOpenGL\CpuRayTracingRenderer\CpuRayTracingRenderer\x64\Debug\CpuRayTracingRenderer.exe

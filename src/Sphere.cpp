@@ -1,4 +1,5 @@
 #include "Sphere.h"
+#include"Bound.h"
 
 Sphere::Sphere(const TinyGlm::vec3<float>& _center, float _radius) :center(_center), radius(_radius)
 {
@@ -29,7 +30,7 @@ bool Sphere::CheckIsIntersect(const Ray& ray)
 
 }
 
-Intersection Sphere::GetIntersection(Ray ray) 
+Intersection Sphere::GetIntersection(Ray& ray)
 {
 	Intersection result;
 	result.hit = CheckIsIntersect(ray);
@@ -64,4 +65,14 @@ Intersection Sphere::GetIntersection(Ray ray)
 	result.normal = TinyGlm::vec3<float>(result.coords - center).normalize();
 
 	return result;
+}
+
+void Sphere::getSurfaceProperties(const TinyGlm::vec3<float>& pos, const TinyGlm::vec3<float>& I, const uint32_t& index, const TinyGlm::vec2<float>& uv, TinyGlm::vec3<float>& normal, TinyGlm::vec2<float>& st) const
+{
+	normal = (pos - center).normalize();
+}
+
+Bound Sphere::getBound()
+{
+	return Bound(TinyGlm::vec3<float>(center.x - radius, center.y - radius, center.z - radius), TinyGlm::vec3<float>(center.x + radius, center.y + radius, center.z + radius));
 }
