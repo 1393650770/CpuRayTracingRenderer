@@ -1,4 +1,5 @@
 #include "Intersection.h"
+
 Intersection::Intersection()
 {
 	hit = false;
@@ -7,6 +8,7 @@ Intersection::Intersection()
 	normal = TinyGlm::vec3<float>();
 	distance = std::numeric_limits<float>::max();
 	obj = nullptr;
+	shader = nullptr;
 }
 
 Intersection::~Intersection()

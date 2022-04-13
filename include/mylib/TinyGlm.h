@@ -21,26 +21,27 @@ namespace TinyGlm
 	public:
 		virtual ~vec4();
 		vec4();
+		vec4(T _x);
 		vec4(T _x, T _y, T _z, T _w);
 		vec4(T _x, T _y, T _z);
 		vec4(const vec4<T>& _vec4) = default;
 
 		vec4(vec4<T>&& _vec4) = default;
 
-		vec4(const vec3<T>& _vec3);
-		
-		template<typename U>
-		vec4(const vec4<U>& _vec4);
-
-		template<typename U>
-		vec4(const vec3<U>& _vec3);
-
 		template<typename U>
 		vec4(vec4<U>&& _vec4) noexcept;
 
 		friend vec4<T> operator+ (const vec4<T>& a, const vec4<T>& b)
 		{
-			return vec4<T>(a.x + b.x, a.y + b.y, a.z + b.z, a.w - b.w);
+			return vec4<T>(a.x + b.x, a.y + b.y, a.z + b.z, a.w+b.w);
+		};
+		friend vec4<T> operator+ (const vec3<T>& a, const vec4<T>& b)
+		{
+			return vec4<T>(a.x + b.x, a.y + b.y, a.z + b.z, b.w);
+		};
+		friend vec4<T> operator+ (const vec4<T>& a, const vec3<T>& b)
+		{
+			return vec4<T>(a.x + b.x, a.y + b.y, a.z + b.z, a.w );
 		};
 		friend vec4<T> operator- (const vec4<T>& a, const vec4<T>& b)
 		{
@@ -50,9 +51,23 @@ namespace TinyGlm
 		{
 			return vec4<T>(a.x * b.x, a.y * b.y, a.z * b.z, a.w * b.w);
 		};
+
+		friend vec4<T> operator* (const vec3<T>& a, const vec4<T>& b)
+		{
+			return vec4<T>(a.x * b.x, a.y * b.y, a.z * b.z, b.w);
+		};
+
+		friend vec4<T> operator* (const vec4<T>& a , const T& b)
+		{
+			return vec4<T>(a.x * b, a.y * b, a.z * b);
+		};
 		friend vec4<T> operator/ (const vec4<T>& a, const vec4<T>& b)
 		{
 			return vec4<T>(a.x / b.x, a.y / b.y, a.z / b.z, a.w / b.w);
+		};
+		friend vec4<T> operator/ (const vec4<T>& a, const T& b)
+		{
+			return vec4<T>(a.x / b, a.y / b, a.z / b, a.w );
 		};
 
 		vec4<T>& operator=(const vec4<T>& _vec4);
@@ -101,8 +116,8 @@ namespace TinyGlm
 		virtual ~vec3();
 		vec3();
 		vec3(T _x,T _y ,T _z);
+		vec3(T _x);
 		vec3(const vec3<T>& _vec3);
-		vec3(const TinyGlm::vec4<T>& _vec4);
 
 		vec3(vec3<T>&& _vec3) noexcept;
 
@@ -123,20 +138,27 @@ namespace TinyGlm
 		T& operator [](short i);
 		const T& operator [](int i) const;
 		const T& operator [](short i) const;
-		vec3<T> operator +(const vec3<T>& b) const;
 
-		//friend vec3<T> operator+ (const vec3<T>& a, const vec3<T>& b)
-		//{
-		//	return vec3<T>(a.x + b.x, a.y + b.y, a.z + b.z);
-		//};
-
-		vec3<T> operator -(const vec3<T>& b) const;
+		friend vec3<T> operator+ (const vec3<T>& a, const vec3<T>& b)
+		{
+			return vec3<T>(a.x + b.x, a.y + b.y, a.z + b.z);
+		};
+		friend vec3<T> operator- (const vec3<T>& a, const vec3<T>& b)
+		{
+			return vec3<T>(a.x - b.x, a.y - b.y, a.z - b.z);
+		};
 		vec3<T> operator /(const vec3<T>& b) const;
-		vec3<T> operator *(const vec3<T>& b) const;
+		vec3<T> operator /(T& b) const;
+		vec3<T> operator /(const T& b) const;
+		vec3<T> operator /(const T& b);
+		vec3<T> operator /(T& b);
+		friend vec3<T> operator* (const vec3<T>& a, const vec3<T>& b)
+		{
+			return vec3<T>(a.x * b.x, a.y * b.y, a.z * b.z);
+		};
 		vec3<T> operator *(T& b) const;
+		vec3<T> operator *(T& b) ;
 		vec3<T> operator *(const T& b) const;
-		template<typename U>
-		vec3<T> operator *(U& b) const;
 		vec3<T>& operator +=(const vec3<T>& _vec3);
 		vec3<T>& operator -=(const vec3<T>& _vec3);
 		vec3<T>& operator *=(const vec3<T>& _vec3);
@@ -401,6 +423,14 @@ namespace TinyGlm
 	}
 
 	template<typename T>
+	TinyGlm::vec3<T>::vec3(T _x)
+	{
+		x = _x;
+		y = _x;
+		z = _x;
+	}
+
+	template<typename T>
 	TinyGlm::vec3<T>::~vec3()
 	{
 	}
@@ -422,13 +452,6 @@ namespace TinyGlm
 		z = _vec3.z;
 	}
 
-	template<typename T>
-	TinyGlm::vec3<T>::vec3(const TinyGlm::vec4<T>& _vec4)
-	{
-		x = _vec4.x;
-		y = _vec4.y;
-		z = _vec4.z;
-	}
 
 
 	template<typename T>
@@ -562,18 +585,10 @@ namespace TinyGlm
 
 	}
 
-	template<typename T>
-	TinyGlm::vec3<T> TinyGlm::vec3<T>::operator+(const vec3<T>& b) const
-	{
-		return vec3<T>(x + b.x, y + b.y, z + b.z);
-	}
 
 
-	template<typename T>
-	TinyGlm::vec3<T> TinyGlm::vec3<T>::operator-(const vec3<T>& b) const
-	{
-		return vec3<T>(x - b.x, y - b.y, z - b.z);
-	}
+
+
 
 	template<typename T>
 	TinyGlm::vec3<T> TinyGlm::vec3<T>::operator/(const vec3<T>& b) const
@@ -582,10 +597,31 @@ namespace TinyGlm
 	}
 
 	template<typename T>
-	TinyGlm::vec3<T> TinyGlm::vec3<T>::operator*(const vec3<T>& b) const
+	inline vec3<T> vec3<T>::operator/(const T& b) const
 	{
-		return vec3<T>(x * b.x, y * b.y, z * b.z);
+		return vec3<T>(x / b, y / b, z / b);
 	}
+
+	template<typename T>
+	inline vec3<T> vec3<T>::operator/(T& b) const
+	{
+		return vec3<T>(x / b, y / b, z / b);
+	}
+
+	template<typename T>
+	inline vec3<T> vec3<T>::operator/(const T& b)
+	{
+		return vec3<T>(x / b, y / b, z / b);
+	}
+
+
+	template<typename T>
+	inline vec3<T> vec3<T>::operator/(T& b)
+	{
+		return vec3<T>(x / b, y / b, z / b);
+	}
+
+
 
 	template<typename T>
 	TinyGlm::vec3<T> TinyGlm::vec3<T>::operator*(T& b) const
@@ -600,12 +636,13 @@ namespace TinyGlm
 	}
 
 	template<typename T>
-	template<typename U>
-	TinyGlm::vec3<T> TinyGlm::vec3<T>::operator*(U& b) const
+	TinyGlm::vec3<T> TinyGlm::vec3<T>::operator*(T& b)
 	{
-		T k = static_cast<T>(b);
-		return vec3<T>(x * k, y * k, z * k);
+		return vec3<T>(x * b, y * b, z * b);
 	}
+
+
+
 
 	template<typename T>
 	TinyGlm::vec3<T>& TinyGlm::vec3<T>::operator+=(const vec3<T>& _vec3)
@@ -684,7 +721,7 @@ namespace TinyGlm
 	TinyGlm::vec3<T> TinyGlm::vec3<T>::normalize()
 	{
 		float this_length = length();
-		return vec3<T>(x / this_length, y / this_length, z / this_length);
+		return vec3<T>( x / this_length, y / this_length, z / this_length);
 	}
 	template<typename T>
 	TinyGlm::vec3<T> TinyGlm::vec3<T>::normalize() const
@@ -737,13 +774,15 @@ namespace TinyGlm
 	}
 
 	template<typename T>
-	inline vec4<T>::vec4(const TinyGlm::vec3<T>& _vec3)
+	TinyGlm::vec4<T>::vec4(T _x)
 	{
-		x = _vec3.x;
-		y = _vec3.y;
-		z = _vec3.z;
+		x = _x;
+		y = _x;
+		z = _x;
 		w = static_cast<T>(1.0f);
 	}
+
+
 
 
 
@@ -752,25 +791,9 @@ namespace TinyGlm
 	{
 	}
 
-	template<typename T>
-	template<typename U>
-	TinyGlm::vec4<T>::vec4(const vec4<U>& _vec4)
-	{
-		x = static_cast<T>(_vec4.x);
-		y = static_cast<T>(_vec4.y);
-		z = static_cast<T>(_vec4.z);
-		w = static_cast<T>(_vec4.w);
-	}
 
-	template<typename T>
-	template<typename U>
-	TinyGlm::vec4<T>::vec4(const vec3<U>& _vec3)
-	{
-		x = static_cast<T>(_vec3.x);
-		y = static_cast<T>(_vec3.y);
-		z = static_cast<T>(_vec3.z);
-		w = static_cast<T>(1.0f);
-	}
+
+
 
 
 	template<typename T>

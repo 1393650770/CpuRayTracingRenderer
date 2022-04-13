@@ -7,12 +7,17 @@
 
 class BVH;
 class Object;
+class Ray;
 
 class Scene
 {
 
 private:
 	//std::vector<std::shared_ptr<Object *> > objlist;
+
+	//计算反射光线
+	TinyGlm::vec3<float> GetReflectDir(TinyGlm::vec3<float>& income_light, TinyGlm::vec3<float>& normal);
+
 public:
 	int width=1920;
 	int height=1080;
@@ -24,7 +29,12 @@ public:
 	
 	virtual ~Scene();
 
+	//往场景中添加物体
 	void Add(std::shared_ptr<Object> object);
+	//构建BVH
 	void BuildBVH();
+
+	//获取颜色
+	TinyGlm::vec3<float> GetColor(Ray& ray,int current_depth=0,int recursive_max_depth=2);
 };
 #endif //_SCENE_

@@ -19,7 +19,7 @@ public:
 	float area;
 
 	bool CheckIsIntersect(const Ray& ray) override;
-	Intersection GetIntersection(Ray& ray) override;
+	Intersection GetIntersection( Ray& ray) override;
 };
 
 #endif //

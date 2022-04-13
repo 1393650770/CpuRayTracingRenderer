@@ -1,19 +1,21 @@
 #include "BVH.h"
+#include "Intersection.h"
+#include "Ray.h"
 #include"Object.h"
 #include<math.h>
 #include <algorithm>
 
 bool sortFunctionByX(const std::shared_ptr<Object>& a, const std::shared_ptr<Object>& b)
 {
-	return a->getBound().centroid_point.x < b->getBound().centroid_point.x;
+	return a->GetBound().centroid_point.x < b->GetBound().centroid_point.x;
 }
 bool sortFunctionByY(const std::shared_ptr<Object>& a, const std::shared_ptr<Object>& b)
 {
-	return a->getBound().centroid_point.y < b->getBound().centroid_point.y;
+	return a->GetBound().centroid_point.y < b->GetBound().centroid_point.y;
 }
 bool sortFunctionByZ(const std::shared_ptr<Object>& a, const std::shared_ptr<Object>& b)
 {
-	return a->getBound().centroid_point.z < b->getBound().centroid_point.z;
+	return a->GetBound().centroid_point.z < b->GetBound().centroid_point.z;
 }
 
 
@@ -39,13 +41,13 @@ BVHNode* BVH::recursiveBuildBVH(std::vector<std::shared_ptr<Object>> object_list
 	//找出最大的包围盒
 	for (size_t i = 0; i < object_list.size(); i++)
 	{
-		bound = Union(bound, object_list[i]->getBound());
+		bound = Union(bound, object_list[i]->GetBound());
 	}
 
 	//如果只剩下一个物体，那么直接返回
 	if (object_list.size() == 1)
 	{
-		node->bound = object_list[0]->getBound();
+		node->bound = object_list[0]->GetBound();
 		node->object = std::move(object_list[0].get());
 		node->left = nullptr;
 		node->right = nullptr;
@@ -64,7 +66,7 @@ BVHNode* BVH::recursiveBuildBVH(std::vector<std::shared_ptr<Object>> object_list
 	Bound max_centroid_bound;
 	for (size_t i = 0; i < object_list.size(); i++)
 	{
-		max_centroid_bound = Union(max_centroid_bound, object_list[i]->getBound().centroid_point);
+		max_centroid_bound = Union(max_centroid_bound, object_list[i]->GetBound().centroid_point);
 	}
 	int max_axis= max_centroid_bound.GetMaxAxis();
 
@@ -108,4 +110,38 @@ BVH::BVH(std::vector<std::shared_ptr<Object>> object_list)
 BVH::~BVH()
 {
 	FreeBVHTree(root);
+}
+
+Intersection BVH::GetIntersection(Ray& ray, BVHNode* node)
+{
+
+	//如果树都没有建起来,或者是叶子节点，或者说没有交点
+	if (!root)
+	{
+		//std::cout << "错误：树没有建起来" << std::endl;
+		return Intersection();
+	}
+	if (!node )
+	{
+		//std::cout << "错误：空节点" << std::endl;
+		return Intersection();
+	}
+	if ( !(node->bound.GetIsIntersect(ray)))
+	{
+		//std::cout << "错误：没有交点" << std::endl;
+		return Intersection();
+	}
+
+	//叶子节点,进行对物体的求教
+	if (!node->right && !node->left)
+	{
+		//std::cout << "叶子节点" << std::endl;
+		return node->object->GetIntersection(ray);
+	}
+
+	//求出左右叶子节点的交点，取最近的那个
+	Intersection inter1 = GetIntersection(ray, node->left);
+	Intersection inter2 = GetIntersection(ray, node->right);
+
+	return inter1.distance<inter2.distance?inter1:inter2;
 }

@@ -4,6 +4,8 @@
 #include"TinyGlm.h"
 class Object;
 class Sphere;
+class IShader;
+
 class Intersection
 {
 private:
@@ -15,6 +17,7 @@ public:
 	TinyGlm::vec3<float> emition;
 	float distance;
 
+	IShader* shader;
 	Object* obj;
 
 	Intersection();

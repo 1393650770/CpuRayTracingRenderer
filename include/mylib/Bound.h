@@ -3,6 +3,8 @@
 #define _BOUND_
 #include"TinyGlm.h"
 
+class Ray;
+
 class Bound
 {
 private:
@@ -15,6 +17,8 @@ public:
 	Bound(const TinyGlm::vec3<float>& min,const TinyGlm::vec3<float>& max);
 	virtual ~Bound();
 
+	//求是否相交；
+	bool GetIsIntersect(const Ray& ray);
 	int GetMaxAxis();
 
 

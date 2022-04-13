@@ -16,7 +16,7 @@
 #include <iostream>
 #include <fstream>
 
-float deg2rad(const float& deg) { return deg * 3.1415926f / 180.0; }
+float deg2rad(const float& deg) { return deg * 3.1415926f / 180.0f; }
 
 
 TinyGlm::vec3<float> Color(Ray& ray, Sphere& sphere)
@@ -29,7 +29,7 @@ TinyGlm::vec3<float> Color(Ray& ray, Sphere& sphere)
 		int index=0;
 		TinyGlm::vec2<float> uv;
 		TinyGlm::vec2<float> st;
-		sphere.getSurfaceProperties(inter.coords, I, index, uv, N, st);
+		sphere.GetSurfaceProperties(inter.coords, I, index, uv, N, st);
 		return TinyGlm::vec3<float>((1.0f+N.x)*0.5f, (1.0f + N.y) * 0.5f, (1.0f + N.z) * 0.5f);
 	}
 	return TinyGlm::vec3<float>(0.1f, 0.1f, 0.1f);
@@ -49,18 +49,15 @@ void RenderFrame(std::pair<int, int> x, std::pair<int, int> y, Scene& scene, std
 		m = j * scene.width + x.first;
 		for (int i = x.first; i < x.second; ++i) 
 		{
-			float x = (2 * (i + 0.5) / (float)scene.width - 1) *
-				imageAspectRatio * scale;
-			float y = (1 - 2 * (j + 0.5) / (float)scene.height) * scale;
+			float dir_x = (2 * (i + 0.5) / (float)scene.width - 1) * imageAspectRatio * scale;
+			float dir_y = (1 - 2 * (j + 0.5) / (float)scene.height) * scale;
+			
+			TinyGlm::vec3 < float> dir = TinyGlm::vec3 < float>( dir_x, dir_y, 1).normalize();
 
-			TinyGlm::vec3 < float> dir = TinyGlm::vec3 < float>(-x, y, 1).normalize();
 			for (int k = 0; k < spp; k++) 
 			{
-				framebuffer[m] = Color(Ray(scene.eye_pos, dir), *dynamic_cast<Sphere*>(scene.objlist[0].get()));
+				framebuffer[m] =scene.GetColor(Ray(scene.eye_pos, dir),0);
 			}			
-			//std::cout << "x " << framebuffer[m].x << " y " << framebuffer[m].y << " z " << framebuffer[m].z << std::endl;
-			/*TinyGlm::vec4<float> colorVec4(framebuffer[m].x, framebuffer[m].y, framebuffer[m].z, 1.0f);
-			sdlwindows.DrawPixel(i, j, colorVec4);*/
 			m++;
 		}
 	}
@@ -76,11 +73,11 @@ void Renderer::DrawBuffer(Scene& scene, std::vector<TinyGlm::vec3<float>>& frame
 		{
 			PublicSingleton<ThreadPool>::get_instance().SubmitMessage(RenderFrame, scene_tile[i].first, scene_tile[j].second, std::ref(scene), std::ref(framebuffer));
 			//thread_pool->SubmitMessage(RenderFrame, scene_tile[i].first, scene_tile[j].second, std::ref(scene), std::ref(framebuffer));
-
 		}
 	}
-	//PublicSingleton<ThreadPool>::get_instance().Join();
-	//thread_pool->CloseTheadPool();
+
+	PublicSingleton<ThreadPool>::get_instance().Join();
+
 
 }
 
@@ -91,7 +88,7 @@ void Renderer::DrawScreenPixel(std::vector<TinyGlm::vec3<float>>& framebuffer)
 	{
 		for (int i = 0; i < scene_width; ++i)
 		{
-			sdl_windows->DrawPixel(i, j, TinyGlm::vec4<float>(framebuffer[m]));
+			sdl_windows->DrawPixel(i, j, TinyGlm::vec4<float>(framebuffer[m].x, framebuffer[m].y, framebuffer[m].z));
 			m++;
 		}
 	}
@@ -148,7 +145,7 @@ Renderer::Renderer(int _scene_width, int _scene_height):scene_width(_scene_width
 		}
 		else
 		{
-			maxAxisX=minAxisX + clip_disX;
+			maxAxisX=  minAxisX + clip_disX;
 			maxAxisY = maxAxisY + clip_disY;
 		}
 

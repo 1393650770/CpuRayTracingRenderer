@@ -6,6 +6,8 @@
 #include"Bound.h"
 
 class Object;
+class Ray;
+class Intersection;
 
 struct BVHNode
 {
@@ -27,8 +29,10 @@ public:
 class BVH
 {
 private:
+	//构建BVH资源
 	void FreeBVHTree(BVHNode* node);
 
+	//构建BVH
 	BVHNode* recursiveBuildBVH(std::vector<std::shared_ptr<Object> > object_list);
 
 public:
@@ -37,6 +41,9 @@ public:
 	BVH();
 	BVH(std::vector<std::shared_ptr<Object> > object_list );
 	virtual ~BVH();
+
+	//获取到碰撞节点
+	Intersection GetIntersection(Ray& ray, BVHNode* node);
 };
 
 #endif //_BVH_
