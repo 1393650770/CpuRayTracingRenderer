@@ -4,6 +4,8 @@
 #include"Object.h"
 #include"TinyGlm.h"
 
+extern template TinyGlm::vec3<float>;
+extern template TinyGlm::vec4<float>;
 
 class Triangle :
 	public Object

@@ -4,14 +4,16 @@
 #include "Ray.h"
 #include "Intersection.h"
 
+
 namespace TinyGlm
 {
+	template<typename T>
+	class vec4;
 	template<typename T>
 	class vec3;
 	template<typename T>
 	class vec2;
 };
-
 class Bound;
 
 class Object

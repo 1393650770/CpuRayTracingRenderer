@@ -4,6 +4,10 @@
 #include<algorithm>
 #include<math.h>
 
+extern template class TinyGlm::vec4<float>;
+extern template class TinyGlm::vec3<float>;
+extern template class TinyGlm::vec2<float>;
+
 Bound::Bound()
 {
 	float max = std::numeric_limits<float>::max();

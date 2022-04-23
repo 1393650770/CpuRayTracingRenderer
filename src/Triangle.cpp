@@ -1,6 +1,10 @@
 #include "Triangle.h"
 #include "TinyGlm.h"
 
+extern template class TinyGlm::vec4<float>;
+extern template class TinyGlm::vec3<float>;
+extern template class TinyGlm::vec2<float>;
+
 Triangle::Triangle(TinyGlm::vec3<float> v0, TinyGlm::vec3<float> v1, TinyGlm::vec3<float> v2):vertices0(v0),vertices1(v1),vertices2(v2)
 {
 	edge0 = vertices1 - vertices0;

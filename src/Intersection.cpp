@@ -1,5 +1,7 @@
 #include "Intersection.h"
-
+extern template class TinyGlm::vec4<float>;
+extern template class TinyGlm::vec3<float>;
+extern template class TinyGlm::vec2<float>;
 Intersection::Intersection()
 {
 	hit = false;

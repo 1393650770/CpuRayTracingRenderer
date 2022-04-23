@@ -5,6 +5,7 @@
 #include "IShader.h"
 #include <iostream>
 
+
 TinyGlm::vec3<float> Scene::GetReflectDir(TinyGlm::vec3<float>& income_light, TinyGlm::vec3<float>& normal)
 {
 	TinyGlm::vec3<float> result;

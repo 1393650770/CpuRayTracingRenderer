@@ -4,6 +4,9 @@
 #include"Object.h"
 #include<math.h>
 #include <algorithm>
+extern template class TinyGlm::vec4<float>;
+extern template class TinyGlm::vec3<float>;
+extern template class TinyGlm::vec2<float>;
 
 bool sortFunctionByX(const std::shared_ptr<Object>& a, const std::shared_ptr<Object>& b)
 {

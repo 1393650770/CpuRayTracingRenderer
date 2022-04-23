@@ -9,6 +9,7 @@ class Object;
 class Ray;
 class Intersection;
 
+
 struct BVHNode
 {
 	Bound bound;

@@ -5,6 +5,7 @@
 
 class Ray;
 
+
 class Bound
 {
 private:

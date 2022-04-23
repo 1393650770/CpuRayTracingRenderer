@@ -1,6 +1,5 @@
 #include "Camera.h"
 
-
 Camera::Camera(TinyGlm::vec3<float> camerapos)
 {
 	camera_pos = camerapos;
