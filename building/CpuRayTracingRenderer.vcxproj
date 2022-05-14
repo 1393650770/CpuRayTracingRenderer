@@ -113,7 +113,8 @@
       <ProxyFileName>%(Filename)_p.c</ProxyFileName>
     </Midl>
     <PostBuildEvent>
-      <Message></Message>
+      <Message>
+      </Message>
       <Command>setlocal
 C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -noprofile -executionpolicy Bypass -file D:/LearnOpenGL/CpuRayTracingRenderer/CpuRayTracingRenderer/vcpkg/scripts/buildsystems/msbuild/applocal.ps1 -targetBinary D:/LearnOpenGL/CpuRayTracingRenderer/CpuRayTracingRenderer/building/Debug/CpuRayTracingRenderer.exe -installedDir D:/LearnOpenGL/CpuRayTracingRenderer/CpuRayTracingRenderer/vcpkg/installed/x64-windows/debug/bin -OutVariable out
 if %errorlevel% neq 0 goto :cmEnd
@@ -166,7 +167,8 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <ProxyFileName>%(Filename)_p.c</ProxyFileName>
     </Midl>
     <PostBuildEvent>
-      <Message></Message>
+      <Message>
+      </Message>
       <Command>setlocal
 C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -noprofile -executionpolicy Bypass -file D:/LearnOpenGL/CpuRayTracingRenderer/CpuRayTracingRenderer/vcpkg/scripts/buildsystems/msbuild/applocal.ps1 -targetBinary D:/LearnOpenGL/CpuRayTracingRenderer/CpuRayTracingRenderer/building/Release/CpuRayTracingRenderer.exe -installedDir D:/LearnOpenGL/CpuRayTracingRenderer/CpuRayTracingRenderer/vcpkg/installed/x64-windows/bin -OutVariable out
 if %errorlevel% neq 0 goto :cmEnd
@@ -219,7 +221,8 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <ProxyFileName>%(Filename)_p.c</ProxyFileName>
     </Midl>
     <PostBuildEvent>
-      <Message></Message>
+      <Message>
+      </Message>
       <Command>setlocal
 C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -noprofile -executionpolicy Bypass -file D:/LearnOpenGL/CpuRayTracingRenderer/CpuRayTracingRenderer/vcpkg/scripts/buildsystems/msbuild/applocal.ps1 -targetBinary D:/LearnOpenGL/CpuRayTracingRenderer/CpuRayTracingRenderer/building/MinSizeRel/CpuRayTracingRenderer.exe -installedDir D:/LearnOpenGL/CpuRayTracingRenderer/CpuRayTracingRenderer/vcpkg/installed/x64-windows/bin -OutVariable out
 if %errorlevel% neq 0 goto :cmEnd
@@ -271,7 +274,8 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <ProxyFileName>%(Filename)_p.c</ProxyFileName>
     </Midl>
     <PostBuildEvent>
-      <Message></Message>
+      <Message>
+      </Message>
       <Command>setlocal
 C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -noprofile -executionpolicy Bypass -file D:/LearnOpenGL/CpuRayTracingRenderer/CpuRayTracingRenderer/vcpkg/scripts/buildsystems/msbuild/applocal.ps1 -targetBinary D:/LearnOpenGL/CpuRayTracingRenderer/CpuRayTracingRenderer/building/RelWithDebInfo/CpuRayTracingRenderer.exe -installedDir D:/LearnOpenGL/CpuRayTracingRenderer/CpuRayTracingRenderer/vcpkg/installed/x64-windows/bin -OutVariable out
 if %errorlevel% neq 0 goto :cmEnd
@@ -358,6 +362,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ClCompile Include="D:\LearnOpenGL\CpuRayTracingRenderer\CpuRayTracingRenderer\src\Renderer.cpp" />
     <ClCompile Include="D:\LearnOpenGL\CpuRayTracingRenderer\CpuRayTracingRenderer\src\SDLWindows.cpp" />
     <ClCompile Include="D:\LearnOpenGL\CpuRayTracingRenderer\CpuRayTracingRenderer\src\InputHandle.cpp" />
+    <ClCompile Include="Rectangles.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="D:\LearnOpenGL\CpuRayTracingRenderer\CpuRayTracingRenderer\building\ZERO_CHECK.vcxproj">
@@ -370,6 +375,9 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <Project>{3E9BA7E0-B12D-371F-AE2F-42FBB4EF79C0}</Project>
       <Name>CpuRayTracingRenderer_library</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Rectangles.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

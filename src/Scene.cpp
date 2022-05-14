@@ -4,6 +4,7 @@
 #include "Ray.h"
 #include "IShader.h"
 #include <iostream>
+#include"Utils.h"
 
 
 TinyGlm::vec3<float> Scene::GetReflectDir(TinyGlm::vec3<float>& income_light, TinyGlm::vec3<float>& normal)
@@ -50,7 +51,7 @@ TinyGlm::vec3<float> Scene::GetColor(Ray& ray,int current_depth, int recursive_m
 		{
 			return TinyGlm::vec3<float>();
 		}
-
+		
 		//如果打到灯光，则直接返回灯光颜色
 		if (interToBvh.shader->is_emit_light)
 			return  TinyGlm::vec3<float>(interToBvh.shader->emittion_color.x, interToBvh.shader->emittion_color.y, interToBvh.shader->emittion_color.z);
@@ -62,11 +63,14 @@ TinyGlm::vec3<float> Scene::GetColor(Ray& ray,int current_depth, int recursive_m
 		hit_color = TinyGlm::vec4<float>(std::min(hit_color.x, 1.0f), std::min(hit_color.y, 1.0f), std::min(hit_color.z, 1.0f));
 
 		TinyGlm::vec3<float> indir_color = GetColor(Ray(interToBvh.coords + 0.01f * interToBvh.normal, GetReflectDir(ray.direction, interToBvh.normal)), current_depth+1, 4);
-		//if(indir_color.x > std::numeric_limits<float>::epsilon() || indir_color.y > std::numeric_limits<float>::epsilon() || indir_color.z>std::numeric_limits<float>::epsilon())
-			//std::cout << "indir_color : " << indir_color.x<<" "<< indir_color.y<<" " << indir_color .z<< std::endl;
+
 		hit_color = hit_color *(1.0f- interToBvh.shader->metallicity) +  TinyGlm::vec4<float>(indir_color.x, indir_color.y, indir_color.z) * interToBvh.shader->metallicity;
 		
-		return TinyGlm::vec3<float>(std::min(hit_color.x,1.0f), std::min(hit_color.y, 1.0f), std::min(hit_color.z, 1.0f));
+		TinyGlm::vec3<float> result = TinyGlm::vec3<float>(hit_color.x,hit_color.y, hit_color.z);
+
+		Utils::toon_mapping(result);
+
+		return result;
 	
 	}
 	else
@@ -79,7 +83,12 @@ TinyGlm::vec3<float> Scene::GetColor(Ray& ray,int current_depth, int recursive_m
 			{
 				TinyGlm::vec3<float> light_dir(10.f, 20.0f, 5.f);
 				TinyGlm::vec4<float> hit_color = (k.shader->emittion_color * 0.8f) + k.shader->Shading(ray.direction, light_dir, k.normal);
-				return  TinyGlm::vec3<float>(hit_color.x, hit_color.y, hit_color.z);
+
+				TinyGlm::vec3<float> result = TinyGlm::vec3<float>(hit_color.x, hit_color.y, hit_color.z);
+
+				Utils::toon_mapping(result);
+
+				return  result;
 			}
 		}
 	}

@@ -13,9 +13,9 @@ private:
 public:
     TinyGlm::vec3<float> center;
     float radius;
-    IShader* shader;
+    std::shared_ptr<IShader> shader;
 
-    Sphere(const TinyGlm::vec3<float>& _center,float _radius,IShader* _shader=nullptr, bool _is_use_mathequation_solve=false);
+    Sphere(const TinyGlm::vec3<float>& _center,float _radius, std::shared_ptr<IShader> _shader=nullptr, bool _is_use_mathequation_solve=false);
     virtual ~Sphere();
 
     bool CheckIsIntersect(const Ray& ray) override;

@@ -21,7 +21,7 @@ private:
 public:
 	int width=1920;
 	int height=1080;
-	float fov = 60;
+	float fov = 45;
 	std::vector<std::shared_ptr<Object> > objlist;
 	TinyGlm::vec3<float> eye_pos;
 	BVH* bvh;

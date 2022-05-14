@@ -13,6 +13,7 @@
     <ClCompile Include="D:\LearnOpenGL\CpuRayTracingRenderer\CpuRayTracingRenderer\src\InputHandle.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Rectangles.cpp" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="D:\LearnOpenGL\CpuRayTracingRenderer\CpuRayTracingRenderer\CMakeLists.txt" />
@@ -21,5 +22,8 @@
     <Filter Include="Source Files">
       <UniqueIdentifier>{A9480DCA-5763-3F20-9AC3-F2FAC6F14067}</UniqueIdentifier>
     </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Rectangles.h" />
   </ItemGroup>
 </Project>

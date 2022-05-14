@@ -35,7 +35,7 @@ namespace TinyGlm
 		{
 			return vec4<T>(a.x + b.x, a.y + b.y, a.z + b.z, a.w+b.w);
 		};
-		friend vec4<T> operator+ (const vec3<T>& a, const vec4<T>& b)
+		friend vec4<T> operator+ (const vec3<T>& a , const vec4<T>& b)
 		{
 			return vec4<T>(a.x + b.x, a.y + b.y, a.z + b.z, b.w);
 		};
@@ -72,7 +72,7 @@ namespace TinyGlm
 
 		vec4<T>& operator=(const vec4<T>& _vec4);
 		vec4<T>& operator=(vec4<T>&& _vec4) noexcept;
-		vec4<T>& operator+() const;
+		vec4<T>& operator +() const;
 		vec4<T> operator -() const;
 		T& operator [](int i);
 		T& operator [](short i);
@@ -143,6 +143,7 @@ namespace TinyGlm
 		{
 			return vec3<T>(a.x + b.x, a.y + b.y, a.z + b.z);
 		};
+
 		friend vec3<T> operator- (const vec3<T>& a, const vec3<T>& b)
 		{
 			return vec3<T>(a.x - b.x, a.y - b.y, a.z - b.z);
@@ -183,7 +184,7 @@ namespace TinyGlm
 		vec3<T>& operator /=(const U& t);
 
 		float dot(const vec3<T>& b);
-		vec3<T> cross(const vec3<T>& b);
+		vec3<T> cross(const vec3<T>& b) const;
 		vec3<T> normalize();
 		vec3<T> normalize()const;
 		float length() const;
@@ -708,9 +709,9 @@ namespace TinyGlm
 	}
 
 	template<typename T>
-	TinyGlm::vec3<T> TinyGlm::vec3<T>::cross(const vec3<T>& b)
+	TinyGlm::vec3<T> TinyGlm::vec3<T>::cross(const vec3<T>& b) const
 	{
-		return vec3<T>(
+		return TinyGlm::vec3<T>(
 			(y * b.z - z * b.y),
 			-(x * b.z - z * b.x),
 			(x * b.y - y * b.x)

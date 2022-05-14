@@ -4,6 +4,7 @@
 #include"Ray.h"
 #include"Sphere.h"
 #include"Scene.h"
+#include"Triangle.h"
 #include"IShader.h"
 #include"PBRMaterial.h"
 #include"InputHandle.h"
@@ -30,27 +31,26 @@ int main(int argc, char* argv[])
 	Scene scene(SceneWidth, SceneHeight);
 	Renderer render(scene.width, scene.height);
 	InputHandle input;
+
+	std::shared_ptr<PBRMaterial>  shader1 = std::make_shared<PBRMaterial>(TinyGlm::vec4<float>(0.63f, 0.065f, 0.05f), TinyGlm::vec3<float>(0.3f, 0.1f, 0.7f),0.15f,0.2f);
+	std::shared_ptr<PBRMaterial>  red = std::make_shared<PBRMaterial>(TinyGlm::vec4<float>(0.65f, 0.05f, 0.05f), TinyGlm::vec3<float>(0.9f, 0.5f, 0.3f), 0.02f, 0.2f);
+	std::shared_ptr<PBRMaterial>  white = std::make_shared<PBRMaterial>(TinyGlm::vec4<float>(0.75f, 0.75f, 0.75f), TinyGlm::vec3<float>(0.1f, 0.7f, 0.01f), 0.02f, 0.2f);
+	std::shared_ptr<PBRMaterial>  green = std::make_shared<PBRMaterial>(TinyGlm::vec4<float>(0.12f, 0.45f, 0.15f), TinyGlm::vec3<float>(0.1f, 0.7f, 0.01f), 0.02f, 0.8f);
+
+	std::shared_ptr<Triangle> triangler_right_1 = std::make_shared<Triangle>(TinyGlm::vec3<float>(150.f, 100.f, -100.f), TinyGlm::vec3<float>(150.f, -100.f, -100.f), TinyGlm::vec3<float>(10.f, 10.f, 100.f), red);
+
+	std::shared_ptr<Sphere>  sphere0 = std::make_shared<Sphere>(TinyGlm::vec3<float>(300.f, 120.f, 500.f), 100.f, shader1);
+
 	//Init the Thread Pool
 	InitThreadPool();
 
-	std::shared_ptr<PBRMaterial>  shader1 = std::make_shared<PBRMaterial>(TinyGlm::vec4<float>(0.63f, 0.065f, 0.05f), TinyGlm::vec3<float>(0.3f, 0.1f, 0.7f),0.15f,0.2f);
-	std::shared_ptr<PBRMaterial>  shader2 = std::make_shared<PBRMaterial>(TinyGlm::vec4<float>(0.14f, 0.45f, 0.091f), TinyGlm::vec3<float>(0.9f, 0.5f, 0.3f), 0.02f, 0.2f);
-	std::shared_ptr<PBRMaterial>  shader3 = std::make_shared<PBRMaterial>(TinyGlm::vec4<float>(0.725f, 0.71f, 0.68f), TinyGlm::vec3<float>(0.1f, 0.7f, 0.01f), 0.02f, 0.2f);
-	std::shared_ptr<PBRMaterial>  shader4 = std::make_shared<PBRMaterial>(TinyGlm::vec4<float>(0.925f, 0.91f, 0.1f), TinyGlm::vec3<float>(0.1f, 0.7f, 0.01f), 0.02f, 0.8f);
+	scene.Add(sphere0);
 
-	std::shared_ptr<Sphere>  sphere0 = std::make_shared<Sphere>(TinyGlm::vec3<float>(300.f, 120.f, 500.f), 100.f, dynamic_cast<IShader*>(shader3.get()));
-	std::shared_ptr<Sphere>  sphere1 = std::make_shared<Sphere>(TinyGlm::vec3<float>(0.f, 2.f, 10.f) , 1.f, dynamic_cast<IShader*>(shader3.get()));
-	std::shared_ptr<Sphere>  sphere2 = std::make_shared<Sphere>(TinyGlm::vec3<float>(-2.f, 1.f, 10.f) , 1.f, dynamic_cast<IShader*>(shader2.get()));
-	std::shared_ptr<Sphere>  sphere3 = std::make_shared<Sphere>(TinyGlm::vec3<float>(2.f, 5.f, 10.f), 1.f, dynamic_cast<IShader*>(shader1.get()));
-	std::shared_ptr<Sphere>  sphere4 = std::make_shared<Sphere>(TinyGlm::vec3<float>(0.f, -200.5f,10.f), 200.f, dynamic_cast<IShader*>(shader4.get()));
-
-	//scene.Add(sphere0);
-	scene.Add(sphere1);
-	scene.Add(sphere2);
-	scene.Add(sphere3);
-	scene.Add(sphere4);
+	scene.Add(triangler_right_1);
 
 	scene.BuildBVH();
+
+
 
 	while (input.is_runing)
 	{

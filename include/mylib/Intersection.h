@@ -17,7 +17,7 @@ public:
 	TinyGlm::vec3<float> emition;
 	float distance;
 
-	IShader* shader;
+	std::shared_ptr<IShader> shader;
 	Object* obj;
 
 	Intersection();

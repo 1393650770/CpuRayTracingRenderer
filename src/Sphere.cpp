@@ -6,7 +6,7 @@ extern template class TinyGlm::vec4<float>;
 extern template class TinyGlm::vec3<float>;
 extern template class TinyGlm::vec2<float>;
 
-Sphere::Sphere(const TinyGlm::vec3<float>& _center, float _radius, IShader* _shader, bool _is_use_mathequation_solve) :center(_center), radius(_radius),shader(_shader), is_use_mathequation_solve(_is_use_mathequation_solve)
+Sphere::Sphere(const TinyGlm::vec3<float>& _center, float _radius, std::shared_ptr<IShader> _shader, bool _is_use_mathequation_solve) :center(_center), radius(_radius),shader(_shader), is_use_mathequation_solve(_is_use_mathequation_solve)
 {
 }
 
