@@ -27,6 +27,7 @@ set(STATIC_LIB_SOURCES
     src/BVH.cpp
     src/Bound.cpp
     src/PublicSingleton.cpp
+    src/Rectangles.cpp
     src/ThreadPool.cpp
     src/IShader.cpp
     src/PBRMaterial.cpp
