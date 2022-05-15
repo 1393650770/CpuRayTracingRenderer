@@ -12,7 +12,7 @@ enum E_Rectangles_Type
 	YZ
 };
 
-class Rectangles_XZ:public Object
+class Rectangles:public Object
 {
 private:
 public:
@@ -21,13 +21,13 @@ public:
 	std::shared_ptr<IShader> shader;
 	E_Rectangles_Type type;
 
-	Rectangles_XZ()=default;
-	Rectangles_XZ(float _x0, float _x1, float _z0, float _z1, float _k, TinyGlm::vec3<float> _normal, E_Rectangles_Type _type,std::shared_ptr<IShader> mat);
-	virtual ~Rectangles_XZ();
+	Rectangles()=default;
+	Rectangles(float _x0, float _x1, float _z0, float _z1, float _k, TinyGlm::vec3<float> _normal, E_Rectangles_Type _type,std::shared_ptr<IShader> mat);
+	virtual ~Rectangles();
 
 	bool CheckIsIntersect(const Ray& ray) override;
 	Intersection GetIntersection(Ray& ray) override;
-	void GetSurfaceProperties(const TinyGlm::vec3<float>&, const TinyGlm::vec3<float>&, const uint32_t&, const TinyGlm::vec2<float>&, TinyGlm::vec3<float>&, TinyGlm::vec2<float>&) const override;
+	void GetSurfaceProperties(const TinyGlm::vec3<float>& pos, const TinyGlm::vec3<float>& I, const uint32_t& index, const TinyGlm::vec2<float>& uv, TinyGlm::vec3<float>& normal, TinyGlm::vec2<float>& st) const override;
 	Bound GetBound() override;
 
 };

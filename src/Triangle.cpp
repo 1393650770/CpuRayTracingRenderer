@@ -2,7 +2,7 @@
 #include "IShader.h"
 #include "Bound.h"
 #include "TinyGlm.h"
-
+#include "BVH.h"
 
 
 Triangle::Triangle(TinyGlm::vec3<float> v0, TinyGlm::vec3<float> v1, TinyGlm::vec3<float> v2, std::shared_ptr<IShader> mat):vertices0(v0),vertices1(v1),vertices2(v2),shader(mat)
@@ -94,3 +94,76 @@ Bound Triangle::GetBound()
 }
 
 
+
+MeshTriangle::MeshTriangle(const std::string& filename, std::shared_ptr<IShader>* mt)
+{
+	objl::Loader loader;
+	loader.LoadFile(filename);
+	area = 0;
+	m = mt;
+	assert(loader.LoadedMeshes.size() == 1);
+	auto mesh = loader.LoadedMeshes[0];
+
+	TinyGlm::vec3<float> min_vert = TinyGlm::vec3<float>{ std::numeric_limits<float>::infinity(),
+								 std::numeric_limits<float>::infinity(),
+								 std::numeric_limits<float>::infinity() };
+	TinyGlm::vec3<float> max_vert = TinyGlm::vec3<float>{ -std::numeric_limits<float>::infinity(),
+								 -std::numeric_limits<float>::infinity(),
+								 -std::numeric_limits<float>::infinity() };
+	for (int i = 0; i < mesh.Vertices.size(); i += 3) 
+	{
+		std::vector<TinyGlm::vec3<float>> face_vertices(3);
+
+		for (int j = 0; j < 3; j++) {
+			auto vert = TinyGlm::vec3<float>(mesh.Vertices[i + j].Position.X,
+				mesh.Vertices[i + j].Position.Y,
+				mesh.Vertices[i + j].Position.Z);
+			face_vertices[j] = vert;
+
+			min_vert = TinyGlm::vec3<float>(std::min(min_vert.x, vert.x),
+				std::min(min_vert.y, vert.y),
+				std::min(min_vert.z, vert.z));
+			max_vert = TinyGlm::vec3<float>(std::max(max_vert.x, vert.x),
+				std::max(max_vert.y, vert.y),
+				std::max(max_vert.z, vert.z));
+		}
+
+		triangles.emplace_back(face_vertices[0], face_vertices[1],
+			face_vertices[2], mt);
+	}
+
+	bounding_box = Bound(min_vert, max_vert);
+
+	std::vector<std::shared_ptr<Object>> ptrs;
+	for (auto& tri : triangles) 
+	{
+		ptrs.push_back(std::make_shared<Object>(tri));
+		area += tri.area;
+	}
+	bvh = new BVH(ptrs);
+}
+
+MeshTriangle::~MeshTriangle()
+{
+	delete bvh;
+}
+
+bool MeshTriangle::CheckIsIntersect(const Ray& ray)
+{
+
+}
+
+Intersection MeshTriangle::GetIntersection(Ray& ray)
+{
+	
+}
+
+void MeshTriangle::GetSurfaceProperties(const TinyGlm::vec3<float>& pos, const TinyGlm::vec3<float>& I, const uint32_t& index, const TinyGlm::vec2<float>& uv, TinyGlm::vec3<float>& normal, TinyGlm::vec2<float>& st) const
+{
+
+}
+
+Bound MeshTriangle::GetBound()
+{
+	
+}

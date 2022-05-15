@@ -29,6 +29,7 @@ set(STATIC_LIB_SOURCES
     src/PublicSingleton.cpp
     src/Rectangles.cpp
     src/ThreadPool.cpp
+    src/OBJLoader.cpp
     src/IShader.cpp
     src/PBRMaterial.cpp
 )
@@ -51,8 +52,11 @@ target_include_directories(CpuRayTracingRenderer_library
 
 find_package(SDL2 CONFIG REQUIRED)
 
-add_executable(CpuRayTracingRenderer  ${EXECUTABLE_SOURCES})
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+add_compile_options(-std=c++17)
 
+add_executable(CpuRayTracingRenderer  ${EXECUTABLE_SOURCES})
 
 
 target_link_libraries(CpuRayTracingRenderer

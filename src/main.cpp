@@ -8,6 +8,7 @@
 #include"IShader.h"
 #include"PBRMaterial.h"
 #include"InputHandle.h"
+#include"Rectangles.h"
 #include"Renderer.h"
 #include"PublicSingleton.h"
 #include<vector>
@@ -37,6 +38,8 @@ int main(int argc, char* argv[])
 	std::shared_ptr<PBRMaterial>  white = std::make_shared<PBRMaterial>(TinyGlm::vec4<float>(0.75f, 0.75f, 0.75f), TinyGlm::vec3<float>(0.1f, 0.7f, 0.01f), 0.02f, 0.2f);
 	std::shared_ptr<PBRMaterial>  green = std::make_shared<PBRMaterial>(TinyGlm::vec4<float>(0.12f, 0.45f, 0.15f), TinyGlm::vec3<float>(0.1f, 0.7f, 0.01f), 0.02f, 0.8f);
 
+	
+	std::shared_ptr<Rectangles> rectangles_1 = std::make_shared<Rectangles>(0,100,0,-10,-10,TinyGlm::vec3<float>(0,-1,0),E_Rectangles_Type::YZ, red);
 	std::shared_ptr<Triangle> triangler_right_1 = std::make_shared<Triangle>(TinyGlm::vec3<float>(150.f, 100.f, -100.f), TinyGlm::vec3<float>(150.f, -100.f, -100.f), TinyGlm::vec3<float>(10.f, 10.f, 100.f), red);
 
 	std::shared_ptr<Sphere>  sphere0 = std::make_shared<Sphere>(TinyGlm::vec3<float>(300.f, 120.f, 500.f), 100.f, shader1);
@@ -46,7 +49,7 @@ int main(int argc, char* argv[])
 
 	scene.Add(sphere0);
 
-	scene.Add(triangler_right_1);
+	scene.Add(rectangles_1);
 
 	scene.BuildBVH();
 
