@@ -222,6 +222,10 @@ namespace TinyGlm
 		{
 			return vec2<T>(a.x * b.x, a.y * b.y);
 		};
+		friend vec2<T> operator* (const vec2<T>& a, const T& b)
+		{
+			return vec2<T>(a.x * b, a.y * b);
+		};
 		friend vec2<T> operator/ (const vec2<T>& a, const vec2<T>& b)
 		{
 			return vec2<T>(a.x / b.x, a.y / b.y);

@@ -49,8 +49,8 @@ void RenderFrame(std::pair<int, int> x, std::pair<int, int> y, Scene& scene, std
 		m = j * scene.width + x.first;
 		for (int i = x.first; i < x.second; ++i) 
 		{
-			float dir_x = (2 * (i + 0.5) / (float)scene.width - 1) * imageAspectRatio * scale;
-			float dir_y = (1 - 2 * (j + 0.5) / (float)scene.height) * scale;
+			float dir_x = (2 * (i + 0.5f) / (float)scene.width - 1) * imageAspectRatio * scale;
+			float dir_y = (1 - 2 * (j + 0.5f) / (float)scene.height) * scale;
 			
 			TinyGlm::vec3 < float> dir = TinyGlm::vec3 < float>( dir_x, dir_y, 1).normalize();
 

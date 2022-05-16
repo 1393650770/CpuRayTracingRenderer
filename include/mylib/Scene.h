@@ -19,8 +19,8 @@ private:
 	TinyGlm::vec3<float> GetReflectDir(TinyGlm::vec3<float>& income_light, TinyGlm::vec3<float>& normal);
 
 public:
-	int width=1920;
-	int height=1080;
+	int width= 1280;
+	int height= 960;
 	float fov = 45;
 	std::vector<std::shared_ptr<Object> > objlist;
 	TinyGlm::vec3<float> eye_pos;

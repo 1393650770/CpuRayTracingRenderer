@@ -1,8 +1,8 @@
 #include "Triangle.h"
 #include "IShader.h"
-#include "Bound.h"
 #include "TinyGlm.h"
 #include "BVH.h"
+#include "OBJLoader.h"
 
 
 Triangle::Triangle(TinyGlm::vec3<float> v0, TinyGlm::vec3<float> v1, TinyGlm::vec3<float> v2, std::shared_ptr<IShader> mat):vertices0(v0),vertices1(v1),vertices2(v2),shader(mat)
@@ -95,7 +95,7 @@ Bound Triangle::GetBound()
 
 
 
-MeshTriangle::MeshTriangle(const std::string& filename, std::shared_ptr<IShader>* mt)
+MeshTriangle::MeshTriangle(const std::string& filename, std::shared_ptr<IShader> mt)
 {
 	objl::Loader loader;
 	loader.LoadFile(filename);
@@ -134,10 +134,11 @@ MeshTriangle::MeshTriangle(const std::string& filename, std::shared_ptr<IShader>
 
 	bounding_box = Bound(min_vert, max_vert);
 
-	std::vector<std::shared_ptr<Object>> ptrs;
 	for (auto& tri : triangles) 
 	{
-		ptrs.push_back(std::make_shared<Object>(tri));
+		std::shared_ptr<Triangle> t = std::make_shared<Triangle>(tri);
+
+		ptrs.push_back(t);
 		area += tri.area;
 	}
 	bvh = new BVH(ptrs);
@@ -150,20 +151,44 @@ MeshTriangle::~MeshTriangle()
 
 bool MeshTriangle::CheckIsIntersect(const Ray& ray)
 {
+	Intersection result;
 
+	if (bvh)
+	{
+		Ray ray_temp = ray;
+		result = bvh->GetIntersection(ray_temp, bvh->root);
+	}
+
+	return result.hit;
 }
 
 Intersection MeshTriangle::GetIntersection(Ray& ray)
 {
-	
+	Intersection result;
+
+	if (bvh) 
+	{
+		result = bvh->GetIntersection(ray,bvh->root);
+	}
+
+	return result;
 }
 
 void MeshTriangle::GetSurfaceProperties(const TinyGlm::vec3<float>& pos, const TinyGlm::vec3<float>& I, const uint32_t& index, const TinyGlm::vec2<float>& uv, TinyGlm::vec3<float>& normal, TinyGlm::vec2<float>& st) const
 {
-
+	const TinyGlm::vec3<float>& v0 = vertices[vertexIndex[index * 3]];
+	const TinyGlm::vec3<float>& v1 = vertices[vertexIndex[index * 3 + 1]];
+	const TinyGlm::vec3<float>& v2 = vertices[vertexIndex[index * 3 + 2]];
+	TinyGlm::vec3<float> e0 =(v1 - v0).normalize();
+	TinyGlm::vec3<float> e1 =(v2 - v1).normalize();
+	normal = e0.cross(e1).normalize();
+	const TinyGlm::vec2<float>& st0 = stCoordinates[vertexIndex[index * 3]];
+	const TinyGlm::vec2<float>& st1 = stCoordinates[vertexIndex[index * 3 + 1]];
+	const TinyGlm::vec2<float>& st2 = stCoordinates[vertexIndex[index * 3 + 2]];
+	st = st0 * (1 - uv.x - uv.y) + st1 * uv.x + st2 * uv.y;
 }
 
 Bound MeshTriangle::GetBound()
 {
-	
+	return bounding_box;
 }

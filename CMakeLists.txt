@@ -56,6 +56,8 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 add_compile_options(-std=c++17)
 
+ file(COPY "${CMAKE_SOURCE_DIR}/models" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}")
+
 add_executable(CpuRayTracingRenderer  ${EXECUTABLE_SOURCES})
 
 

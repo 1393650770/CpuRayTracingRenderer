@@ -1,9 +1,13 @@
 #pragma once
+
 #ifndef _TRIANGLE_
 #define _TRIANGLE_
+
 #include"Object.h"
 #include"TinyGlm.h"
-#include"OBJLoader.h"
+#include"Bound.h"
+#include<vector>
+
 class IShader;
 class BVH;
 
@@ -32,18 +36,22 @@ public:
 class MeshTriangle : public Object
 {
 public:
+	
 	Bound bounding_box;
+
 	std::unique_ptr<TinyGlm::vec3<float>[]> vertices;
 	uint32_t numTriangles;
 	std::unique_ptr<uint32_t[]> vertexIndex;
 	std::unique_ptr<TinyGlm::vec2<float>[]> stCoordinates;
 
 	std::vector<Triangle> triangles;
+
+	std::vector<std::shared_ptr<Object>> ptrs;
 	BVH* bvh;
 	float area;
-	std::shared_ptr<IShader>* m;
+	std::shared_ptr<IShader> m;
 
-    MeshTriangle(const std::string& filename, std::shared_ptr<IShader>* mt);
+    MeshTriangle(const std::string& filename, std::shared_ptr<IShader> mt);
     virtual ~MeshTriangle();
 
 	bool CheckIsIntersect(const Ray& ray) override;
@@ -51,8 +59,7 @@ public:
 	Bound GetBound() override;
 	void GetSurfaceProperties(const TinyGlm::vec3<float>& pos, const TinyGlm::vec3<float>& I, const uint32_t& index, const TinyGlm::vec2<float>& uv, TinyGlm::vec3<float>& normal, TinyGlm::vec2<float>& st) const override;
 
-
 };
 
-#endif //
+#endif //_TRIANGLE_
 

@@ -45,6 +45,7 @@ public:
 
 	//获取到碰撞节点
 	Intersection GetIntersection(Ray& ray, BVHNode* node);
+
 };
 
 #endif //_BVH_
