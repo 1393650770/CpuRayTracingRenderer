@@ -24,9 +24,9 @@ namespace TinyGlm
 		vec4(T _x);
 		vec4(T _x, T _y, T _z, T _w);
 		vec4(T _x, T _y, T _z);
-		vec4(const vec4<T>& _vec4) = default;
+		vec4(const vec4<T>& _vec4);
 
-		vec4(vec4<T>&& _vec4) = default;
+		vec4(vec4<T>&& _vec4) noexcept;
 
 		template<typename U>
 		vec4(vec4<U>&& _vec4) noexcept;
@@ -796,6 +796,25 @@ namespace TinyGlm
 	{
 	}
 
+	template<typename T>
+	TinyGlm::vec4<T>::vec4(const vec4<T>& _vec4)
+	{
+		x = _vec4.x;
+		y = _vec4.y;
+		z = _vec4.z;
+		w = _vec4.w;
+	}
+
+
+
+	template<typename T>
+	TinyGlm::vec4<T>::vec4(vec4<T>&& _vec4) noexcept
+	{
+		x = _vec4.x;
+		y = _vec4.y;
+		z = _vec4.z;
+		w = _vec4.w;
+	}
 
 
 

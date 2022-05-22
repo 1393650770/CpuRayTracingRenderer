@@ -146,5 +146,5 @@ Intersection BVH::GetIntersection(Ray& ray, BVHNode* node)
 	Intersection inter1 = GetIntersection(ray, node->left);
 	Intersection inter2 = GetIntersection(ray, node->right);
 
-	return inter1.distance<inter2.distance?inter1:inter2;
+	return inter1.distance< inter2.distance ? inter1:inter2;
 }

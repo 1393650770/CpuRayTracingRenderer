@@ -7,6 +7,7 @@
 #include"Triangle.h"
 #include"IShader.h"
 #include"PBRMaterial.h"
+#include"DiffuseMaterial.h"
 #include"InputHandle.h"
 #include"Renderer.h"
 #include"PublicSingleton.h"
@@ -37,16 +38,33 @@ int main(int argc, char* argv[])
 	std::shared_ptr<PBRMaterial>  white = std::make_shared<PBRMaterial>(TinyGlm::vec4<float>(0.75f, 0.75f, 0.75f), TinyGlm::vec3<float>(0.1f, 0.7f, 0.01f), 0.02f, 0.2f);
 	std::shared_ptr<PBRMaterial>  green = std::make_shared<PBRMaterial>(TinyGlm::vec4<float>(0.12f, 0.45f, 0.15f), TinyGlm::vec3<float>(0.1f, 0.7f, 0.01f), 0.02f, 0.8f);
 
-	std::shared_ptr<MeshTriangle> floor = std::make_shared<MeshTriangle>("models/cornellbox/floor.obj", white);
+	std::shared_ptr<DiffuseMaterial>  white_diffuse = std::make_shared<DiffuseMaterial>(TinyGlm::vec4<float>(0.75f, 0.75f, 0.75f), TinyGlm::vec3<float>(0.1f, 0.7f, 0.01f), 0.02f, 0.2f);
+	std::shared_ptr<DiffuseMaterial>  green_diffuse = std::make_shared<DiffuseMaterial>(TinyGlm::vec4<float>(0.12f, 0.45f, 0.15f), TinyGlm::vec3<float>(0.1f, 0.7f, 0.01f), 0.02f, 0.8f);
 
-	std::shared_ptr<Sphere>  sphere0 = std::make_shared<Sphere>(TinyGlm::vec3<float>(300.f, 120.f, 500.f), 100.f, shader1);
+
+	std::shared_ptr<Sphere>  right = std::make_shared<Sphere>(TinyGlm::vec3<float>(10500.f, 0.f, 500.f), 10000.f, red);
+
+	std::shared_ptr<Sphere>  left = std::make_shared<Sphere>(TinyGlm::vec3<float>(-10500.f, 0.f, 500.f), 10000.f, green);
+
+	std::shared_ptr<Sphere>  forward = std::make_shared<Sphere>(TinyGlm::vec3<float>(0.f, 0.f, 11200.f), 10000.f, white);
+
+	std::shared_ptr<Sphere>  up = std::make_shared<Sphere>(TinyGlm::vec3<float>(0.f, 10300.f, 500.f), 10000.f, white);
+
+
+	std::shared_ptr<Sphere>  sphere1 = std::make_shared<Sphere>(TinyGlm::vec3<float>(0.f, -100.5f, 1.f), 100.0f, white);
+	std::shared_ptr<Sphere>  sphere2 = std::make_shared<Sphere>(TinyGlm::vec3<float>(0.f, -0.1f, 1.f), 0.1f, green);
 
 	//Init the Thread Pool
 	InitThreadPool();
 
-	scene.Add(sphere0);
+	//scene.Add(right);
+	//scene.Add(left);
+	//scene.Add(forward);
+	//scene.Add(up);
 
-	scene.Add(floor);
+	scene.Add(sphere1);
+	scene.Add(sphere2);
+
 
 	scene.BuildBVH();
 

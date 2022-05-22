@@ -2,7 +2,10 @@
 #ifndef _UTILS_
 #define _UTILS_
 
+#define PI 3.1415926f
+
 #include "TinyGlm.h"
+#include <random>
 
 class Utils
 {
@@ -22,6 +25,37 @@ public:
 
         source = source / up_color;
     }
+
+    static float get_random_float()
+    {
+        std::random_device dev;
+        std::mt19937 random_seed(dev());
+        std::uniform_real_distribution<float> ran(0.f, 1.0f);
+        return ran(random_seed);
+    }
+
+    static TinyGlm::vec3<float> toWorld(const TinyGlm::vec3<float>& a, const TinyGlm::vec3<float>& N) 
+    {
+        //TinyGlm::vec3<float> B, C;
+        //if (std::fabs(N.x) > std::fabs(N.y)) {
+        //    float invLen = 1.0f / std::sqrt(N.x * N.x + N.z * N.z);
+        //    C = TinyGlm::vec3<float>(N.z * invLen, 0.0f, -N.x * invLen);
+        //}
+        //else {
+        //    float invLen = 1.0f / std::sqrt(N.y * N.y + N.z * N.z);
+        //    C = TinyGlm::vec3<float>(0.0f, N.z * invLen, -N.y * invLen);
+        //}
+        //B = C.dot(N);
+        //return a.x * B + a.y * C + a.z * N;
+
+        TinyGlm::vec3<float> T, B;
+        T = N.cross(TinyGlm::vec3<float>(N.z, 0.0, -N.x));
+        B = N.cross(B);
+        T = T.normalize();
+        B = T.normalize();
+        return (a.x * B + a.y * T + a.z * N).normalize();
+    }
+
 };
 #endif //_UTILS_
 

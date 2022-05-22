@@ -3,8 +3,6 @@
 #include <algorithm>
 #include "Utils.h"
 
-#define PI 3.1415926f
-
 
 
 
@@ -97,4 +95,20 @@ TinyGlm::vec4<float> PBRMaterial::Shading(TinyGlm::vec3<float> wi, TinyGlm::vec3
     }
 
     return TinyGlm::vec4<float>(0.0f);
+}
+
+//获取间接光的方向
+TinyGlm::vec3<float> PBRMaterial::GetInDirSample(const TinyGlm::vec3<float> wi, const TinyGlm::vec3<float> normal) 
+{
+    float x_1 = Utils::get_random_float(), x_2 = Utils::get_random_float();
+    float z = std::fabs(1.0f - 2.0f * x_1);
+    float r = std::sqrt(1.0f - z * z), phi = 2 * PI * x_2;
+    TinyGlm::vec3<float> localRay(r * std::cos(phi), r * std::sin(phi), z);
+    return Utils::toWorld(localRay, normal);
+}
+
+//重要性采样
+float PBRMaterial::GetPdf(const TinyGlm::vec3<float> wi, const TinyGlm::vec3<float> normal) 
+{
+    return 0;
 }

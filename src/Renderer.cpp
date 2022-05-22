@@ -56,7 +56,8 @@ void RenderFrame(std::pair<int, int> x, std::pair<int, int> y, Scene& scene, std
 
 			for (int k = 0; k < spp; k++) 
 			{
-				framebuffer[m] =scene.GetColor(Ray(scene.eye_pos, dir),0);
+				Ray ray(scene.eye_pos, dir);
+				framebuffer[m] =scene.GetColor(ray,0);
 			}			
 			m++;
 		}
