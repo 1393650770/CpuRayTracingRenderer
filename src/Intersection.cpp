@@ -13,6 +13,17 @@ Intersection::Intersection()
 	shader = nullptr;
 }
 
+Intersection::Intersection(const Intersection& inter)
+{
+	hit = inter.hit;
+	coords = inter.coords;
+	texture_coords = inter.texture_coords;
+	normal = inter.normal;
+	distance = inter.distance;
+	obj = inter.obj;
+	shader = inter.shader;
+}
+
 Intersection::~Intersection()
 {
 }

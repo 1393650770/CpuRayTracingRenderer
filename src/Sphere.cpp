@@ -6,8 +6,11 @@ extern template class TinyGlm::vec4<float>;
 extern template class TinyGlm::vec3<float>;
 extern template class TinyGlm::vec2<float>;
 
-Sphere::Sphere(const TinyGlm::vec3<float>& _center, float _radius, std::shared_ptr<IShader> _shader, bool _is_use_mathequation_solve) :center(_center), radius(_radius),shader(_shader), is_use_mathequation_solve(_is_use_mathequation_solve)
+#define is_use_mathequation_solve 0
+
+Sphere::Sphere(const TinyGlm::vec3<float>& _center, float _radius, std::shared_ptr<IShader> _shader) :center(_center), radius(_radius)
 {
+	shader = _shader;
 }
 
 Sphere::~Sphere()
@@ -16,7 +19,7 @@ Sphere::~Sphere()
 
 bool Sphere::CheckIsIntersect(const Ray& ray)
 {
-	if (is_use_mathequation_solve ==true)
+#if is_use_mathequation_solve==1
 	{
 
 		TinyGlm::vec3<float> oc = ray.origin - center;
@@ -40,7 +43,8 @@ bool Sphere::CheckIsIntersect(const Ray& ray)
 		}
 		return false;
 	}
-	else
+
+#else
 	{
 		TinyGlm::vec3<float> rayorigin_to_origin = center - ray.origin;
 		//射线原点到球中心的距离平方
@@ -60,6 +64,7 @@ bool Sphere::CheckIsIntersect(const Ray& ray)
 		//std::cout << "3" << std::endl;
 		return true;
 	}
+#endif 
 }
 
 Intersection Sphere::GetIntersection(Ray& ray)
@@ -70,7 +75,7 @@ Intersection Sphere::GetIntersection(Ray& ray)
 		return result;
 	TinyGlm::vec3<float> ray_dir_normal = ray.direction.normalize();
 
-	if (is_use_mathequation_solve == true)
+#if is_use_mathequation_solve==1
 	{
 		TinyGlm::vec3<float> oc = ray.origin - center;
 
@@ -101,9 +106,9 @@ Intersection Sphere::GetIntersection(Ray& ray)
 				return result;
 			}
 		}
-
+		return result;
 	}
-	else
+#else
 	{
 		float t0 = std::numeric_limits<float>::max(), t1 = std::numeric_limits<float>::max();
 
@@ -136,6 +141,7 @@ Intersection Sphere::GetIntersection(Ray& ray)
 
 
 	return result;
+#endif 
 }
 
 void Sphere::GetSurfaceProperties(const TinyGlm::vec3<float>& pos, const TinyGlm::vec3<float>& I, const uint32_t& index, const TinyGlm::vec2<float>& uv, TinyGlm::vec3<float>& normal, TinyGlm::vec2<float>& st) const

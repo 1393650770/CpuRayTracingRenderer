@@ -21,6 +21,7 @@ class Object
 private:
 
 public:
+	std::shared_ptr<IShader> shader=nullptr;
 	Object();
 	virtual ~Object();
 	//≈–∂œ «∑Òœ‡Ωª

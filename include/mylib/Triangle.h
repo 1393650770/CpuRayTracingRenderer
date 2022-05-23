@@ -24,7 +24,6 @@ public:
 	TinyGlm::vec3<float> texture_vertices0, texture_vertices1, texture_vertices2;
 	TinyGlm::vec3<float> normal;
 	float area;
-	std::shared_ptr<IShader> shader;
 
 	bool CheckIsIntersect(const Ray& ray) override;
 	Intersection GetIntersection( Ray& ray) override;
@@ -49,7 +48,7 @@ public:
 	std::vector<std::shared_ptr<Object>> ptrs;
 	BVH* bvh;
 	float area;
-	std::shared_ptr<IShader> m;
+
 
     MeshTriangle(const std::string& filename, std::shared_ptr<IShader> mt);
     virtual ~MeshTriangle();

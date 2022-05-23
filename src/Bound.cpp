@@ -42,7 +42,7 @@ bool Bound::GetIsIntersect(const Ray& ray)
 	float t_min_time = std::max(t_min.x, std::max(t_min.y, t_min.z));
 	float t_max_time = std::min(t_max.x, std::max(t_max.y, t_max.z));
 
-	return t_max_time>=-std::numeric_limits<float>::epsilon()&&t_min_time<=t_max_time;
+	return t_max_time>=-std::numeric_limits<float>::epsilon()&&t_min_time <= t_max_time;
 }
 
 int Bound::GetMaxAxis()

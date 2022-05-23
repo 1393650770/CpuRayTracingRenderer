@@ -12,7 +12,7 @@ float PBRMaterial::GeometrySchlickGGX(float NdotV, float roughness)
     float k = (r * r) / 8.0f;
 
     float nom = NdotV;
-    float denom = NdotV * (1.0f - k) + k;
+    float denom = NdotV * (1.0f - k) + k+0.000001f;
 
     return nom / denom;
 }
@@ -38,7 +38,7 @@ float PBRMaterial::DistributionGGX(TinyGlm::vec3<float>& normal_dir, TinyGlm::ve
 
     float nom = a2;
     float denom = (NdotH2 * (a2 - 1.0f) + 1.0f);
-    denom = denom * denom * PI;
+    denom = denom * denom * PI+0.0001f;
 
     return nom / denom;
 }
@@ -75,9 +75,13 @@ TinyGlm::vec4<float> PBRMaterial::Shading(TinyGlm::vec3<float> wi, TinyGlm::vec3
     {
         TinyGlm::vec3<float> view_dir = (-wi).normalize();
         TinyGlm::vec3<float> half_dir = (view_dir + light_dir).normalize();
+
         float D = DistributionGGX(normal_dir, half_dir, roughness);
+
         float G = GeometrySmith(normal_dir, view_dir, light_dir, roughness);
+
         TinyGlm::vec3<float> F = FresnelSchlick(cos_theta, f0);
+
         float divide = 1.0f / (4 * std::max(normal_dir.dot(light_dir), 0.0001f) * std::max(normal_dir.dot(view_dir), 0.0001f));
 
         TinyGlm::vec3<float> specular = D * F * G * divide;
@@ -89,8 +93,8 @@ TinyGlm::vec4<float> PBRMaterial::Shading(TinyGlm::vec3<float> wi, TinyGlm::vec3
         TinyGlm::vec3<float> emittion_color_vec3 = TinyGlm::vec3<float>(emittion_color.x, emittion_color.y, emittion_color.z);
         TinyGlm::vec3<float> color = emittion_color_vec3 * KD / PI + specular;
         
-        
-        return  TinyGlm::vec4<float>(std::min(color.x, 1.0f), std::min(color.y, 1.0f), std::min(color.z, 1.0f));
+        Utils::toon_mapping(color);
+        return  TinyGlm::vec4<float>(color.x, color.y, color.z);
 
     }
 

@@ -5,7 +5,7 @@
 #include "OBJLoader.h"
 
 
-Triangle::Triangle(TinyGlm::vec3<float> v0, TinyGlm::vec3<float> v1, TinyGlm::vec3<float> v2, std::shared_ptr<IShader> mat):vertices0(v0),vertices1(v1),vertices2(v2),shader(mat)
+Triangle::Triangle(TinyGlm::vec3<float> v0, TinyGlm::vec3<float> v1, TinyGlm::vec3<float> v2, std::shared_ptr<IShader> mat):vertices0(v0),vertices1(v1),vertices2(v2)
 {
 	edge0 = vertices1 - vertices0;
 	edge1 = vertices2 - vertices0;
@@ -14,6 +14,8 @@ Triangle::Triangle(TinyGlm::vec3<float> v0, TinyGlm::vec3<float> v1, TinyGlm::ve
 
 	normal = e0_cross_e1.normalize();
 	area = e0_cross_e1.length() * 0.5f;
+
+	shader = mat;
 }
 
 Triangle::~Triangle()
@@ -100,7 +102,7 @@ MeshTriangle::MeshTriangle(const std::string& filename, std::shared_ptr<IShader>
 	objl::Loader loader;
 	loader.LoadFile(filename);
 	area = 0;
-	m = mt;
+	shader = mt;
 	assert(loader.LoadedMeshes.size() == 1);
 	auto mesh = loader.LoadedMeshes[0];
 

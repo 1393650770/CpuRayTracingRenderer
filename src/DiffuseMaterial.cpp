@@ -28,11 +28,20 @@ TinyGlm::vec4<float> DiffuseMaterial::Shading(TinyGlm::vec3<float> wi, TinyGlm::
 
 TinyGlm::vec3<float> DiffuseMaterial::GetInDirSample(const TinyGlm::vec3<float> wi, const TinyGlm::vec3<float> normal)
 {
-	float x_1 = Utils::get_random_float(), x_2 = Utils::get_random_float();
-	float z = std::fabs(1.0f - 2.0f * x_1);
-	float r = std::sqrt(1.0f - z * z), phi = 2 * PI * x_2;
+	float z = std::fabs(1.0f - 2.0f * get_random_float());
+	float r = std::sqrt(1.0f - z * z), phi = 2 * PI * get_random_float();
 	TinyGlm::vec3<float> localRay(r * std::cos(phi), r * std::sin(phi), z);
-	return Utils::toWorld(localRay, normal);
+	return toWorld(localRay, normal);
+
+
+	//TinyGlm::vec3<float> localRay;
+	//do
+	//{
+	//	localRay = 2.0 * TinyGlm::vec3<float>(get_random_float(), get_random_float(), get_random_float()) - TinyGlm::vec3<float>(1.0f);
+	//} while (localRay.dot(localRay)>=1.0f);
+
+
+	//return localRay+normal.normalize();
 }
 
 float DiffuseMaterial::GetPdf(const TinyGlm::vec3<float> wi, const TinyGlm::vec3<float> normal)

@@ -21,6 +21,7 @@ public:
 	Object* obj;
 
 	Intersection();
+	Intersection(const Intersection& inter);
 	virtual ~Intersection();
 };
 
