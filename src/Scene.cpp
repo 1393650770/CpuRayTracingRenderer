@@ -73,15 +73,16 @@ TinyGlm::vec3<float> Scene::GetColor(Ray& ray,int current_depth, int recursive_m
 	Intersection interToBvh = bvh->GetIntersection(ray, bvh->root);
 	if (interToBvh.hit == false)
 	{
-
 		return TinyGlm::vec3<float>();
 	}
 		
+	TinyGlm::vec3<float> result;
 	//如果打到灯光，则直接返回灯光颜色
 	if (interToBvh.shader->is_emit_light)
 	{
-
-		return  TinyGlm::vec3<float>(interToBvh.shader->emittion_color.x, interToBvh.shader->emittion_color.y, interToBvh.shader->emittion_color.z);
+		result = TinyGlm::vec3<float>(interToBvh.shader->emittion_color.x, interToBvh.shader->emittion_color.y, interToBvh.shader->emittion_color.z);
+		Utils::toon_mapping(result);
+		return  result;
 	}
 
 #if  NormalSee == 1
@@ -90,7 +91,7 @@ TinyGlm::vec3<float> Scene::GetColor(Ray& ray,int current_depth, int recursive_m
 #endif //  NormalSee == 1
 
 	//std::cout << "有交点" << std::endl;
-	TinyGlm::vec3<float> result;
+
 	TinyGlm::vec4<float> hit_color;
 
 	TinyGlm::vec3<float> light_dir;
@@ -99,8 +100,10 @@ TinyGlm::vec3<float> Scene::GetColor(Ray& ray,int current_depth, int recursive_m
 
 	if (light_list.size() >= 1)
 	{
-		std::shared_ptr<Sphere> light = std::dynamic_pointer_cast<Sphere>(light_list[0]);
-		light_dir = light->center - interToBvh.coords;
+		Intersection light_sample= light_list[0]->GetSampleInfo();
+		float light_pdf = light_list[0]->GetPdf();
+
+		light_dir = light_sample.coords - interToBvh.coords;
 		light_and_hitpoint_dis = light_dir.length();
 
 		light_dir = light_dir.normalize();
@@ -110,26 +113,28 @@ TinyGlm::vec3<float> Scene::GetColor(Ray& ray,int current_depth, int recursive_m
 		interToLight =bvh->GetIntersection(tolight_ray, bvh->root);
 
 
-		if (interToLight.hit&& interToLight.shader->is_emit_light)
+		if (interToLight.distance - light_and_hitpoint_dis > -0.005f)
 		{
 			TinyGlm::vec4<float> shading = interToBvh.shader->Shading(ray.direction, light_dir, interToBvh.normal);
 
-			hit_color = light->shader->emittion_color * shading *
+			hit_color = light_sample.emition  * shading *
 				light_dir.dot(interToBvh.normal)*
-				light_dir.dot(-interToLight.normal)*10.0f ;
+				light_dir.dot(-interToLight.normal)/ light_and_hitpoint_dis/light_pdf;
 
 			result = TinyGlm::vec3<float>(hit_color.x, hit_color.y, hit_color.z);
 			Utils::toon_mapping(result);
 			hit_color = TinyGlm::vec4<float>(result.x, result.y, result.z, hit_color.w);
 
-	/*		std::cout << "hit_color: " << hit_color.x << " " << hit_color.y << " " << hit_color.z << std::endl;
-			std::cout << "light_dir.dot(interToBvh.normal): " << light_dir.dot(interToBvh.normal) << std::endl;
-			std::cout << "interToLight.normal: " << interToLight.normal.x << " " << interToLight.normal.y << " " << interToLight.normal.z << std::endl;
-			std::cout << "light_dir.dot(interToLight.normal): " << light_dir.dot(-interToLight.normal) << std::endl;
-			std::cout << "shading: " << shading.x << " " << shading.y << " " << shading.z << std::endl << std::endl;*/
+			//std::cout << "hit_color: " << hit_color.x << " " << hit_color.y << " " << hit_color.z << std::endl;
+			//std::cout << "interToLight.normal: " << interToLight.normal.x << " " << interToLight.normal.y << " " << interToLight.normal.z << std::endl;
+			//std::cout << "light_sample.emition: " << light_sample.emition.x << " " << light_sample.emition.y << " " << light_sample.emition.z << std::endl;
+			//std::cout << "light_dir.dot(interToBvh.normal): " << light_dir.dot(interToBvh.normal) << std::endl;
+			//std::cout << "light_dir.dot(interToLight.normal): " << light_dir.dot(-interToLight.normal) << std::endl;
+			//std::cout << "shading: " << shading.x << " " << shading.y << " " << shading.z << std::endl << std::endl;
 
 			
 		}
+
 
 	}
 
@@ -146,27 +151,24 @@ TinyGlm::vec3<float> Scene::GetColor(Ray& ray,int current_depth, int recursive_m
 		Utils::toon_mapping(result);
 		return result;
 	}
-	else if(interToIndir.hit  && interToIndir.shader->is_emit_light==false)
-	{
-		float in_light_and_hitpoint_dis = (interToIndir.coords- interToBvh.coords).length();
-		TinyGlm::vec3<float> indir_color = GetColor(indir_ray, (current_depth + 1), recursive_max_depth);
 
-		TinyGlm::vec4<float> shading = interToBvh.shader->Shading(ray.direction , indir , interToBvh.normal);
+	float in_light_and_hitpoint_dis = (interToIndir.coords- interToBvh.coords).length();
 
-		//std::cout << "shading: " << shading.x << " " << shading.y << " " << shading.z << std::endl;
+	TinyGlm::vec3<float> indir_color = GetColor(indir_ray, (current_depth + 1), recursive_max_depth);
 
-		TinyGlm::vec4<float> indir_color_vec4 = indir_color * 5.0f * shading * std::clamp(indir.dot(interToBvh.normal), 0.0f, 1.0f)/ in_light_and_hitpoint_dis;
+	TinyGlm::vec4<float> shading = interToBvh.shader->Shading(ray.direction , indir , interToBvh.normal);
 
-		hit_color += indir_color_vec4;
 
-		result = TinyGlm::vec3<float>(hit_color.x, hit_color.y, hit_color.z);
-		Utils::toon_mapping(result);
+	TinyGlm::vec4<float> indir_color_vec4 = indir_color* shading * std::clamp(indir.dot(interToBvh.normal), 0.0f, 1.0f)/ (in_light_and_hitpoint_dis* in_light_and_hitpoint_dis)/ interToBvh.shader->GetPdf(indir, interToBvh.normal);
 
-		return result;
-	}
-	
-	result= TinyGlm::vec3<float>(hit_color.x, hit_color.y, hit_color.z);
+	hit_color += indir_color_vec4;
+
+	result = TinyGlm::vec3<float>(hit_color.x, hit_color.y, hit_color.z);
 	Utils::toon_mapping(result);
+
 	return result;
+	
+	
+
 }
 

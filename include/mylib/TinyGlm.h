@@ -183,7 +183,7 @@ namespace TinyGlm
 		template<typename U>
 		vec3<T>& operator /=(const U& t);
 
-		float dot(const vec3<T>& b);
+		float dot(const vec3<T>& b) const;
 		vec3<T> cross(const vec3<T>& b) const;
 		vec3<T> normalize();
 		vec3<T> normalize()const;
@@ -707,7 +707,7 @@ namespace TinyGlm
 	}
 
 	template<typename T>
-	float TinyGlm::vec3<T>::dot(const vec3<T>& b)
+	float TinyGlm::vec3<T>::dot(const vec3<T>& b) const
 	{
 		return x * b.x + y * b.y + z * b.z;
 	}

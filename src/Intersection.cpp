@@ -22,6 +22,7 @@ Intersection::Intersection(const Intersection& inter)
 	distance = inter.distance;
 	obj = inter.obj;
 	shader = inter.shader;
+	emition = inter.emition;
 }
 
 Intersection::~Intersection()

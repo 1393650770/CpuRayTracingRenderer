@@ -38,11 +38,3 @@ TinyGlm::vec3<float> IShader::toWorld(const TinyGlm::vec3<float>& a, const TinyG
     //return (a.x * B + a.y * T + a.z * N).normalize();
 }
 
-float IShader::get_random_float()
-{
-    std::random_device dev;
-    std::mt19937 random_seed(dev());
-    std::uniform_real_distribution<float> ran(0.f, 1.0f);
-    return ran(random_seed);
-}
-

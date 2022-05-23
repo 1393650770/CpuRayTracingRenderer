@@ -1,10 +1,16 @@
 #include "Rectangles.h"
 #include"Bound.h"
 #include"IShader.h"
+#include"Utils.h"
 
-
-Rectangles::Rectangles(float _x0, float _x1, float _z0, float _z1, float _k, TinyGlm::vec3<float> _normal, E_Rectangles_Type _type, std::shared_ptr<IShader> mat):x0(_x0), x1(_x1), z0(_z0), z1(_z1), k(_k),normal(_normal),type(_type),shader(mat)
+Rectangles::Rectangles(TinyGlm::vec3<float> _x0, TinyGlm::vec3<float> _x1, TinyGlm::vec3<float> _z0, TinyGlm::vec3<float> _z1, std::shared_ptr<IShader> mat) :A(_x0), B(_x1), C(_z0), D(_z1), shader(mat)
 {
+	//假定CCW
+	S =  B - A  ;
+	T =  B - C  ;
+	TinyGlm::vec3<float> AB_cross_CB = (S.cross(T));
+	area = AB_cross_CB.length();
+	normal = AB_cross_CB.normalize();
 
 }
 
@@ -14,35 +20,61 @@ Rectangles::~Rectangles()
 
 bool Rectangles::CheckIsIntersect(const Ray& ray)
 {
-	return false;
+	float t = (A - ray.origin).dot(normal) * (1 / normal.dot(ray.direction));
+	if (t < 0.00001f)
+	{
+		return false;
+	}
+
+	TinyGlm::vec3<float> point = ray.origin + ray.direction * t;
+
+	TinyGlm::vec3<float> max_vec = TinyGlm::vec3<float>::max(TinyGlm::vec3<float>::max(A, B), TinyGlm::vec3<float>::max(C, D));
+	TinyGlm::vec3<float> min_vec = TinyGlm::vec3<float>::min(TinyGlm::vec3<float>::min(A, B), TinyGlm::vec3<float>::min(C, D));
+
+	//如果不在矩形内
+	if (min_vec.x - point.x > std::numeric_limits<float>::epsilon() || point.x - max_vec.x > std::numeric_limits<float>::epsilon() ||
+		min_vec.y - point.y > std::numeric_limits<float>::epsilon() || point.y - max_vec.y > std::numeric_limits<float>::epsilon() ||
+		min_vec.z - point.z > std::numeric_limits<float>::epsilon() || point.z - max_vec.z > std::numeric_limits<float>::epsilon())
+	{
+		return false;
+	}
+
+	return true;
 }
 
 Intersection Rectangles::GetIntersection(Ray& ray)
 {
-	float t = (k - ray.origin.y) / ray.direction.y;
-	float x, z;
-	if (type == E_Rectangles_Type::XZ)
-	{
-		x = ray.origin.x + t * ray.direction.x;
-	}
-	else if (type == E_Rectangles_Type::YZ)
-	{
-		x = ray.origin.y + t * ray.direction.y;
-	}
-
-	z= ray.origin.z + t * ray.direction.z;
 	Intersection result;
-	if (x<x0 || x>x1 || z<z0 || z>z1)
+
+	//平面求教
+	float t = (A - ray.origin).dot(normal) * (1.0f / normal.dot(ray.direction));
+	if (t < 0.00001f)
 	{
 		return result;
 	}
+
+	TinyGlm::vec3<float> point = ray.origin + ray.direction * t;
+
+	TinyGlm::vec3<float> max_vec = TinyGlm::vec3<float>::max(TinyGlm::vec3<float>::max(A, B), TinyGlm::vec3<float>::max(C, D));
+	TinyGlm::vec3<float> min_vec = TinyGlm::vec3<float>::min(TinyGlm::vec3<float>::min(A, B), TinyGlm::vec3<float>::min(C, D));
+
+	//如果不在矩形内
+	if (min_vec.x - point.x > std::numeric_limits<float>::epsilon() || point.x - max_vec.x > std::numeric_limits<float>::epsilon() ||
+		min_vec.y - point.y > std::numeric_limits<float>::epsilon() || point.y - max_vec.y > std::numeric_limits<float>::epsilon() ||
+		min_vec.z - point.z > std::numeric_limits<float>::epsilon() || point.z - max_vec.z > std::numeric_limits<float>::epsilon())
+	{
+		return result;
+	}
+
+
+	result.coords = point;
 	result.distance = t;
-	result.coords = TinyGlm::vec3<float>(ray.origin + ray.direction * result.distance);
 	result.obj = this;
-	result.normal = this->normal.normalize();
+	result.normal = this->normal;
 	result.shader = shader;
-
-
+	result.hit = true;
+	result.emition = TinyGlm::vec3<float>(shader->emittion_color.x, shader->emittion_color.y, shader->emittion_color.z);
+	
 	return result;
 }
 
@@ -53,13 +85,20 @@ void Rectangles::GetSurfaceProperties(const TinyGlm::vec3<float>& pos, const Tin
 
 Bound Rectangles::GetBound()
 {
-	if (type == E_Rectangles_Type::XZ)
-	{
-		return Bound(TinyGlm::vec3<float>(x0,k-0.0001f,z0), TinyGlm::vec3<float>(x1, k + 0.0001f, z1));
-	}
-	else if (type == E_Rectangles_Type::YZ)
-	{
-		return Bound(TinyGlm::vec3<float>(k - 0.0001f,x0, z0), TinyGlm::vec3<float>(k + 0.0001f, x1, z1));
-	}
-	return Bound();
+	return Union( Union(Bound(A,B) ,C ), D );
+}
+
+float Rectangles::GetPdf()
+{
+	return 1.0f/area;
+}
+
+Intersection Rectangles::GetSampleInfo()
+{
+	Intersection result;
+	result.coords = A + S * Utils::get_random_float() + T * Utils::get_random_float();
+	result.shader = this->shader;
+	result.normal = this->normal;
+	result.emition = TinyGlm::vec3<float>(shader->emittion_color.x, shader->emittion_color.y, shader->emittion_color.z);
+	return result;
 }

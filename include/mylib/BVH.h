@@ -36,6 +36,8 @@ private:
 	//构建BVH
 	BVHNode* recursiveBuildBVH(std::vector<std::shared_ptr<Object> > object_list);
 
+	Intersection GetSampleInfoFromBVH(BVHNode* node,float p);
+
 public:
 	BVHNode* root;
 
@@ -46,6 +48,7 @@ public:
 	//获取到碰撞节点
 	Intersection GetIntersection(Ray& ray, BVHNode* node);
 
+	Intersection GetSampleInfo();
 };
 
 #endif //_BVH_

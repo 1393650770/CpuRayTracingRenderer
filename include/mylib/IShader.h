@@ -22,9 +22,6 @@ public:
 	virtual float GetPdf(const TinyGlm::vec3<float> wi, const TinyGlm::vec3<float> normal)=0;
 
 
-	//获取随机数
-	float get_random_float();
-
 	//将方向转换到世界空间
 	TinyGlm::vec3<float> toWorld(const TinyGlm::vec3<float>& a, const TinyGlm::vec3<float>& N);
 

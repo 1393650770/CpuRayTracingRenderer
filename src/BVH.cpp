@@ -2,8 +2,10 @@
 #include "Intersection.h"
 #include "Ray.h"
 #include"Object.h"
+#include"Rectangles.h"
 #include<math.h>
 #include <algorithm>
+#include <Utils.h>
 extern template class TinyGlm::vec4<float>;
 extern template class TinyGlm::vec3<float>;
 extern template class TinyGlm::vec2<float>;
@@ -100,6 +102,21 @@ BVHNode* BVH::recursiveBuildBVH(std::vector<std::shared_ptr<Object>> object_list
 	return node;
 }
 
+Intersection BVH::GetSampleInfoFromBVH(BVHNode* node, float p)
+{
+	Intersection result;
+	if (node->left == nullptr || node->right == nullptr) 
+	{
+		return node->object->GetSampleInfo();
+	}
+	if (p < node->left->area)
+		return GetSampleInfoFromBVH(node->left, p);
+	else
+	{
+		return GetSampleInfoFromBVH(node->right, p - node->left->area);
+	}
+}
+
 BVH::BVH()
 {
 
@@ -148,3 +165,10 @@ Intersection BVH::GetIntersection(Ray& ray, BVHNode* node)
 
 	return inter1.distance< inter2.distance ? inter1:inter2;
 }
+
+Intersection BVH::GetSampleInfo()
+{
+	float p = std::sqrt(Utils::get_random_float()) * root->area;
+	return GetSampleInfoFromBVH(root, p);
+}
+

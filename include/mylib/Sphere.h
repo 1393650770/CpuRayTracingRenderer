@@ -22,6 +22,11 @@ public:
     void GetSurfaceProperties(const TinyGlm::vec3<float>& pos, const TinyGlm::vec3<float>& I, const uint32_t& index, const TinyGlm::vec2<float>& uv, TinyGlm::vec3<float>& normal, TinyGlm::vec2<float>& st) const override;
     Bound GetBound() override;
 
+    //均匀采样 ， TODO：重要性采样
+    float GetPdf() override;
+
+    Intersection GetSampleInfo() override;
+
 };
 
 

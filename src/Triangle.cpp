@@ -3,6 +3,7 @@
 #include "TinyGlm.h"
 #include "BVH.h"
 #include "OBJLoader.h"
+#include <Utils.h>
 
 
 Triangle::Triangle(TinyGlm::vec3<float> v0, TinyGlm::vec3<float> v1, TinyGlm::vec3<float> v2, std::shared_ptr<IShader> mat):vertices0(v0),vertices1(v1),vertices2(v2)
@@ -95,7 +96,21 @@ Bound Triangle::GetBound()
 	return Union(Bound(vertices0, vertices1), vertices2);
 }
 
+float Triangle::GetPdf()
+{
+	return 0.0f;
+}
 
+Intersection Triangle::GetSampleInfo()
+{
+	Intersection result;
+	float x = std::sqrt(Utils::get_random_float()), y = Utils::get_random_float();
+	result.coords = vertices0 * (1.0f - x) + vertices1 * (x * (1.0f - y)) + vertices2 * (x * y);
+	result.normal = this->normal;
+	result.emition = TinyGlm::vec3<float>(shader->emittion_color.x, shader->emittion_color.y, shader->emittion_color.z);
+	result.shader = shader;
+	return result;
+}
 
 MeshTriangle::MeshTriangle(const std::string& filename, std::shared_ptr<IShader> mt)
 {
@@ -194,3 +209,14 @@ Bound MeshTriangle::GetBound()
 {
 	return bounding_box;
 }
+
+float MeshTriangle::GetPdf()
+{
+	return 0.0f;
+}
+
+Intersection MeshTriangle::GetSampleInfo()
+{
+	return  bvh->GetSampleInfo();
+}
+
