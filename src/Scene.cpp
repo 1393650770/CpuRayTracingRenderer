@@ -103,7 +103,6 @@ TinyGlm::vec3<float> Scene::GetColor(Ray& ray,int current_depth, int recursive_m
 		light_dir = light->center - interToBvh.coords;
 		light_and_hitpoint_dis = light_dir.length();
 
-
 		light_dir = light_dir.normalize();
 
 		Ray tolight_ray(interToBvh.coords + 0.001f * interToBvh.normal, light_dir);
@@ -117,7 +116,7 @@ TinyGlm::vec3<float> Scene::GetColor(Ray& ray,int current_depth, int recursive_m
 
 			hit_color = light->shader->emittion_color * shading *
 				light_dir.dot(interToBvh.normal)*
-				light_dir.dot(-interToLight.normal)*10.0f / (light_and_hitpoint_dis);
+				light_dir.dot(-interToLight.normal)*10.0f ;
 
 			result = TinyGlm::vec3<float>(hit_color.x, hit_color.y, hit_color.z);
 			Utils::toon_mapping(result);
@@ -149,34 +148,19 @@ TinyGlm::vec3<float> Scene::GetColor(Ray& ray,int current_depth, int recursive_m
 	}
 	else if(interToIndir.hit  && interToIndir.shader->is_emit_light==false)
 	{
+		float in_light_and_hitpoint_dis = (interToIndir.coords- interToBvh.coords).length();
 		TinyGlm::vec3<float> indir_color = GetColor(indir_ray, (current_depth + 1), recursive_max_depth);
 
 		TinyGlm::vec4<float> shading = interToBvh.shader->Shading(ray.direction , indir , interToBvh.normal);
 
 		//std::cout << "shading: " << shading.x << " " << shading.y << " " << shading.z << std::endl;
 
-		TinyGlm::vec4<float> indir_color_vec4 = indir_color * 5.0f * shading * std::clamp(indir.dot(interToBvh.normal), 0.0f, 1.0f);
+		TinyGlm::vec4<float> indir_color_vec4 = indir_color * 5.0f * shading * std::clamp(indir.dot(interToBvh.normal), 0.0f, 1.0f)/ in_light_and_hitpoint_dis;
 
 		hit_color += indir_color_vec4;
 
 		result = TinyGlm::vec3<float>(hit_color.x, hit_color.y, hit_color.z);
 		Utils::toon_mapping(result);
-
-		//std::cout << "hit_color: " << hit_color.x << " " << hit_color.y << " " << hit_color.z << std::endl;
-		//std::cout << "light_dir.dot(interToBvh.normal): " << std::clamp(light_dir.dot(interToBvh.normal), 0.0f, 1.0f) << std::endl;
-		//std::cout << "indir_color: " << indir_color.x << " " << indir_color.y << " " << indir_color.z << std::endl;
-		//std::cout << "indir_color_vec4: " << indir_color_vec4.x << " " << indir_color_vec4.y << " " << indir_color_vec4.z << std::endl;
-		//std::cout << "shading: " << shading.x << " " << shading.y << " " << shading.z << std::endl << std::endl;
-
-		//if ((!interToLight.hit || !interToLight.shader->is_emit_light))
-		//{
-		//	std::cout << "indir: " << indir.x << " " << indir.y << " " << indir.z << std::endl;
-		//	std::cout << "hit_color: " << hit_color.x << " " << hit_color.y << " " << hit_color.z << std::endl;
-		//	std::cout << "light_dir.dot(interToBvh.normal): " << std::clamp(light_dir.dot(-interToBvh.normal), 0.0f, 1.0f) << std::endl;
-		//	std::cout << "indir_color: " << indir_color.x << " " << indir_color.y << " " << indir_color.z << std::endl;
-		//	std::cout << "indir_color_vec4: " << indir_color_vec4.x << " " << indir_color_vec4.y << " " << indir_color_vec4.z << std::endl;
-		//	std::cout << "shading: " << shading.x << " " << shading.y << " " << shading.z << std::endl << std::endl;
-		//}
 
 		return result;
 	}

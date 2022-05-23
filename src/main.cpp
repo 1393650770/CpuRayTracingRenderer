@@ -52,33 +52,33 @@ int main(int argc, char* argv[])
 	std::shared_ptr<DiffuseMaterial> light = std::make_shared<DiffuseMaterial>(TinyGlm::vec4<float>(0.75f, 0.75f, 0.75f), TinyGlm::vec3<float>(0.9f, 0.5f, 0.3f), 0.02f, 0.2f, true);
 
 	//Object
-	std::shared_ptr<Sphere>  right = std::make_shared<Sphere>(TinyGlm::vec3<float>(10300.f, 0.f, 500.f), 10000.f, red_diffuse);
+	std::shared_ptr<Sphere>  right = std::make_shared<Sphere>(TinyGlm::vec3<float>(601.5f, 0.f, 0.f), 600.f, red_diffuse);
 
-	std::shared_ptr<Sphere>  left = std::make_shared<Sphere>(TinyGlm::vec3<float>(-10300.f, 0.f, 500.f), 10000.f, green_diffuse);
+	std::shared_ptr<Sphere>  left = std::make_shared<Sphere>(TinyGlm::vec3<float>(-601.5f, 0.f, 0.f), 600.f, green_diffuse);
 
-	std::shared_ptr<Sphere>  forward = std::make_shared<Sphere>(TinyGlm::vec3<float>(0.f, 0.f, 11200.f), 10000.f, white_diffuse);
+	std::shared_ptr<Sphere>  forward = std::make_shared<Sphere>(TinyGlm::vec3<float>(0.f, 0.f, 606.f), 600.f, white_diffuse);
 
-	std::shared_ptr<Sphere>  up = std::make_shared<Sphere>(TinyGlm::vec3<float>(0.f, 10300.f, 500.f), 10000.f, white_diffuse);
+	std::shared_ptr<Sphere>  up = std::make_shared<Sphere>(TinyGlm::vec3<float>(0.f, 601.5f,0.f), 600.f, white_diffuse);
 
-	std::shared_ptr<Sphere>  down = std::make_shared<Sphere>(TinyGlm::vec3<float>(0.f, -10300.f, 500.f), 10000.f, white_diffuse);
+	std::shared_ptr<Sphere>  down = std::make_shared<Sphere>(TinyGlm::vec3<float>(0.f, -601.5f, 0.f), 600.f, white_diffuse);
 
-	std::shared_ptr<Sphere>  sphere1 = std::make_shared<Sphere>(TinyGlm::vec3<float>(0.f, -401.5f, 10.f), 400.0f, white_diffuse);
-	std::shared_ptr<Sphere>  sphere2 = std::make_shared<Sphere>(TinyGlm::vec3<float>(1.5f, 0.7f, 10.f), 1.f, green_diffuse);
+	std::shared_ptr<Sphere>  sphere1 = std::make_shared<Sphere>(TinyGlm::vec3<float>(0.f, -401.5f, 2.f), 400.0f, white_diffuse);
+	std::shared_ptr<Sphere>  sphere2 = std::make_shared<Sphere>(TinyGlm::vec3<float>(0.f, -1.f, 5.f), 0.5f, green_diffuse);
 
 	//Light
-	std::shared_ptr<Sphere>  light1 = std::make_shared<Sphere>(TinyGlm::vec3<float>(-1.f, 3.f, 9.f),0.1f, light);
+	std::shared_ptr<Sphere>  light1 = std::make_shared<Sphere>(TinyGlm::vec3<float>(0.f, 1.2f, 5.f),0.1f, light);
 
 	//Init the Thread Pool
 	InitThreadPool();
 
 	//Add Object
-	//scene.AddObj(right);
-	//scene.AddObj(left);
-	//scene.AddObj(forward);
-	//scene.AddObj(up);
-	//scene.AddObj(down);
+	scene.AddObj(right);
+	scene.AddObj(left);
+	scene.AddObj(forward);
+	scene.AddObj(up);
+	scene.AddObj(down);
 
-	scene.AddObj(sphere1);
+	//scene.AddObj(sphere1);
 	scene.AddObj(sphere2);
 
 
