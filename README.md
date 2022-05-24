@@ -58,8 +58,9 @@ And then , I will show how to build this project by Cmake GUI . You can see the 
 ### ③ Space Accelerating Structurer
 ### ---SAH
 ### ---Octree
-### ④ Object
+### ④ Object(Maybe will do)
 ### ---OBJLoader
+### ---Texture
 ### ④ Material
 ### ---Dielectrics
  
