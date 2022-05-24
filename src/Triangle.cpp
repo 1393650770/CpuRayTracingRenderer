@@ -98,7 +98,7 @@ Bound Triangle::GetBound()
 
 float Triangle::GetPdf()
 {
-	return 0.0f;
+	return 1.0f/ area;
 }
 
 Intersection Triangle::GetSampleInfo()
@@ -213,7 +213,7 @@ Bound MeshTriangle::GetBound()
 
 float MeshTriangle::GetPdf()
 {
-	return 0.0f;
+	return 1.0f / area;
 }
 
 Intersection MeshTriangle::GetSampleInfo()
