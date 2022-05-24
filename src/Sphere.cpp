@@ -137,6 +137,7 @@ Intersection Sphere::GetIntersection(Ray& ray)
 		result.obj = this;
 		result.normal = TinyGlm::vec3<float>(result.coords - center).normalize();
 		result.shader = shader;
+		result.emition = TinyGlm::vec3<float>(shader->emittion_color.x, shader->emittion_color.y, shader->emittion_color.z);
 	}
 
 
@@ -163,11 +164,12 @@ float Sphere::GetPdf()
 Intersection Sphere::GetSampleInfo()
 {
 	Intersection result;
-	float theta = 2.0f * PI * Utils::get_random_float(), phi = PI * Utils::get_random_float();
+	float theta = 2.0f * PI * Utils::get_random_float()*0.95f, phi = PI * Utils::get_random_float();
 	TinyGlm::vec3<float> dir(std::cos(phi), std::sin(phi) * std::cos(theta), std::sin(phi) * std::sin(theta));
-	result.coords = center + radius * dir.normalize();
-	result.normal = dir;
+	result.coords = center + radius*0.95f  * dir.normalize();
+	result.normal = dir.normalize();
 	result.shader = shader;
+	result.obj = this;	
 	result.emition = TinyGlm::vec3<float>(shader->emittion_color.x, shader->emittion_color.y, shader->emittion_color.z);
 	return result;
 }

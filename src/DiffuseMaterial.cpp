@@ -15,7 +15,7 @@ DiffuseMaterial::~DiffuseMaterial()
 
 TinyGlm::vec4<float> DiffuseMaterial::Shading(TinyGlm::vec3<float> wi, TinyGlm::vec3<float> wo, TinyGlm::vec3<float> normal)
 {
-	if (normal.dot(wo) > std::numeric_limits<float>::epsilon())
+	if (normal.dot(wo) > -std::numeric_limits<float>::epsilon())
 	{
 		return emittion_color / PI;
 	}
@@ -24,31 +24,34 @@ TinyGlm::vec4<float> DiffuseMaterial::Shading(TinyGlm::vec3<float> wi, TinyGlm::
 
 		return TinyGlm::vec4<float>(0.f);
 	}
-}
+}	
 
 TinyGlm::vec3<float> DiffuseMaterial::GetInDirSample(const TinyGlm::vec3<float> wi, const TinyGlm::vec3<float> normal)
 {
-	float z = std::fabs(1.0f - 2.0f * Utils::get_random_float());
-	float r = std::sqrt(1.0f - z * z), phi = 2 * PI * Utils::get_random_float();
-	TinyGlm::vec3<float> localRay(r * std::cos(phi), r * std::sin(phi), z);
-	return Utils::toWorld(localRay, normal);
+	//float z = std::fabs(1.0f - 2.0f * Utils::get_random_float());
+	//float r = std::sqrt(1.0f - z * z), phi = 2 * PI * Utils::get_random_float();
+	//TinyGlm::vec3<float> localRay(r * std::cos(phi), r * std::sin(phi), z);
+	//return Utils::toWorld(localRay, normal);
 
 
-	//TinyGlm::vec3<float> localRay;
-	//do
-	//{
-	//	localRay = 2.0 * TinyGlm::vec3<float>(get_random_float(), get_random_float(), get_random_float()) - TinyGlm::vec3<float>(1.0f);
-	//} while (localRay.dot(localRay)>=1.0f);
+	TinyGlm::vec3<float> localRay;
+	do
+	{
+		localRay = 2.0f * TinyGlm::vec3<float>(Utils::get_random_float(), Utils::get_random_float(), Utils::get_random_float()) - TinyGlm::vec3<float>(1.0f);
+	} while (localRay.dot(localRay)>=1.0f);
 
 
-	//return localRay+normal.normalize();
+	return localRay+normal.normalize();
 }
 
 float DiffuseMaterial::GetPdf(const TinyGlm::vec3<float> wi, const TinyGlm::vec3<float> normal)
 {
-	if (wi.dot(normal) >= 0.0001f)
+	float ndotl=wi.dot(normal);
+	if (ndotl >= -0.0001f)
 	{
-		return 0.5f / PI;
+		return ndotl / PI;
 	}
 	return 0.0f;
 }
+
+

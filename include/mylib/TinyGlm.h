@@ -725,14 +725,14 @@ namespace TinyGlm
 	template<typename T>
 	TinyGlm::vec3<T> TinyGlm::vec3<T>::normalize()
 	{
-		float this_length = length();
-		return vec3<T>( x / this_length, y / this_length, z / this_length);
+		float inv_length =1.0f/ length();
+		return vec3<T>( x * inv_length, y* inv_length, z * inv_length);
 	}
 	template<typename T>
 	TinyGlm::vec3<T> TinyGlm::vec3<T>::normalize() const
 	{
-		float this_length = length();
-		return vec3<T>(x / this_length, y / this_length, z / this_length);
+		float inv_length =1.0f/ length();
+		return vec3<T>(x * inv_length, y * inv_length, z * inv_length);
 	}
 
 	template<typename T>

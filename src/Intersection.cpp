@@ -15,6 +15,7 @@ Intersection::Intersection()
 
 Intersection::Intersection(const Intersection& inter)
 {
+
 	hit = inter.hit;
 	coords = inter.coords;
 	texture_coords = inter.texture_coords;

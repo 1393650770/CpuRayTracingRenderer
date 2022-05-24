@@ -107,6 +107,7 @@ Intersection Triangle::GetSampleInfo()
 	float x = std::sqrt(Utils::get_random_float()), y = Utils::get_random_float();
 	result.coords = vertices0 * (1.0f - x) + vertices1 * (x * (1.0f - y)) + vertices2 * (x * y);
 	result.normal = this->normal;
+	result.obj = this;
 	result.emition = TinyGlm::vec3<float>(shader->emittion_color.x, shader->emittion_color.y, shader->emittion_color.z);
 	result.shader = shader;
 	return result;

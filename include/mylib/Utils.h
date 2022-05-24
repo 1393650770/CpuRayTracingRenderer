@@ -7,9 +7,15 @@
 #include "TinyGlm.h"
 #include <random>
 
+static std::random_device dev;
+static std::mt19937 random_seed(dev());
+static std::uniform_real_distribution<float> ran(0.f, 1.0f);
+
 class Utils
 {
 public:
+
+
     static float clamp(float val, float min, float max)
     {
         if (val > max)
@@ -62,9 +68,6 @@ public:
 
     static float get_random_float()
     {
-        std::random_device dev;
-        std::mt19937 random_seed(dev());
-        std::uniform_real_distribution<float> ran(0.f, 1.0f);
         return ran(random_seed);
     }
 

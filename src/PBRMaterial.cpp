@@ -114,5 +114,10 @@ TinyGlm::vec3<float> PBRMaterial::GetInDirSample(const TinyGlm::vec3<float> wi, 
 //重要性采样
 float PBRMaterial::GetPdf(const TinyGlm::vec3<float> wi, const TinyGlm::vec3<float> normal) 
 {
-    return 0;
+    float ndotl = wi.dot(normal);
+    if (ndotl >= 0.0001f)
+    {
+        return ndotl / PI;
+    }
+    return 0.0f;
 }
