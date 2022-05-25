@@ -108,19 +108,34 @@ TinyGlm::vec4<float> PBRMaterial::Shading(TinyGlm::vec3<float> wi, TinyGlm::vec3
 //获取间接光的方向
 TinyGlm::vec3<float> PBRMaterial::GetInDirSample(const TinyGlm::vec3<float> wi, const TinyGlm::vec3<float> normal) 
 {
-    float x_1 = Utils::get_random_float(), x_2 = Utils::get_random_float();
-    float z = std::fabs(1.0f - 2.0f * x_1);
-    float r = std::sqrt(1.0f - z * z), phi = 2 * PI * x_2;
-    TinyGlm::vec3<float> localRay(r * std::cos(phi), r * std::sin(phi), z);
-    return Utils::toWorld(localRay, normal);
+    //----cos-weighted 重要性采样---
+    {
+        //----cos-weighted 重要性采样:从pdf反推---
+        {
+            float r1 = Utils::get_random_float(), r2 = Utils::get_random_float();
+            float theta = std::acosf(std::sqrt(1.0f - r1)), phi = 2 * PI * r2;
+            TinyGlm::vec3<float> localRay(std::cos(phi) * std::sin(theta), std::sin(phi) * std::sin(theta), std::cos(theta));
+            return Utils::toWorld(localRay, normal);
+        }
 
-    //TinyGlm::vec3<float> localRay;
-    //do
-    //{
-    //    localRay = 2.0f * TinyGlm::vec3<float>(Utils::get_random_float(), Utils::get_random_float(), Utils::get_random_float()) - TinyGlm::vec3<float>(1.0f);
-    //}
-    //while (localRay.dot(localRay) >= 1.0f);
-    //return localRay + normal.normalize();
+        //----cos-weighted 重要性采样:从pdf反推（化简，并改版）---
+        //{
+        //	float z = std::fabs(1.0f - 2.0f * Utils::get_random_float());
+        //	float r = std::sqrt(1.0f - z * z), phi = 2 * PI * Utils::get_random_float();
+        //	TinyGlm::vec3<float> localRay(r * std::cos(phi), r * std::sin(phi), z);
+        //	return Utils::toWorld(localRay, normal);
+        //}
+
+        //----cos-weighted 重要性采样:法线中心球形采样（太极图形）---
+        //{
+        //	TinyGlm::vec3<float> localRay;
+        //	do
+        //	{
+        //		localRay = 2.0f * TinyGlm::vec3<float>(Utils::get_random_float(), Utils::get_random_float(), Utils::get_random_float()) - TinyGlm::vec3<float>(1.0f);
+        //	} while (localRay.dot(localRay) >= 1.0f);
+        //	return localRay + normal.normalize();
+        //}
+    }
 }
 
 //重要性采样

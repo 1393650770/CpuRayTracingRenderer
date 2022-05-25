@@ -28,20 +28,36 @@ TinyGlm::vec4<float> DiffuseMaterial::Shading(TinyGlm::vec3<float> wi, TinyGlm::
 
 TinyGlm::vec3<float> DiffuseMaterial::GetInDirSample(const TinyGlm::vec3<float> wi, const TinyGlm::vec3<float> normal)
 {
-	float z = std::fabs(1.0f - 2.0f * Utils::get_random_float());
-	float r = std::sqrt(1.0f - z * z), phi = 2 * PI * Utils::get_random_float();
-	TinyGlm::vec3<float> localRay(r * std::cos(phi), r * std::sin(phi), z);
-	return Utils::toWorld(localRay, normal);
 
+	//----cos-weighted 重要性采样---
+	{
+		//----cos-weighted 重要性采样:从pdf反推---
+		{
+			float r1 = Utils::get_random_float(), r2 = Utils::get_random_float();
+			float theta = std::acosf(std::sqrt(1.0f - r1)), phi = 2 * PI * r2;
+			TinyGlm::vec3<float> localRay(std::cos(phi) * std::sin(theta), std::sin(phi) * std::sin(theta), std::cos(theta));
+			return Utils::toWorld(localRay, normal);
+		}
 
-	//TinyGlm::vec3<float> localRay;
-	//do
-	//{
-	//	localRay = 2.0f * TinyGlm::vec3<float>(Utils::get_random_float(), Utils::get_random_float(), Utils::get_random_float()) - TinyGlm::vec3<float>(1.0f);
-	//} while (localRay.dot(localRay)>=1.0f);
+		//----cos-weighted 重要性采样:从pdf反推（化简，并改版）---
+		//{
+		//	float z = std::fabs(1.0f - 2.0f * Utils::get_random_float());
+		//	float r = std::sqrt(1.0f - z * z), phi = 2 * PI * Utils::get_random_float();
+		//	TinyGlm::vec3<float> localRay(r * std::cos(phi), r * std::sin(phi), z);
+		//	return Utils::toWorld(localRay, normal);
+		//}
 
+		//----cos-weighted 重要性采样:法线中心球形采样（太极图形）---
+		//{
+		//	TinyGlm::vec3<float> localRay;
+		//	do
+		//	{
+		//		localRay = 2.0f * TinyGlm::vec3<float>(Utils::get_random_float(), Utils::get_random_float(), Utils::get_random_float()) - TinyGlm::vec3<float>(1.0f);
+		//	} while (localRay.dot(localRay) >= 1.0f);
+		//	return localRay + normal.normalize();
+		//}
+	}
 
-	//return localRay+normal.normalize();
 }
 
 float DiffuseMaterial::GetPdf(const TinyGlm::vec3<float> wi, const TinyGlm::vec3<float> normal)

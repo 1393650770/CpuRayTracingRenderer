@@ -88,7 +88,7 @@ int main(int argc, char* argv[])
 	//std::shared_ptr<Rectangles>  forward = std::make_shared<Rectangles>(H,D,C,G, white_diffuse);
 
 	//Sphere
-	std::shared_ptr<Sphere>  sphere = std::make_shared<Sphere>(TinyGlm::vec3<float>(0.f, -1.f, 4.5f), 0.5f, pbr);
+	std::shared_ptr<Sphere>  sphere = std::make_shared<Sphere>(TinyGlm::vec3<float>(0.f, -1.f, 4.5f), 0.5f, green_diffuse);
 
 	//Light
 	std::shared_ptr<Sphere>  point_light = std::make_shared<Sphere>(TinyGlm::vec3<float>(0.f, 0.5f, 5.f),0.2f, light);
