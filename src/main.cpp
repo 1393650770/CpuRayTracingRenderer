@@ -21,7 +21,7 @@
 	
 
 
-#define M_PI 3.1415926
+
 
  int SceneWidth= 1280, SceneHeight = 800;
 
@@ -59,10 +59,10 @@ int main(int argc, char* argv[])
 	TinyGlm::vec3<float> H = TinyGlm::vec3<float>(-50.f, -1.5f, 50.f);
 
 	//Material
-	std::shared_ptr<PBRMaterial>  shader1 = std::make_shared<PBRMaterial>(TinyGlm::vec4<float>(0.63f, 0.065f, 0.05f), TinyGlm::vec3<float>(0.3f, 0.1f, 0.7f),0.15f,0.2f);
-	std::shared_ptr<PBRMaterial>  red = std::make_shared<PBRMaterial>(TinyGlm::vec4<float>(0.65f, 0.05f, 0.05f), TinyGlm::vec3<float>(0.9f, 0.5f, 0.3f), 0.02f, 0.2f);
-	std::shared_ptr<PBRMaterial>  white = std::make_shared<PBRMaterial>(TinyGlm::vec4<float>(0.75f, 0.75f, 0.75f), TinyGlm::vec3<float>(0.1f, 0.7f, 0.01f), 0.02f, 0.2f);
-	std::shared_ptr<PBRMaterial>  Test = std::make_shared<PBRMaterial>(TinyGlm::vec4<float>(0.12f, 0.45f, 0.15f), TinyGlm::vec3<float>(1.0f,1.0f, 1.0f), 0.01f, 0.7f);
+	std::shared_ptr<PBRMaterial>  shader1 = std::make_shared<PBRMaterial>(TinyGlm::vec4<float>(0.63f, 0.065f, 0.05f), TinyGlm::vec3<float>(0.3f, 0.1f, 0.7f), TinyGlm::vec3<float>(16.5f, 15.f, 15.f), 0.15f,0.2f);
+	std::shared_ptr<PBRMaterial>  red = std::make_shared<PBRMaterial>(TinyGlm::vec4<float>(0.65f, 0.05f, 0.05f), TinyGlm::vec3<float>(0.9f, 0.5f, 0.3f), TinyGlm::vec3<float>(16.5f, 15.f, 15.f), 0.02f, 0.2f);
+	std::shared_ptr<PBRMaterial>  white = std::make_shared<PBRMaterial>(TinyGlm::vec4<float>(0.75f, 0.75f, 0.75f), TinyGlm::vec3<float>(0.1f, 0.7f, 0.01f), TinyGlm::vec3<float>(16.5f, 15.f, 15.f), 0.02f, 0.2f);
+	std::shared_ptr<PBRMaterial>  pbr = std::make_shared<PBRMaterial>(TinyGlm::vec4<float>(0.65f, 0.06f, 0.05f), TinyGlm::vec3<float>(0.9f, 0.5f, 0.3f), TinyGlm::vec3<float>(5.f, 5.f, 5.f),0.05f, 0.1f);
 
 	std::shared_ptr<DiffuseMaterial>  white_diffuse = std::make_shared<DiffuseMaterial>(TinyGlm::vec4<float>(0.75f, 0.75f, 0.75f), TinyGlm::vec3<float>(0.1f, 0.7f, 0.01f), 0.02f, 0.2f);
 	std::shared_ptr<DiffuseMaterial>  green_diffuse = std::make_shared<DiffuseMaterial>(TinyGlm::vec4<float>(0.12f, 0.45f, 0.15f), TinyGlm::vec3<float>(0.1f, 0.7f, 0.01f), 0.02f, 0.8f);
@@ -88,26 +88,11 @@ int main(int argc, char* argv[])
 	//std::shared_ptr<Rectangles>  forward = std::make_shared<Rectangles>(H,D,C,G, white_diffuse);
 
 	//Sphere
-	//std::shared_ptr<Sphere>  sphere1 = std::make_shared<Sphere>(TinyGlm::vec3<float>(0.f, -401.5f, 2.f), 400.0f, white_diffuse);
-	std::shared_ptr<Sphere>  sphere2 = std::make_shared<Sphere>(TinyGlm::vec3<float>(0.f, -1.f, 4.5f), 0.5f, Test);
-
+	std::shared_ptr<Sphere>  sphere = std::make_shared<Sphere>(TinyGlm::vec3<float>(0.f, -1.f, 4.5f), 0.5f, pbr);
 
 	//Light
 	std::shared_ptr<Sphere>  point_light = std::make_shared<Sphere>(TinyGlm::vec3<float>(0.f, 0.5f, 5.f),0.2f, light);
 	std::shared_ptr<Rectangles>  rectangle_light = std::make_shared<Rectangles>(TinyGlm::vec3<float>(-0.5f, 1.5f, 4.25f), TinyGlm::vec3<float>(0.5f, 1.5f, 4.25f), TinyGlm::vec3<float>(0.5f, 1.5f, 4.75f), TinyGlm::vec3<float>(-0.5f, 1.5f, 4.75f), light);
-
-	/*new Test
-	// Sphere simulates the Cornell box
-	std::shared_ptr<Sphere>  right = std::make_shared<Sphere>(TinyGlm::vec3<float>(5035.5f, 0.f, 100.f), 5000.f, red_diffuse);
-	std::shared_ptr<Sphere>  left = std::make_shared<Sphere>(TinyGlm::vec3<float>(-5035.5f, 0.f, 100.f), 5000.f, green_diffuse);
-	std::shared_ptr<Sphere>  forward = std::make_shared<Sphere>(TinyGlm::vec3<float>(0.f, 0.f, 5116.f), 5000.f, white_diffuse);
-	std::shared_ptr<Sphere>  up = std::make_shared<Sphere>(TinyGlm::vec3<float>(0.f, 5031.5f, 100.f), 5000.f, white_diffuse);
-	std::shared_ptr<Sphere>  down = std::make_shared<Sphere>(TinyGlm::vec3<float>(0.f, -5031.5f, 100.f), 5000.f, white_diffuse);
-
-	//Light
-	std::shared_ptr<Sphere>  point_light = std::make_shared<Sphere>(TinyGlm::vec3<float>(0.f, 28.f, 100.f), 10.f, light);
-	std::shared_ptr<Rectangles>  rectangle_light = std::make_shared<Rectangles>(TinyGlm::vec3<float>(-10.5f, 30.5f, 85.25f), TinyGlm::vec3<float>(10.5f, 30.5f, 85.25f), TinyGlm::vec3<float>(10.5f, 30.5f, 95.75f), TinyGlm::vec3<float>(-10.5f, 30.5f, 95.75f), light);
-	*/
 
 	//Init the Thread Pool
 	InitThreadPool();
@@ -119,8 +104,7 @@ int main(int argc, char* argv[])
 	scene.AddObj(up);
 	scene.AddObj(down);
 
-	//scene.AddObj(sphere1);
-	scene.AddObj(sphere2);
+	scene.AddObj(sphere);
 
 
 	//Add Light

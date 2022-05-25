@@ -52,8 +52,9 @@ TinyGlm::vec3<float> PBRMaterial::FresnelSchlick(float cosTheta, TinyGlm::vec3<f
 
 
 
-PBRMaterial::PBRMaterial(const TinyGlm::vec4<float>& emit_color, const TinyGlm::vec3<float>& _f0, float _roughness, float _metallicity, bool _is_emit_light)
+PBRMaterial::PBRMaterial(const TinyGlm::vec4<float>& emit_color, const TinyGlm::vec3<float>& _f0, const TinyGlm::vec3<float>& _light_color, float _roughness, float _metallicity, bool _is_emit_light)
 {
+    light_color = _light_color;
     emittion_color = emit_color;
     f0 = _f0;
     roughness = std::clamp( _roughness,0.001f,0.999f);
@@ -83,7 +84,7 @@ TinyGlm::vec4<float> PBRMaterial::Shading(TinyGlm::vec3<float> wi, TinyGlm::vec3
         TinyGlm::vec3<float> non_matal(0.04f);
         f0 = Utils::lerp(non_matal, f0, metallicity);
 
-        TinyGlm::vec3<float> F = FresnelSchlick(cos_theta, f0);
+        TinyGlm::vec3<float> F = FresnelSchlick(std::max(cos_theta,0.0f), f0);
 
         float divide = 1.0f / (4.0f * std::max(normal_dir.dot(light_dir), 0.0001f) * std::max(normal_dir.dot(view_dir), 0.0001f));
 
@@ -94,9 +95,9 @@ TinyGlm::vec4<float> PBRMaterial::Shading(TinyGlm::vec3<float> wi, TinyGlm::vec3
         KD *= 1.0f- metallicity;
          
         TinyGlm::vec3<float> emittion_color_vec3 = TinyGlm::vec3<float>(emittion_color.x, emittion_color.y, emittion_color.z);
-        TinyGlm::vec3<float> color = emittion_color_vec3 * KD / PI + specular;
+        TinyGlm::vec3<float> color = (emittion_color_vec3 * KD / PI + specular)* light_color;
         
-        Utils::toon_mapping(color);
+        //Utils::toon_mapping(color);
         return  TinyGlm::vec4<float>(color.x, color.y, color.z);
 
     }
@@ -107,18 +108,19 @@ TinyGlm::vec4<float> PBRMaterial::Shading(TinyGlm::vec3<float> wi, TinyGlm::vec3
 //获取间接光的方向
 TinyGlm::vec3<float> PBRMaterial::GetInDirSample(const TinyGlm::vec3<float> wi, const TinyGlm::vec3<float> normal) 
 {
-    //float x_1 = Utils::get_random_float(), x_2 = Utils::get_random_float();
-    //float z = std::fabs(1.0f - 2.0f * x_1);
-    //float r = std::sqrt(1.0f - z * z), phi = 2 * PI * x_2;
-    //TinyGlm::vec3<float> localRay(r * std::cos(phi), r * std::sin(phi), z);
-    //return Utils::toWorld(localRay, normal);
+    float x_1 = Utils::get_random_float(), x_2 = Utils::get_random_float();
+    float z = std::fabs(1.0f - 2.0f * x_1);
+    float r = std::sqrt(1.0f - z * z), phi = 2 * PI * x_2;
+    TinyGlm::vec3<float> localRay(r * std::cos(phi), r * std::sin(phi), z);
+    return Utils::toWorld(localRay, normal);
 
-    TinyGlm::vec3<float> localRay;
-    do
-    {
-        localRay = 2.0f * TinyGlm::vec3<float>(Utils::get_random_float(), Utils::get_random_float(), Utils::get_random_float()) - TinyGlm::vec3<float>(1.0f);
-    } while (localRay.dot(localRay) >= 1.0f);
-    return localRay + normal.normalize();
+    //TinyGlm::vec3<float> localRay;
+    //do
+    //{
+    //    localRay = 2.0f * TinyGlm::vec3<float>(Utils::get_random_float(), Utils::get_random_float(), Utils::get_random_float()) - TinyGlm::vec3<float>(1.0f);
+    //}
+    //while (localRay.dot(localRay) >= 1.0f);
+    //return localRay + normal.normalize();
 }
 
 //重要性采样

@@ -19,7 +19,9 @@ private:
 
 
 public:
-    PBRMaterial(const TinyGlm::vec4<float>& emit_color, const TinyGlm::vec3<float>& _f0, float _roughness,float _metallicity,bool _is_emit_light=false);
+    TinyGlm::vec3<float> light_color;
+
+    PBRMaterial(const TinyGlm::vec4<float>& emit_color, const TinyGlm::vec3<float>& _f0, const TinyGlm::vec3<float>& _light_color, float _roughness,float _metallicity,bool _is_emit_light=false);
     virtual ~PBRMaterial();
     //计算着色接口
     TinyGlm::vec4<float> Shading(TinyGlm::vec3<float> wi, TinyGlm::vec3<float> wo, TinyGlm::vec3<float> normal) override;

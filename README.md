@@ -43,6 +43,7 @@ And then , I will show how to build this project by Cmake GUI . You can see the 
 ### ---MeshTriangle
 ### ④ Material
 ### ---Diffuse
+### ---Microfacet BRDF
 ### ⑤ Light
 ### ---SphereLight (PointLight)
 ### ---AreaLight
@@ -63,8 +64,6 @@ And then , I will show how to build this project by Cmake GUI . You can see the 
 ### ---Texture
 ### ④ Material
 ### ---Dielectrics
- 
-### ---BRDF 
 ### ---BSSRDF 
 ### ⑤ Sampling
 ### ---Importance Sampling
@@ -75,3 +74,6 @@ And then , I will show how to build this project by Cmake GUI . You can see the 
 ### ---Toon-mapping
 ### ---NormalSpace To WorldSpace
 ### ---Random number generator
+
+
+
