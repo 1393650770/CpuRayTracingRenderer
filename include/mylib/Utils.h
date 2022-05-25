@@ -71,6 +71,16 @@ public:
         return ran(random_seed);
     }
 
+    static TinyGlm::vec3<float> lerp(TinyGlm::vec3<float>& a, TinyGlm::vec3<float>& b, float m)
+    {
+        m = std::clamp(m, 0.0f, 1.0f);
+        float x1 = a.x * (1.0f - m) + b.x * (m);
+        float x2 = a.y * (1.0f - m) + b.y * (m);
+        float x3 = a.z * (1.0f - m) + b.z * (m);
+
+        return TinyGlm::vec3<float>(x1, x2, x3);
+
+    }
 
 };
 #endif //_UTILS_
