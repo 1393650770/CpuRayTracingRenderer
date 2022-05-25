@@ -44,6 +44,8 @@ And then , I will show how to build this project by Cmake GUI . You can see the 
 ### ④ Material
 ### ---Diffuse
 ### ---Microfacet BRDF
+### ⑤ Sampling
+### ---Cos-Weighted Importance Sampling
 ### ⑤ Light
 ### ---SphereLight (PointLight)
 ### ---AreaLight
