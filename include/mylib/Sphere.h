@@ -23,7 +23,7 @@ public:
     Bound GetBound() override;
 
     //均匀采样 ， TODO：重要性采样
-    float GetPdf() override;
+    float GetPdf(const TinyGlm::vec3<float>& income_light, const float dis) override;
 
     Intersection GetSampleInfo() override;
 

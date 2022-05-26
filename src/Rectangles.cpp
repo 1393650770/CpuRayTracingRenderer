@@ -11,7 +11,7 @@ Rectangles::Rectangles(TinyGlm::vec3<float> _x0, TinyGlm::vec3<float> _x1, TinyG
 	TinyGlm::vec3<float> AB_cross_CB = (S.cross(T));
 	area = AB_cross_CB.length();
 	normal = AB_cross_CB.normalize();
-
+	
 }
 
 Rectangles::~Rectangles()
@@ -88,9 +88,12 @@ Bound Rectangles::GetBound()
 	return Union( Union(Bound(A,B) ,C ), D );
 }
 
-float Rectangles::GetPdf()
+float Rectangles::GetPdf(const TinyGlm::vec3<float>& income_light, const float dis)
 {
-	return 1.0f/area;
+	{
+		return 1.0f / area;
+	}
+
 }
 
 Intersection Rectangles::GetSampleInfo()

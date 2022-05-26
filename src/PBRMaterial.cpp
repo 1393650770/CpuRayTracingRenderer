@@ -12,7 +12,7 @@ float PBRMaterial::GeometrySchlickGGX(float NdotV, float roughness)
     float k = (r * r) / 8.0f;
 
     float nom = NdotV;
-    float denom = NdotV * (1.0f - k) + k+0.000001f;
+    float denom = NdotV * (1.0f - k) + k +0.000001f;
 
     return nom / denom;
 }
@@ -46,18 +46,18 @@ float PBRMaterial::DistributionGGX(TinyGlm::vec3<float>& normal_dir, TinyGlm::ve
 TinyGlm::vec3<float> PBRMaterial::FresnelSchlick(float cosTheta, TinyGlm::vec3<float>& F0)
 {
 
-    return F0 + (TinyGlm::vec3<float>(1.0f) - F0) * std::powf(Utils::clamp(1.0f - cosTheta, 0.0f, 1.0f), 5.0f);
+    return F0 + (TinyGlm::vec3<float>(1.0f) - F0) * std::powf(std::clamp(1.0f - cosTheta, 0.0f, 1.0f), 5.0f);
 }
 
 
 
 
-PBRMaterial::PBRMaterial(const TinyGlm::vec4<float>& emit_color, const TinyGlm::vec3<float>& _f0, const TinyGlm::vec3<float>& _light_color, float _roughness, float _metallicity, bool _is_emit_light)
+PBRMaterial::PBRMaterial(const TinyGlm::vec4<float>& emit_color, const TinyGlm::vec3<float>& _f0, float specular_intensity, float _roughness, float _metallicity, bool _is_emit_light)
 {
-    light_color = _light_color;
     emittion_color = emit_color;
     f0 = _f0;
     roughness = std::clamp( _roughness,0.001f,0.999f);
+    intensiy = specular_intensity;
     metallicity = std::clamp(_metallicity, 0.001f, 0.999f);
     is_emit_light=_is_emit_light;
 }
@@ -84,7 +84,7 @@ TinyGlm::vec4<float> PBRMaterial::Shading(TinyGlm::vec3<float> wi, TinyGlm::vec3
         TinyGlm::vec3<float> non_matal(0.04f);
         f0 = Utils::lerp(non_matal, f0, metallicity);
 
-        TinyGlm::vec3<float> F = FresnelSchlick(std::max(cos_theta,0.0f), f0);
+        TinyGlm::vec3<float> F = FresnelSchlick(std::max(cos_theta,0.0001f), f0);
 
         float divide = 1.0f / (4.0f * std::max(normal_dir.dot(light_dir), 0.0001f) * std::max(normal_dir.dot(view_dir), 0.0001f));
 
@@ -92,12 +92,15 @@ TinyGlm::vec4<float> PBRMaterial::Shading(TinyGlm::vec3<float> wi, TinyGlm::vec3
 
         TinyGlm::vec3<float> KD = TinyGlm::vec3<float>(1.0f) - F;
         
-        KD *= 1.0f- metallicity;
+        KD *= (1.0f- metallicity);
          
         TinyGlm::vec3<float> emittion_color_vec3 = TinyGlm::vec3<float>(emittion_color.x, emittion_color.y, emittion_color.z);
-        TinyGlm::vec3<float> color = (emittion_color_vec3 * KD / PI + specular)* light_color;
         
-        //Utils::toon_mapping(color);
+        //return  TinyGlm::vec4<float>(specular.x* intensiy, specular.y * intensiy, specular.z * intensiy);
+        TinyGlm::vec3<float> color = emittion_color_vec3 * KD / PI + specular*intensiy;
+        
+
+        Utils::toon_mapping(color);
         return  TinyGlm::vec4<float>(color.x, color.y, color.z);
 
     }
@@ -111,12 +114,12 @@ TinyGlm::vec3<float> PBRMaterial::GetInDirSample(const TinyGlm::vec3<float> wi, 
     //----cos-weighted 重要性采样---
     {
         //----cos-weighted 重要性采样:从pdf反推---
-        {
-            float r1 = Utils::get_random_float(), r2 = Utils::get_random_float();
-            float theta = std::acosf(std::sqrt(1.0f - r1)), phi = 2 * PI * r2;
-            TinyGlm::vec3<float> localRay(std::cos(phi) * std::sin(theta), std::sin(phi) * std::sin(theta), std::cos(theta));
-            return Utils::toWorld(localRay, normal);
-        }
+        //{
+        //    float r1 = Utils::get_random_float(), r2 = Utils::get_random_float();
+        //    float theta = std::acosf(std::sqrt(1.0f - r1)), phi = 2 * PI * r2;
+        //    TinyGlm::vec3<float> localRay(std::cos(phi) * std::sin(theta), std::sin(phi) * std::sin(theta), std::cos(theta));
+        //    return Utils::toWorld(localRay, normal);
+        //}
 
         //----cos-weighted 重要性采样:从pdf反推（化简，并改版）---
         //{
@@ -136,15 +139,38 @@ TinyGlm::vec3<float> PBRMaterial::GetInDirSample(const TinyGlm::vec3<float> wi, 
         //	return localRay + normal.normalize();
         //}
     }
+
+    //----BRDF 重要性采样---
+    {
+        float a_2 = roughness * roughness;
+        float r1 = Utils::get_random_float(), r2 = Utils::get_random_float();
+        float theta = std::atanf(std::sqrt(-(a_2*a_2*std::logf(1-r1)))), phi = 2.0f * PI * r2;
+        TinyGlm::vec3<float> localRay(std::cos(phi) * std::sin(theta), std::sin(phi) * std::sin(theta), std::cos(theta));
+        TinyGlm::vec3<float> worldHalf = Utils::toWorld(localRay, normal).normalize();
+        TinyGlm::vec3<float> income_view = -wi;
+        return Utils::reflect(income_view,worldHalf);
+    }
 }
 
 //重要性采样
-float PBRMaterial::GetPdf(const TinyGlm::vec3<float> wi, const TinyGlm::vec3<float> normal) 
+float PBRMaterial::GetPdf(const TinyGlm::vec3<float>& income_view, const TinyGlm::vec3<float>& out_light,const TinyGlm::vec3<float>& normal)
 {
-    float ndotl = wi.dot(normal);
-    if (ndotl >= 0.0001f)
+
+    //----朗伯曲面---
     {
-        return ndotl / PI;
+        //float ndotl = out_light.dot(normal);
+        //if (ndotl >= 0.0001f)
+        //{
+        //    return ndotl / PI;
+        //}
+        //return 0.0f;
     }
-    return 0.0f;
+
+    //----BRDF 重要性采样---
+    {
+        TinyGlm::vec3<float> worldHalf = (income_view+out_light).normalize();
+        TinyGlm::vec3<float> normal_not_const = normal;
+        float D = DistributionGGX(normal_not_const, worldHalf, roughness);
+        return D / (4 * normal_not_const.dot(out_light));
+    }
 }

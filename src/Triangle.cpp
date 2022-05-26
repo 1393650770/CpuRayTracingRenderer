@@ -96,7 +96,7 @@ Bound Triangle::GetBound()
 	return Union(Bound(vertices0, vertices1), vertices2);
 }
 
-float Triangle::GetPdf()
+float Triangle::GetPdf(const TinyGlm::vec3<float>& income_light, const float dis)
 {
 	return 1.0f/ area;
 }
@@ -211,7 +211,7 @@ Bound MeshTriangle::GetBound()
 	return bounding_box;
 }
 
-float MeshTriangle::GetPdf()
+float MeshTriangle::GetPdf(const TinyGlm::vec3<float>& income_light, const float dis)
 {
 	return 1.0f / area;
 }

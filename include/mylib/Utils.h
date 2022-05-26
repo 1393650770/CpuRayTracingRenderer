@@ -78,6 +78,14 @@ public:
 
     }
 
+    static TinyGlm::vec3<float> reflect(TinyGlm::vec3<float>& income_light, TinyGlm::vec3<float>& normal)
+    {
+        TinyGlm::vec3<float> result;
+        result = income_light - (2.0f * income_light.dot(normal) * normal);
+        return result;
+    }
+
+
 };
 #endif //_UTILS_
 

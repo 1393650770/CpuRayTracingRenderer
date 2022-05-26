@@ -9,6 +9,7 @@
 #include"Utils.h"
 #define NormalSee 0
 #define LightHitJudge 0
+
 TinyGlm::vec3<float> Scene::GetReflectDir(TinyGlm::vec3<float>& income_light, TinyGlm::vec3<float>& normal)
 {
 	TinyGlm::vec3<float> result;
@@ -105,13 +106,13 @@ TinyGlm::vec3<float> Scene::GetColor(Ray& ray,int current_depth, int recursive_m
 	{
 		//获取灯光采样的信息
 		Intersection light_sample= light_list[0]->GetSampleInfo();
-		float light_pdf = light_list[0]->GetPdf();
 
 		light_dir = light_sample.coords - interToBvh.coords;
 		light_and_hitpoint_dis = std::max(light_dir.length(),1.0f);
 
 		light_dir = light_dir.normalize();
-
+		
+		float light_pdf = light_list[0]->GetPdf(-light_dir, light_and_hitpoint_dis);
 		Ray tolight_ray(interToBvh.coords + 0.001f * interToBvh.normal.normalize(), light_dir);
 
 		interToLight = bvh->GetIntersection(tolight_ray, bvh->root);
@@ -153,6 +154,7 @@ TinyGlm::vec3<float> Scene::GetColor(Ray& ray,int current_depth, int recursive_m
 		}
 	}
 
+
 	TinyGlm::vec3<float> indir = (interToBvh.shader->GetInDirSample(ray.direction, (interToBvh.normal)));
 
 	Ray indir_ray(interToBvh.coords + 0.001f * interToBvh.normal.normalize(), indir.normalize());
@@ -176,14 +178,14 @@ TinyGlm::vec3<float> Scene::GetColor(Ray& ray,int current_depth, int recursive_m
 	TinyGlm::vec4<float> indir_color_vec4 = indir_color *
 		shading *
 		std::clamp(indir.dot(interToBvh.normal), -std::numeric_limits<float>::epsilon(), 1.0f) /
-		interToBvh.shader->GetPdf(indir, interToBvh.normal)/
+		interToBvh.shader->GetPdf(-(ray.direction), indir, interToBvh.normal)/
 		(in_light_and_hitpoint_dis* in_light_and_hitpoint_dis);
 
 	//std::cout << "indir_color_vec4: " << indir_color_vec4.x << " " << indir_color_vec4.y << " " << indir_color_vec4.z << std::endl;
 	//std::cout << "indir.dot(interToBvh.normal): " << indir.dot(interToBvh.normal) << std::endl;
-	//std::cout << "interToBvh.shader->GetPdf(indir, interToBvh.normal): " << interToBvh.shader->GetPdf(indir, interToBvh.normal) << std::endl;
-	//std::cout << "shading: " << shading.x << " " << shading.y << " " << shading.z << std::endl << std::endl;
-
+	//std::cout << "interToBvh.shader->GetPdf(indir, interToBvh.normal): " << interToBvh.shader->GetPdf(-(ray.direction), indir, interToBvh.normal) << std::endl;
+	//std::cout << "shading: " << shading.x << " " << shading.y << " " << shading.z <<  std::endl;
+	//std::cout << "indir: " << indir.x << " " << indir.y << " " << indir.z << std::endl << std::endl;
 	hit_color += indir_color_vec4;
 
 	result = TinyGlm::vec3<float>(hit_color.x, hit_color.y, hit_color.z);

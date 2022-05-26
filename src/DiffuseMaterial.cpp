@@ -60,9 +60,9 @@ TinyGlm::vec3<float> DiffuseMaterial::GetInDirSample(const TinyGlm::vec3<float> 
 
 }
 
-float DiffuseMaterial::GetPdf(const TinyGlm::vec3<float> wi, const TinyGlm::vec3<float> normal)
+float DiffuseMaterial::GetPdf(const TinyGlm::vec3<float>& income_view, const TinyGlm::vec3<float>& out_light,const TinyGlm::vec3<float>& normal)
 {
-	float ndotl=wi.dot(normal);
+	float ndotl= out_light.dot(normal);
 	if (ndotl >= -0.0001f)
 	{
 		return ndotl / PI;

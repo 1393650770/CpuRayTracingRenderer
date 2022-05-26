@@ -59,10 +59,13 @@ int main(int argc, char* argv[])
 	TinyGlm::vec3<float> H = TinyGlm::vec3<float>(-50.f, -1.5f, 50.f);
 
 	//Material
-	std::shared_ptr<PBRMaterial>  shader1 = std::make_shared<PBRMaterial>(TinyGlm::vec4<float>(0.63f, 0.065f, 0.05f), TinyGlm::vec3<float>(0.3f, 0.1f, 0.7f), TinyGlm::vec3<float>(16.5f, 15.f, 15.f), 0.15f,0.2f);
-	std::shared_ptr<PBRMaterial>  red = std::make_shared<PBRMaterial>(TinyGlm::vec4<float>(0.65f, 0.05f, 0.05f), TinyGlm::vec3<float>(0.9f, 0.5f, 0.3f), TinyGlm::vec3<float>(16.5f, 15.f, 15.f), 0.02f, 0.2f);
-	std::shared_ptr<PBRMaterial>  white = std::make_shared<PBRMaterial>(TinyGlm::vec4<float>(0.75f, 0.75f, 0.75f), TinyGlm::vec3<float>(0.1f, 0.7f, 0.01f), TinyGlm::vec3<float>(16.5f, 15.f, 15.f), 0.02f, 0.2f);
-	std::shared_ptr<PBRMaterial>  pbr = std::make_shared<PBRMaterial>(TinyGlm::vec4<float>(0.65f, 0.06f, 0.05f), TinyGlm::vec3<float>(0.9f, 0.5f, 0.3f), TinyGlm::vec3<float>(5.f, 5.f, 5.f),0.05f, 0.1f);
+	std::shared_ptr<PBRMaterial>  shader1 = std::make_shared<PBRMaterial>(TinyGlm::vec4<float>(0.63f, 0.065f, 0.05f), TinyGlm::vec3<float>(0.3f, 0.1f, 0.7f), 10.f, 0.15f,0.2f);
+	std::shared_ptr<PBRMaterial>  red = std::make_shared<PBRMaterial>(TinyGlm::vec4<float>(0.65f, 0.05f, 0.05f), TinyGlm::vec3<float>(0.9f, 0.5f, 0.3f), 10.f, 0.02f, 0.2f);
+	std::shared_ptr<PBRMaterial>  white = std::make_shared<PBRMaterial>(TinyGlm::vec4<float>(0.75f, 0.75f, 0.75f), TinyGlm::vec3<float>(0.1f, 0.7f, 0.01f), 10.f, 0.02f, 0.2f);
+	std::shared_ptr<PBRMaterial>  pbr = std::make_shared<PBRMaterial>(TinyGlm::vec4<float>(0.65f, 0.06f, 0.05f), TinyGlm::vec3<float>(0.9f, 0.5f, 0.3f), 1.f,0.78f, 0.2f);
+	std::shared_ptr<PBRMaterial>  pbr1 = std::make_shared<PBRMaterial>(TinyGlm::vec4<float>(0.12f, 0.45f, 0.15f), TinyGlm::vec3<float>(0.9f, 0.5f, 0.3f), 1.f, 0.22f, 0.2f);
+
+
 
 	std::shared_ptr<DiffuseMaterial>  white_diffuse = std::make_shared<DiffuseMaterial>(TinyGlm::vec4<float>(0.75f, 0.75f, 0.75f), TinyGlm::vec3<float>(0.1f, 0.7f, 0.01f), 0.02f, 0.2f);
 	std::shared_ptr<DiffuseMaterial>  green_diffuse = std::make_shared<DiffuseMaterial>(TinyGlm::vec4<float>(0.12f, 0.45f, 0.15f), TinyGlm::vec3<float>(0.1f, 0.7f, 0.01f), 0.02f, 0.8f);
@@ -88,8 +91,9 @@ int main(int argc, char* argv[])
 	//std::shared_ptr<Rectangles>  forward = std::make_shared<Rectangles>(H,D,C,G, white_diffuse);
 
 	//Sphere
-	std::shared_ptr<Sphere>  sphere = std::make_shared<Sphere>(TinyGlm::vec3<float>(0.f, -1.f, 4.5f), 0.5f, green_diffuse);
-
+	std::shared_ptr<Sphere>  sphere = std::make_shared<Sphere>(TinyGlm::vec3<float>(-0.6f, -1.f, 5.0f), 0.5f, pbr);
+	std::shared_ptr<Sphere>  sphere1 = std::make_shared<Sphere>(TinyGlm::vec3<float>(0.6f, -1.f, 5.0f), 0.5f, pbr1);
+	
 	//Light
 	std::shared_ptr<Sphere>  point_light = std::make_shared<Sphere>(TinyGlm::vec3<float>(0.f, 0.5f, 5.f),0.2f, light);
 	std::shared_ptr<Rectangles>  rectangle_light = std::make_shared<Rectangles>(TinyGlm::vec3<float>(-0.5f, 1.5f, 4.25f), TinyGlm::vec3<float>(0.5f, 1.5f, 4.25f), TinyGlm::vec3<float>(0.5f, 1.5f, 4.75f), TinyGlm::vec3<float>(-0.5f, 1.5f, 4.75f), light);
@@ -105,7 +109,7 @@ int main(int argc, char* argv[])
 	scene.AddObj(down);
 
 	scene.AddObj(sphere);
-
+	scene.AddObj(sphere1);
 
 	//Add Light
 	//scene.AddLight(point_light);

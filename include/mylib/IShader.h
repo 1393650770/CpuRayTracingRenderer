@@ -19,7 +19,7 @@ public:
 	//获取间接光的方向
 	virtual TinyGlm::vec3<float> GetInDirSample(const TinyGlm::vec3<float> wi, const TinyGlm::vec3<float> normal)=0;
 	//重要性采样
-	virtual float GetPdf(const TinyGlm::vec3<float> wi, const TinyGlm::vec3<float> normal)=0;
+	virtual float GetPdf(const TinyGlm::vec3<float>& income_view, const TinyGlm::vec3<float>& out_light, const TinyGlm::vec3<float>& normal)=0;
 
 
 	//将方向转换到世界空间

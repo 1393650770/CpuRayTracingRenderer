@@ -29,7 +29,7 @@ public:
 	Intersection GetIntersection( Ray& ray) override;
 	Bound GetBound() override;
 	void GetSurfaceProperties(const TinyGlm::vec3<float>& pos, const TinyGlm::vec3<float>& I, const uint32_t& index, const TinyGlm::vec2<float>& uv, TinyGlm::vec3<float>& normal, TinyGlm::vec2<float>& st) const override;
-	float GetPdf() override;
+	float GetPdf(const TinyGlm::vec3<float>& income_light, const float dis) override;
 	Intersection GetSampleInfo() override;
 };
 
@@ -59,7 +59,7 @@ public:
 	Intersection GetIntersection(Ray& ray) override;
 	Bound GetBound() override;
 	void GetSurfaceProperties(const TinyGlm::vec3<float>& pos, const TinyGlm::vec3<float>& I, const uint32_t& index, const TinyGlm::vec2<float>& uv, TinyGlm::vec3<float>& normal, TinyGlm::vec2<float>& st) const override;
-	float GetPdf() override;
+	float GetPdf(const TinyGlm::vec3<float>& income_light, const float dis) override;
 	Intersection GetSampleInfo() override;
 
 };

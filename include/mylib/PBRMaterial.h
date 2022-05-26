@@ -17,11 +17,11 @@ private:
     //计算菲涅尔函数
     TinyGlm::vec3<float> FresnelSchlick(float cosTheta, TinyGlm::vec3<float>& F0);
 
+    float intensiy;
 
 public:
-    TinyGlm::vec3<float> light_color;
 
-    PBRMaterial(const TinyGlm::vec4<float>& emit_color, const TinyGlm::vec3<float>& _f0, const TinyGlm::vec3<float>& _light_color, float _roughness,float _metallicity,bool _is_emit_light=false);
+    PBRMaterial(const TinyGlm::vec4<float>& emit_color, const TinyGlm::vec3<float>& _f0, float specular_intensity, float _roughness,float _metallicity,bool _is_emit_light=false);
     virtual ~PBRMaterial();
     //计算着色接口
     TinyGlm::vec4<float> Shading(TinyGlm::vec3<float> wi, TinyGlm::vec3<float> wo, TinyGlm::vec3<float> normal) override;
@@ -30,7 +30,7 @@ public:
     TinyGlm::vec3<float> GetInDirSample(const TinyGlm::vec3<float> wi, const TinyGlm::vec3<float> normal) override;
     
     //重要性采样
-    float GetPdf(const TinyGlm::vec3<float> wi, const TinyGlm::vec3<float> normal) override;
+    float GetPdf(const TinyGlm::vec3<float>& income_view, const TinyGlm::vec3<float>& out_light, const TinyGlm::vec3<float>& normal) override;
 
 };
 #endif //_MATERIAL_

@@ -156,7 +156,7 @@ Bound Sphere::GetBound()
 }
 
 
-float Sphere::GetPdf() 
+float Sphere::GetPdf(const TinyGlm::vec3<float>& income_light, const float dis)
 {
 	return 1.0f / (4.0f * PI * radius * radius);
 }

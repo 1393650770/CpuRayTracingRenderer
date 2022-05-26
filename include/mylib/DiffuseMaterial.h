@@ -15,7 +15,7 @@ public:
     TinyGlm::vec3<float> GetInDirSample(const TinyGlm::vec3<float> wi, const TinyGlm::vec3<float> normal) override;
 
     //重要性采样
-    float GetPdf(const TinyGlm::vec3<float> wi, const TinyGlm::vec3<float> normal) override;
+    float GetPdf(const TinyGlm::vec3<float>& income_view, const TinyGlm::vec3<float>& out_light, const TinyGlm::vec3<float>& normal) override;
 
 };
 
