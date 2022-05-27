@@ -62,8 +62,10 @@ PBR MATERIAL:
  - [x] Diffuse
  - [x] Microfacet BRDF
 ### ⑦ Sampling
+ - [x] Light Importance Sampling
  - [x] Cos-Weighted Importance Sampling
  - [x] BRDF Importance Sampling
+ - [ ] Multiple Importance Sampling
 ### ⑧ Light
  - [x] SphereLight (PointLight)
  - [x] AreaLight
