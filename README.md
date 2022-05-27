@@ -36,64 +36,64 @@ PBR MATERIAL:
 ### ---Library Supported Data Types : Vec2 Vec3 Vec4 Mat4
 #### Vector Supported :
  - [x] Template
-##### - [x] Add / Sub / Div / Mul
-##### - [x] Dot / Cross
-##### - [x] Normalize / Length
+ - [x] Add / Sub / Div / Mul
+ - [x] Dot / Cross
+ - [x] Normalize / Length
 
 #### Matrix Supported :
-##### - [x] Template
-##### - [x] Add/ Sub / Div / Mul
-##### - [x] Cofactor / Adjoint
-##### - [x] Transpose / Inverse
-##### - [x] Multiply with vector
+ - [x] Template
+ - [x] Add/ Sub / Div / Mul
+ - [x] Cofactor / Adjoint
+ - [x] Transpose / Inverse
+ - [x] Multiply with vector
 ### ② Multithreading Acceleration Rendering
-### - [x] Thread Pool
-### - [x] Message Queue
+ - [x] Thread Pool
+ - [x] Message Queue
 ### ③ Light Transport Algorithm
-### - [x] Path Tracing
+ - [x] Path Tracing
 ### ④ Space Accelerating Structurer
-### - [x] BVH
+ - [x] BVH
 ### ⑤ Object
-### - [x] Sphere
-### - [x] Rectangle
-### - [x] Triangle
-### - [x] MeshTriangle
+ - [x] Sphere
+ - [x] Rectangle
+ - [x] Triangle
+ - [x] MeshTriangle
 ### ⑥ Material
-### - [x] Diffuse
-### - [x] Microfacet BRDF
+ - [x] Diffuse
+ - [x] Microfacet BRDF
 ### ⑦ Sampling
-### - [x] Cos-Weighted Importance Sampling
-### - [x] BRDF Importance Sampling
+ - [x] Cos-Weighted Importance Sampling
+ - [x] BRDF Importance Sampling
 ### ⑧ Light
-### - [x] SphereLight (PointLight)
-### - [x] AreaLight
+ - [x] SphereLight (PointLight)
+ - [x] AreaLight
 ### ⑨ Camera
-### - [x] Perspective Camera
+ - [x] Perspective Camera
 
 ### ⑩ Tool
-### - [x] Toon-mapping
-### - [x] NormalSpace To WorldSpace
-### - [x] Random number generator
+ - [x] Toon-mapping
+ - [x] NormalSpace To WorldSpace
+ - [x] Random number generator
 
 ## Feature(To done list)
 ### ① Light Transport Algorithm
-### - [] BDPT, Bidirectional Path Tracing
-### - [] MLT, Metropolis Light Transport
-### - [] SPPM, Stochastic Progress Photon Mapping
+ - [] BDPT, Bidirectional Path Tracing
+ - [] MLT, Metropolis Light Transport
+ - [] SPPM, Stochastic Progress Photon Mapping
 ### ② Space Accelerating Structurer
-### - [] SAH
-### - [] Octree
+ - [] SAH
+ - [] Octree
 ### ③ Object(Maybe will do)
-### - [] OBJLoader
-### - [] Texture
+ - [] OBJLoader
+ - [] Texture
 ### ④ Material
-### - [] Dielectrics
-### - [] BSSRDF 
+ - [] Dielectrics
+ - [] BSSRDF 
 ### ⑤ Sampling
-### - [] Importance Sampling
-### - [] Multiple Importance Sampling
+ - [] Importance Sampling
+ - [] Multiple Importance Sampling
 ### ⑥ Post process
-### - [] TAA
+ - [] TAA
 ### ⑦ Tool
 
 
