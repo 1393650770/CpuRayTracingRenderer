@@ -162,7 +162,7 @@ TinyGlm::vec3<float> Scene::GetColor(Ray& ray,int current_depth, int recursive_m
 	Intersection interToIndir = bvh->GetIntersection(indir_ray , bvh->root);
 	
 	//如果未打到其他物体则返回
-	if (interToIndir.hit == false )
+	if (interToIndir.hit == false)
 	{
 		result = TinyGlm::vec3<float>(hit_color.x, hit_color.y, hit_color.z);
 
@@ -176,17 +176,19 @@ TinyGlm::vec3<float> Scene::GetColor(Ray& ray,int current_depth, int recursive_m
 	TinyGlm::vec4<float> shading = interToBvh.shader->Shading(ray.direction , indir , interToBvh.normal);
 
 	TinyGlm::vec4<float> indir_color_vec4 = indir_color *
-		shading *0.8f*
+		shading *
 		std::clamp(indir.dot(interToBvh.normal), -std::numeric_limits<float>::epsilon(), 1.0f) /
 		interToBvh.shader->GetPdf(-(ray.direction), indir, interToBvh.normal)/
 		(in_light_and_hitpoint_dis* in_light_and_hitpoint_dis);
+
+	indir_color_vec4 = TinyGlm::vec4<float>(std::max(indir_color_vec4.x,std::numeric_limits<float>::epsilon()), std::max(indir_color_vec4.y, std::numeric_limits<float>::epsilon()), std::max(indir_color_vec4.z, std::numeric_limits<float>::epsilon()));
 
 	//std::cout << "indir_color_vec4: " << indir_color_vec4.x << " " << indir_color_vec4.y << " " << indir_color_vec4.z << std::endl;
 	//std::cout << "indir.dot(interToBvh.normal): " << indir.dot(interToBvh.normal) << std::endl;
 	//std::cout << "interToBvh.shader->GetPdf(indir, interToBvh.normal): " << interToBvh.shader->GetPdf(-(ray.direction), indir, interToBvh.normal) << std::endl;
 	//std::cout << "shading: " << shading.x << " " << shading.y << " " << shading.z <<  std::endl;
 	//std::cout << "indir: " << indir.x << " " << indir.y << " " << indir.z << std::endl << std::endl;
-	hit_color += indir_color_vec4;
+	hit_color += indir_color_vec4 * 0.8f;
 
 	result = TinyGlm::vec3<float>(hit_color.x, hit_color.y, hit_color.z);
 	Utils::toon_mapping(result);

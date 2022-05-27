@@ -38,7 +38,7 @@ public:
     {
         //施密特正交化重建坐标系
         TinyGlm::vec3<float> B, C;
-        auto temp = std::fabs(N.x) > 0.01 ? TinyGlm::vec3<float>(0.f, 1.f, 0.f) : TinyGlm::vec3<float>(1.f, 0.f, 0.f);
+        auto temp = std::fabs(N.x) > 0.01f ? TinyGlm::vec3<float>(0.f, 1.f, 0.f) : TinyGlm::vec3<float>(1.f, 0.f, 0.f);
         B = (temp - temp.dot(N) * N).normalize();
         C = B.cross(N);
         return a.x * B + a.y * C + a.z * N;

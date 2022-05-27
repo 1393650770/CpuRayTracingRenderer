@@ -38,7 +38,7 @@ float PBRMaterial::DistributionGGX(TinyGlm::vec3<float>& normal_dir, TinyGlm::ve
 
     float nom = a2;
     float denom = (NdotH2 * (a2 - 1.0f) + 1.0f);
-    denom = denom * denom * PI+0.01f;
+    denom = denom * denom * PI+ 0.0001f;
 
     return nom / denom;
 }
@@ -56,9 +56,9 @@ PBRMaterial::PBRMaterial(const TinyGlm::vec4<float>& emit_color, const TinyGlm::
 {
     emittion_color = emit_color;
     f0 = _f0;
-    roughness = std::clamp( _roughness,0.001f,0.999f);
+    roughness = std::clamp( _roughness, std::numeric_limits<float>::epsilon(), 1.0f);
     intensiy = specular_intensity;
-    metallicity = std::clamp(_metallicity, 0.001f, 0.999f);
+    metallicity = std::clamp(_metallicity, std::numeric_limits<float>::epsilon(), 1.0f);
     is_emit_light=_is_emit_light;
 }
 
@@ -144,11 +144,14 @@ TinyGlm::vec3<float> PBRMaterial::GetInDirSample(const TinyGlm::vec3<float> wi, 
     {
         float a_2 = roughness * roughness;
         float r1 = Utils::get_random_float(), r2 = Utils::get_random_float();
-        float theta = std::atanf(std::sqrt(-(a_2*a_2*std::logf(1.0f-r1)))), phi = 2.0f * PI * r2;
-        TinyGlm::vec3<float> localRay(std::cos(phi) * std::sin(theta), std::sin(phi) * std::sin(theta), std::cos(theta));
+        float theta = std::atanf(std::sqrtf( -( a_2 * a_2 * std::logf(1.0f-r1) ))), phi = 2.0f * PI * r2;
+
+        TinyGlm::vec3<float> localRay(std::cos(phi) * std::sin(theta), std::sin(phi) * std::sin(theta) , std::cos(theta));
+
         TinyGlm::vec3<float> worldHalf = Utils::toWorld(localRay, normal).normalize();
         TinyGlm::vec3<float> income_view = wi;
-        return Utils::reflect(income_view,worldHalf);
+
+        return Utils::reflect(income_view,worldHalf).normalize();
     }
 }
 
@@ -170,11 +173,27 @@ float PBRMaterial::GetPdf(const TinyGlm::vec3<float>& income_view, const TinyGlm
 
     //----BRDF 重要性采样---
     {
-        TinyGlm::vec3<float> worldHalf = (income_view+out_light).normalize();
-        TinyGlm::vec3<float> normal_not_const = normal;
-        float D = DistributionGGX(normal_not_const, worldHalf, roughness);
-        float result = D / (4.0f * normal_not_const.dot(out_light));
-        result =std::max(result , 0.01f);
+        TinyGlm::vec3<float> world_half = (income_view+out_light).normalize();
+        TinyGlm::vec3<float> normal_not_const = normal.normalize();
+        float D = DistributionGGX(normal_not_const, world_half, roughness);
+        float n_dot_h = std::max(normal_not_const.dot(world_half), 0.0001f);
+        float l_dot_h = std::max(world_half.dot(out_light), 0.0001f);
+        float l_dot_n = std::max(normal.dot(out_light), 0.0001f);
+
+        TinyGlm::vec3<float> Ks_vec3 = FresnelSchlick(std::max(l_dot_n, 0.0001f), f0);
+
+        float ks = (Ks_vec3.x + Ks_vec3.y + Ks_vec3.z) / 3.0f;
+
+        //镜面反射项pdf
+        float glossy = ks * D * n_dot_h / (4.0f * l_dot_h);
+
+        //漫反射项pdf
+        float diffuse = (1.0f - ks) * l_dot_n / PI;
+
+        float result = glossy + diffuse;
+        //std::cout <<" l_dot_h "<< l_dot_h << std::endl;
+        //std::cout << " n_dot_h " << n_dot_h << std::endl;
+
         return (result);
     }
 }
