@@ -12,7 +12,7 @@ float PBRMaterial::GeometrySchlickGGX(float NdotV, float roughness)
     float k = (r * r) / 8.0f;
 
     float nom = NdotV;
-    float denom = NdotV * (1.0f - k) + k +0.000001f;
+    float denom = NdotV * (1.0f - k) + k +0.01f;
 
     return nom / denom;
 }
@@ -38,7 +38,7 @@ float PBRMaterial::DistributionGGX(TinyGlm::vec3<float>& normal_dir, TinyGlm::ve
 
     float nom = a2;
     float denom = (NdotH2 * (a2 - 1.0f) + 1.0f);
-    denom = denom * denom * PI+0.0001f;
+    denom = denom * denom * PI+0.01f;
 
     return nom / denom;
 }
@@ -114,12 +114,12 @@ TinyGlm::vec3<float> PBRMaterial::GetInDirSample(const TinyGlm::vec3<float> wi, 
     //----cos-weighted 重要性采样---
     {
         //----cos-weighted 重要性采样:从pdf反推---
-        //{
-        //    float r1 = Utils::get_random_float(), r2 = Utils::get_random_float();
-        //    float theta = std::acosf(std::sqrt(1.0f - r1)), phi = 2 * PI * r2;
-        //    TinyGlm::vec3<float> localRay(std::cos(phi) * std::sin(theta), std::sin(phi) * std::sin(theta), std::cos(theta));
-        //    return Utils::toWorld(localRay, normal);
-        //}
+        {
+            //float r1 = Utils::get_random_float(), r2 = Utils::get_random_float();
+            //float theta = std::acosf(std::sqrt(1.0f - r1)), phi = 2 * PI * r2;
+            //TinyGlm::vec3<float> localRay(std::cos(phi) * std::sin(theta), std::sin(phi) * std::sin(theta), std::cos(theta));
+            //return Utils::toWorld(localRay, normal);
+        }
 
         //----cos-weighted 重要性采样:从pdf反推（化简，并改版）---
         //{
@@ -144,10 +144,10 @@ TinyGlm::vec3<float> PBRMaterial::GetInDirSample(const TinyGlm::vec3<float> wi, 
     {
         float a_2 = roughness * roughness;
         float r1 = Utils::get_random_float(), r2 = Utils::get_random_float();
-        float theta = std::atanf(std::sqrt(-(a_2*a_2*std::logf(1-r1)))), phi = 2.0f * PI * r2;
+        float theta = std::atanf(std::sqrt(-(a_2*a_2*std::logf(1.0f-r1)))), phi = 2.0f * PI * r2;
         TinyGlm::vec3<float> localRay(std::cos(phi) * std::sin(theta), std::sin(phi) * std::sin(theta), std::cos(theta));
         TinyGlm::vec3<float> worldHalf = Utils::toWorld(localRay, normal).normalize();
-        TinyGlm::vec3<float> income_view = -wi;
+        TinyGlm::vec3<float> income_view = wi;
         return Utils::reflect(income_view,worldHalf);
     }
 }
@@ -156,21 +156,25 @@ TinyGlm::vec3<float> PBRMaterial::GetInDirSample(const TinyGlm::vec3<float> wi, 
 float PBRMaterial::GetPdf(const TinyGlm::vec3<float>& income_view, const TinyGlm::vec3<float>& out_light,const TinyGlm::vec3<float>& normal)
 {
 
-    //----朗伯曲面---
-    {
-        //float ndotl = out_light.dot(normal);
-        //if (ndotl >= 0.0001f)
-        //{
-        //    return ndotl / PI;
-        //}
-        //return 0.0f;
-    }
+    //----cos-weighted 重要性采样---
+    //{
+    //    float result = 0.0f;
+    //    float ndotl = out_light.dot(normal);
+    //    if (ndotl >= 0.0001f)
+    //    {
+    //        result= ndotl / PI;
+    //    }
+    //    //std::cout << result << std::endl;
+    //    return result;
+    //}
 
     //----BRDF 重要性采样---
     {
         TinyGlm::vec3<float> worldHalf = (income_view+out_light).normalize();
         TinyGlm::vec3<float> normal_not_const = normal;
         float D = DistributionGGX(normal_not_const, worldHalf, roughness);
-        return D / (4 * normal_not_const.dot(out_light));
+        float result = D / (4.0f * normal_not_const.dot(out_light));
+        result = result + 0.01f;
+        return (result);
     }
 }

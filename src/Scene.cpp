@@ -176,7 +176,7 @@ TinyGlm::vec3<float> Scene::GetColor(Ray& ray,int current_depth, int recursive_m
 	TinyGlm::vec4<float> shading = interToBvh.shader->Shading(ray.direction , indir , interToBvh.normal);
 
 	TinyGlm::vec4<float> indir_color_vec4 = indir_color *
-		shading *
+		shading *0.8f*
 		std::clamp(indir.dot(interToBvh.normal), -std::numeric_limits<float>::epsilon(), 1.0f) /
 		interToBvh.shader->GetPdf(-(ray.direction), indir, interToBvh.normal)/
 		(in_light_and_hitpoint_dis* in_light_and_hitpoint_dis);

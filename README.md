@@ -12,9 +12,11 @@ https://github.com/microsoft/vcpkg
 And then , I will show how to build this project by Cmake GUI . You can see the operation instruction in the follow picture . Good luck to you building it .
 
 ![image](https://github.com/1393650770/CpuRayTracingRenderer/blob/main/image/operation_instruction_picture.png)
-## Show The Render Result
-![image](https://github.com/1393650770/CpuRayTracingRenderer/blob/main/image/result-Level-1.png)
-
+## Show The Render Result [1 Spp]
+DIFFUSE MATERIAL:
+![image](https://github.com/1393650770/CpuRayTracingRenderer/blob/main/image/result-Level-DIFFUSE.png)
+PBR MATERIAL:
+![image](https://github.com/1393650770/CpuRayTracingRenderer/blob/main/image/result-Level-PBR.png)
 ## Feature(Already done)
 ### ① My Math Library --- TinyGlm
 ### ---Library Supported Data Types : Vec2 Vec3 Vec4 Mat4
@@ -46,6 +48,7 @@ And then , I will show how to build this project by Cmake GUI . You can see the 
 ### ---Microfacet BRDF
 ### ⑤ Sampling
 ### ---Cos-Weighted Importance Sampling
+### ---BRDF Importance Sampling
 ### ⑤ Light
 ### ---SphereLight (PointLight)
 ### ---AreaLight
