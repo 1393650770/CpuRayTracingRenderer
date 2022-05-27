@@ -55,8 +55,8 @@ int main(int argc, char* argv[])
 	std::shared_ptr<PBRMaterial>  shader1 = std::make_shared<PBRMaterial>(TinyGlm::vec4<float>(0.63f, 0.065f, 0.05f), TinyGlm::vec3<float>(0.3f, 0.1f, 0.7f), 10.f, 0.15f,0.2f);
 	std::shared_ptr<PBRMaterial>  red = std::make_shared<PBRMaterial>(TinyGlm::vec4<float>(0.65f, 0.05f, 0.05f), TinyGlm::vec3<float>(0.9f, 0.5f, 0.3f), 10.f, 0.02f, 0.2f);
 	std::shared_ptr<PBRMaterial>  white = std::make_shared<PBRMaterial>(TinyGlm::vec4<float>(0.75f, 0.75f, 0.75f), TinyGlm::vec3<float>(0.1f, 0.7f, 0.01f), 10.f, 0.02f, 0.2f);
-	std::shared_ptr<PBRMaterial>  pbr_high_roughness_red = std::make_shared<PBRMaterial>(TinyGlm::vec4<float>(0.65f, 0.06f, 0.05f), TinyGlm::vec3<float>(0.9f, 0.5f, 0.3f), 1.f,0.78f, 0.2f);
-	std::shared_ptr<PBRMaterial>  pbr_low__roughness_green = std::make_shared<PBRMaterial>(TinyGlm::vec4<float>(0.12f, 0.45f, 0.15f), TinyGlm::vec3<float>(0.9f, 0.5f, 0.3f), 1.f, 0.22f, 0.2f);
+	std::shared_ptr<PBRMaterial>  pbr_high_roughness_red = std::make_shared<PBRMaterial>(TinyGlm::vec4<float>(0.65f, 0.06f, 0.05f), TinyGlm::vec3<float>(0.9f, 0.5f, 0.3f), 1.f,0.98f, 0.2f);
+	std::shared_ptr<PBRMaterial>  pbr_low__roughness_green = std::make_shared<PBRMaterial>(TinyGlm::vec4<float>(0.12f, 0.45f, 0.15f), TinyGlm::vec3<float>(0.9f, 0.5f, 0.3f), 1.f, 0.02f, 0.2f);
 
 
 

@@ -35,36 +35,41 @@ PBR MATERIAL:
 ### ② Multithreading Acceleration Rendering
 ### ---Thread Pool
 ### ---Message Queue
-
-### ③ Space Accelerating Structurer
+### ③ Light Transport Algorithm
+### ---Path Tracing
+### ④ Space Accelerating Structurer
 ### ---BVH
-### ④ Object
+### ⑤ Object
 ### ---Sphere
 ### ---Rectangle
 ### ---Triangle
 ### ---MeshTriangle
-### ④ Material
+### ⑥ Material
 ### ---Diffuse
 ### ---Microfacet BRDF
-### ⑤ Sampling
+### ⑦ Sampling
 ### ---Cos-Weighted Importance Sampling
 ### ---BRDF Importance Sampling
-### ⑤ Light
+### ⑧ Light
 ### ---SphereLight (PointLight)
 ### ---AreaLight
-### ⑤ Camera
+### ⑨ Camera
 ### ---Perspective Camera
 
-### ⑤ Tool
+### ⑩ Tool
 ### ---Toon-mapping
 ### ---NormalSpace To WorldSpace
 ### ---Random number generator
 
 ## Feature(To done list)
-### ③ Space Accelerating Structurer
+### ① Light Transport Algorithm
+### ---BDPT, Bidirectional Path Tracing
+### ---MLT, Metropolis Light Transport
+### ---SPPM, Stochastic Progress Photon Mapping
+### ② Space Accelerating Structurer
 ### ---SAH
 ### ---Octree
-### ④ Object(Maybe will do)
+### ③ Object(Maybe will do)
 ### ---OBJLoader
 ### ---Texture
 ### ④ Material
@@ -73,9 +78,9 @@ PBR MATERIAL:
 ### ⑤ Sampling
 ### ---Importance Sampling
 ### ---Multiple Importance Sampling
-### ⑤ Post process
+### ⑥ Post process
 ### ---TAA
-### ⑤ Tool
+### ⑦ Tool
 ### ---Toon-mapping
 ### ---NormalSpace To WorldSpace
 ### ---Random number generator

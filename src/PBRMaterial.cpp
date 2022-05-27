@@ -174,7 +174,7 @@ float PBRMaterial::GetPdf(const TinyGlm::vec3<float>& income_view, const TinyGlm
         TinyGlm::vec3<float> normal_not_const = normal;
         float D = DistributionGGX(normal_not_const, worldHalf, roughness);
         float result = D / (4.0f * normal_not_const.dot(out_light));
-        result = result + 0.01f;
+        result =std::max(result , 0.01f);
         return (result);
     }
 }
