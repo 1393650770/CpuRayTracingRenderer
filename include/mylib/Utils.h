@@ -91,9 +91,9 @@ public:
         float total = 0.0f;
         for (size_t i = 0; i < pdf_list.size(); i++)
         {
-            total += pdf_list[i] * pdf_list[i];
+            total += ( pdf_list[i] );
         }
-        return pdf * pdf / total;
+        return pdf  / total;
     }
 
 };
