@@ -30,72 +30,72 @@ DIFFUSE MATERIAL:
 PBR MATERIAL:
 ![image](https://github.com/1393650770/CpuRayTracingRenderer/blob/main/image/result-Level-PBR.png)
 ## Feature(Already done)
+
+
 ### ① My Math Library --- TinyGlm
 ### ---Library Supported Data Types : Vec2 Vec3 Vec4 Mat4
-#### -------Vector Supported :
-##### -----------Template
-##### -----------Add / Sub / Div / Mul
-##### -----------Dot / Cross
-##### -----------Normalize / Length
+#### Vector Supported :
+##### - [x] Template
+##### - [x] Add / Sub / Div / Mul
+##### - [x] Dot / Cross
+##### - [x] Normalize / Length
 
-#### -------Matrix Supported :
-##### -----------Template
-##### -----------Add/ Sub / Div / Mul
-##### -----------Cofactor / Adjoint
-##### -----------Transpose / Inverse
-##### -----------Multiply with vector
+#### Matrix Supported :
+##### - [x] Template
+##### - [x] Add/ Sub / Div / Mul
+##### - [x] Cofactor / Adjoint
+##### - [x] Transpose / Inverse
+##### - [x] Multiply with vector
 ### ② Multithreading Acceleration Rendering
-### ---Thread Pool
-### ---Message Queue
+### - [x] Thread Pool
+### - [x] Message Queue
 ### ③ Light Transport Algorithm
-### ---Path Tracing
+### - [x] Path Tracing
 ### ④ Space Accelerating Structurer
-### ---BVH
+### - [x] BVH
 ### ⑤ Object
-### ---Sphere
-### ---Rectangle
-### ---Triangle
-### ---MeshTriangle
+### - [x] Sphere
+### - [x] Rectangle
+### - [x] Triangle
+### - [x] MeshTriangle
 ### ⑥ Material
-### ---Diffuse
-### ---Microfacet BRDF
+### - [x] Diffuse
+### - [x] Microfacet BRDF
 ### ⑦ Sampling
-### ---Cos-Weighted Importance Sampling
-### ---BRDF Importance Sampling
+### - [x] Cos-Weighted Importance Sampling
+### - [x] BRDF Importance Sampling
 ### ⑧ Light
-### ---SphereLight (PointLight)
-### ---AreaLight
+### - [x] SphereLight (PointLight)
+### - [x] AreaLight
 ### ⑨ Camera
-### ---Perspective Camera
+### - [x] Perspective Camera
 
 ### ⑩ Tool
-### ---Toon-mapping
-### ---NormalSpace To WorldSpace
-### ---Random number generator
+### - [x] Toon-mapping
+### - [x] NormalSpace To WorldSpace
+### - [x] Random number generator
 
 ## Feature(To done list)
 ### ① Light Transport Algorithm
-### ---BDPT, Bidirectional Path Tracing
-### ---MLT, Metropolis Light Transport
-### ---SPPM, Stochastic Progress Photon Mapping
+### - [] BDPT, Bidirectional Path Tracing
+### - [] MLT, Metropolis Light Transport
+### - [] SPPM, Stochastic Progress Photon Mapping
 ### ② Space Accelerating Structurer
-### ---SAH
-### ---Octree
+### - [] SAH
+### - [] Octree
 ### ③ Object(Maybe will do)
-### ---OBJLoader
-### ---Texture
+### - [] OBJLoader
+### - [] Texture
 ### ④ Material
-### ---Dielectrics
-### ---BSSRDF 
+### - [] Dielectrics
+### - [] BSSRDF 
 ### ⑤ Sampling
-### ---Importance Sampling
-### ---Multiple Importance Sampling
+### - [] Importance Sampling
+### - [] Multiple Importance Sampling
 ### ⑥ Post process
-### ---TAA
+### - [] TAA
 ### ⑦ Tool
-### ---Toon-mapping
-### ---NormalSpace To WorldSpace
-### ---Random number generator
+
 
 
 

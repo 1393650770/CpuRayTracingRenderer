@@ -94,7 +94,6 @@ int main(int argc, char* argv[])
 	//std::shared_ptr<Rectangles>  forward = std::make_shared<Rectangles>(H,D,C,G, white_diffuse);
  
 
-
 	//Sphere
 	std::shared_ptr<Sphere>  sphere = std::make_shared<Sphere>(TinyGlm::vec3<float>(-0.6f, -1.f, 5.0f), 0.5f, pbr_high_roughness_red);
 	std::shared_ptr<Sphere>  sphere1 = std::make_shared<Sphere>(TinyGlm::vec3<float>(0.6f, -1.f, 5.0f), 0.5f, pbr_low__roughness_green);
@@ -115,9 +114,9 @@ int main(int argc, char* argv[])
 	scene.AddObj(back);
 
 
-	//scene.AddObj(sphere);
-	//scene.AddObj(sphere1);
-	scene.AddObj(sphere_center); 
+	scene.AddObj(sphere);
+	scene.AddObj(sphere1);
+	//scene.AddObj(sphere_center); 
 
 	//Add Light
 	//scene.AddLight(point_light);

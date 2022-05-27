@@ -147,8 +147,9 @@ TinyGlm::vec3<float> Scene::GetColor(Ray& ray,int current_depth, int recursive_m
 			hit_color = light_sample.emition *
 				shading *
 				std::clamp(light_dir.dot(interToBvh.normal), -std::numeric_limits<float>::epsilon(), 1.0f) *
-				std::clamp(light_dir.dot(-interToLight.normal), -std::numeric_limits<float>::epsilon(), 1.0f) /
-				(pdf)/
+				std::clamp(light_dir.dot(-interToLight.normal), -std::numeric_limits<float>::epsilon(), 1.0f)*
+				Utils::get_mis_weight(pdf, pdf_list)/  //多重重要性采样
+				pdf/
 				(light_and_hitpoint_dis* light_and_hitpoint_dis);
 
 
@@ -183,8 +184,9 @@ TinyGlm::vec3<float> Scene::GetColor(Ray& ray,int current_depth, int recursive_m
 
 	TinyGlm::vec4<float> indir_color_vec4 = indir_color *
 		shading *
-		std::clamp(indir.dot(interToBvh.normal), -std::numeric_limits<float>::epsilon(), 1.0f) /
-		(indir_pdf) /
+		std::clamp(indir.dot(interToBvh.normal), -std::numeric_limits<float>::epsilon(), 1.0f) *
+		Utils::get_mis_weight(indir_pdf, pdf_list) /  //多重重要性采样
+		 indir_pdf /
 		(in_light_and_hitpoint_dis* in_light_and_hitpoint_dis);
 
 	indir_color_vec4 = TinyGlm::vec4<float>(std::max(indir_color_vec4.x,std::numeric_limits<float>::epsilon()), std::max(indir_color_vec4.y, std::numeric_limits<float>::epsilon()), std::max(indir_color_vec4.z, std::numeric_limits<float>::epsilon()));
@@ -194,6 +196,10 @@ TinyGlm::vec3<float> Scene::GetColor(Ray& ray,int current_depth, int recursive_m
 	//std::cout << "interToBvh.shader->GetPdf(indir, interToBvh.normal): " << interToBvh.shader->GetPdf(-(ray.direction), indir, interToBvh.normal) << std::endl;
 	//std::cout << "shading: " << shading.x << " " << shading.y << " " << shading.z <<  std::endl;
 	//std::cout << "indir: " << indir.x << " " << indir.y << " " << indir.z << std::endl << std::endl;
+	std::cout << indir_pdf << "  : " << pdf << std::endl ;
+	std::cout << Utils::get_mis_weight(indir_pdf, pdf_list) <<"  : " << Utils::get_mis_weight(pdf, pdf_list) << std::endl << std::endl;
+	
+	
 	hit_color += indir_color_vec4 * 0.8f;
 
 	result = TinyGlm::vec3<float>(hit_color.x, hit_color.y, hit_color.z);
