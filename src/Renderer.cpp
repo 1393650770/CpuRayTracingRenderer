@@ -42,7 +42,7 @@ void RenderFrame(std::pair<int, int> x, std::pair<int, int> y, Scene& scene, std
 	int m = 0;
 	int spp = 1;
 	float imageAspectRatio = scene.width / (float)scene.height;
-	float scale = tan(deg2rad(scene.fov * 0.5));
+	float scale = tan(deg2rad(scene.fov * 0.5f));
 	int int_X = 0, int_Y = 0;
 	for (int j = y.first; j < y.second; ++j) 
 	{

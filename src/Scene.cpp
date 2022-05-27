@@ -95,13 +95,24 @@ TinyGlm::vec3<float> Scene::GetColor(Ray& ray,int current_depth, int recursive_m
 #endif //  NormalSee == 1
 
 
-	//直接光
+	
 	TinyGlm::vec4<float> hit_color;
-
 	TinyGlm::vec3<float> light_dir;
 	Intersection interToLight;
+	std::vector<float> pdf_list;
+	float pdf=0.0f;
+
 	float light_and_hitpoint_dis = 0;
 
+	//为了计算多重重要性采样，需要先求出pdf(目前场景只有一个光源先这么写，Todo: 多光源)
+	TinyGlm::vec3<float> indir = (interToBvh.shader->GetInDirSample(ray.direction, (interToBvh.normal)));
+	Ray indir_ray(interToBvh.coords + 0.001f * interToBvh.normal.normalize(), indir.normalize());
+	Intersection interToIndir = bvh->GetIntersection(indir_ray, bvh->root);
+	float indir_pdf = interToBvh.shader->GetPdf(-(ray.direction), indir, interToBvh.normal);
+
+	pdf_list.push_back(indir_pdf);
+
+	//直接光
 	if (light_list.size() >= 1)
 	{
 		//获取灯光采样的信息
@@ -111,8 +122,11 @@ TinyGlm::vec3<float> Scene::GetColor(Ray& ray,int current_depth, int recursive_m
 		light_and_hitpoint_dis = std::max(light_dir.length(),1.0f);
 
 		light_dir = light_dir.normalize();
+
+		pdf = light_list[0]->GetPdf(-light_dir, light_and_hitpoint_dis);
 		
-		float light_pdf = light_list[0]->GetPdf(-light_dir, light_and_hitpoint_dis);
+		pdf_list.push_back(pdf);
+
 		Ray tolight_ray(interToBvh.coords + 0.001f * interToBvh.normal.normalize(), light_dir);
 
 		interToLight = bvh->GetIntersection(tolight_ray, bvh->root);
@@ -128,14 +142,13 @@ TinyGlm::vec3<float> Scene::GetColor(Ray& ray,int current_depth, int recursive_m
 		//如果打到灯光
 		if (hit_bool)
 		{
-
 			TinyGlm::vec4<float> shading = interToBvh.shader->Shading(ray.direction, light_dir, interToBvh.normal);
 
 			hit_color = light_sample.emition *
 				shading *
 				std::clamp(light_dir.dot(interToBvh.normal), -std::numeric_limits<float>::epsilon(), 1.0f) *
 				std::clamp(light_dir.dot(-interToLight.normal), -std::numeric_limits<float>::epsilon(), 1.0f) /
-				light_pdf/
+				(pdf)/
 				(light_and_hitpoint_dis* light_and_hitpoint_dis);
 
 
@@ -154,13 +167,6 @@ TinyGlm::vec3<float> Scene::GetColor(Ray& ray,int current_depth, int recursive_m
 		}
 	}
 
-
-	TinyGlm::vec3<float> indir = (interToBvh.shader->GetInDirSample(ray.direction, (interToBvh.normal)));
-
-	Ray indir_ray(interToBvh.coords + 0.001f * interToBvh.normal.normalize(), indir.normalize());
-
-	Intersection interToIndir = bvh->GetIntersection(indir_ray , bvh->root);
-	
 	//如果未打到其他物体则返回
 	if (interToIndir.hit == false)
 	{
@@ -178,7 +184,7 @@ TinyGlm::vec3<float> Scene::GetColor(Ray& ray,int current_depth, int recursive_m
 	TinyGlm::vec4<float> indir_color_vec4 = indir_color *
 		shading *
 		std::clamp(indir.dot(interToBvh.normal), -std::numeric_limits<float>::epsilon(), 1.0f) /
-		interToBvh.shader->GetPdf(-(ray.direction), indir, interToBvh.normal)/
+		(indir_pdf) /
 		(in_light_and_hitpoint_dis* in_light_and_hitpoint_dis);
 
 	indir_color_vec4 = TinyGlm::vec4<float>(std::max(indir_color_vec4.x,std::numeric_limits<float>::epsilon()), std::max(indir_color_vec4.y, std::numeric_limits<float>::epsilon()), std::max(indir_color_vec4.z, std::numeric_limits<float>::epsilon()));

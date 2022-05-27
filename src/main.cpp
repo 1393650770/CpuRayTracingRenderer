@@ -64,7 +64,7 @@ int main(int argc, char* argv[])
 	std::shared_ptr<DiffuseMaterial>  green_diffuse = std::make_shared<DiffuseMaterial>(TinyGlm::vec4<float>(0.12f, 0.45f, 0.15f), TinyGlm::vec3<float>(0.1f, 0.7f, 0.01f), 0.02f, 0.8f);
 	std::shared_ptr<DiffuseMaterial>  red_diffuse = std::make_shared<DiffuseMaterial>(TinyGlm::vec4<float>(0.65f, 0.05f, 0.05f), TinyGlm::vec3<float>(0.9f, 0.5f, 0.3f), 0.02f, 0.2f);
 
-	TinyGlm::vec4<float> lightcolor = ( TinyGlm::vec4<float>(0.747f + 0.058f, 0.747f + 0.258f, 0.747f) * 8.0f  +  TinyGlm::vec4<float>(0.740f + 0.287f, 0.740f + 0.160f, 0.740f) * 15.6f +  TinyGlm::vec4<float>(0.737f + 0.642f, 0.737f + 0.159f, 0.737f) * 18.4f);
+	TinyGlm::vec4<float> lightcolor = ( TinyGlm::vec4<float>(0.747f + 0.058f, 0.747f + 0.258f, 0.747f) *8.0f  +  TinyGlm::vec4<float>(0.740f + 0.287f, 0.740f + 0.160f, 0.740f) * 15.6f +  TinyGlm::vec4<float>(0.737f + 0.642f, 0.737f + 0.159f, 0.737f) * 18.4f);
 	std::shared_ptr<DiffuseMaterial> light = std::make_shared<DiffuseMaterial>(TinyGlm::vec4<float>(35.f, 35.f,35.f), TinyGlm::vec3<float>(0.9f, 0.5f, 0.3f), 0.02f, 0.2f, true);
 
 
@@ -74,9 +74,10 @@ int main(int argc, char* argv[])
 	std::shared_ptr<Sphere>  right = std::make_shared<Sphere>(TinyGlm::vec3<float>(1051.5f, 0.f, 0.f), 1050.f, red_diffuse);
 	std::shared_ptr<Sphere>  left = std::make_shared<Sphere>(TinyGlm::vec3<float>(-1051.5f, 0.f, 0.f), 1050.f, green_diffuse);
 	std::shared_ptr<Sphere>  forward = std::make_shared<Sphere>(TinyGlm::vec3<float>(0.f, 0.f, 1056.f), 1050.f, white_diffuse);
-	std::shared_ptr<Sphere>  up = std::make_shared<Sphere>(TinyGlm::vec3<float>(0.f, 1051.5f,0.f), 150.f, white_diffuse);
+	std::shared_ptr<Sphere>  up = std::make_shared<Sphere>(TinyGlm::vec3<float>(0.f, 1051.5f,0.f), 1050.f, white_diffuse);
 	std::shared_ptr<Sphere>  down = std::make_shared<Sphere>(TinyGlm::vec3<float>(0.f, -1051.5f, 0.f), 1050.f, white_diffuse);
 	std::shared_ptr<Sphere>  back = std::make_shared<Sphere>(TinyGlm::vec3<float>(0.f, 0.f, -1056.f), 1050.f, black_diffuse);
+
 	// Rectangles simulates the Cornell box (Todo)
 	//TinyGlm::vec3<float> A = TinyGlm::vec3<float>(-50.f, 1.5f, -50.f);
 	//TinyGlm::vec3<float> B = TinyGlm::vec3<float>(50.f, 1.5f, -50.f);
@@ -97,10 +98,10 @@ int main(int argc, char* argv[])
 	//Sphere
 	std::shared_ptr<Sphere>  sphere = std::make_shared<Sphere>(TinyGlm::vec3<float>(-0.6f, -1.f, 5.0f), 0.5f, pbr_high_roughness_red);
 	std::shared_ptr<Sphere>  sphere1 = std::make_shared<Sphere>(TinyGlm::vec3<float>(0.6f, -1.f, 5.0f), 0.5f, pbr_low__roughness_green);
-	std::shared_ptr<Sphere>  sphere_center = std::make_shared<Sphere>(TinyGlm::vec3<float>(0.0f, -1.f, 5.0f), 0.5f, pbr_high_roughness_red);
+	std::shared_ptr<Sphere>  sphere_center = std::make_shared<Sphere>(TinyGlm::vec3<float>(0.0f, -1.f, 5.0f), 0.5f, green_diffuse);
 	//Light
 	std::shared_ptr<Sphere>  point_light = std::make_shared<Sphere>(TinyGlm::vec3<float>(0.f, 0.5f, 5.f),0.2f, light);
-	std::shared_ptr<Rectangles>  rectangle_light = std::make_shared<Rectangles>(TinyGlm::vec3<float>(-0.5f, 1.5f, 4.25f), TinyGlm::vec3<float>(0.5f, 1.5f, 4.25f), TinyGlm::vec3<float>(0.5f, 1.5f, 4.75f), TinyGlm::vec3<float>(-0.5f, 1.5f, 4.75f), light);
+	std::shared_ptr<Rectangles>  rectangle_light = std::make_shared<Rectangles>(TinyGlm::vec3<float>(-0.5f, 1.49999f, 4.25f), TinyGlm::vec3<float>(0.5f, 1.49999f, 4.25f), TinyGlm::vec3<float>(0.5f, 1.49999f, 4.75f), TinyGlm::vec3<float>(-0.5f, 1.49f, 4.75f), light);
 
 	//Init the Thread Pool
 	InitThreadPool();
@@ -114,9 +115,10 @@ int main(int argc, char* argv[])
 	scene.AddObj(back);
 
 
-	scene.AddObj(sphere);
-	scene.AddObj(sphere1);
-	//scene.AddObj(sphere_center); 
+	//scene.AddObj(sphere);
+	//scene.AddObj(sphere1);
+	scene.AddObj(sphere_center); 
+
 	//Add Light
 	//scene.AddLight(point_light);
 	scene.AddLight(rectangle_light);

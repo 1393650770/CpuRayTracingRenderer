@@ -85,6 +85,16 @@ public:
         return result;
     }
 
+    static float get_mis_weight(float pdf,const std::vector<float>& pdf_list)
+    {
+        float result = 0.0f;
+        float total = 0.0f;
+        for (size_t i = 0; i < pdf_list.size(); i++)
+        {
+            total += pdf_list[i] * pdf_list[i];
+        }
+        return pdf * pdf / total;
+    }
 
 };
 #endif //_UTILS_
