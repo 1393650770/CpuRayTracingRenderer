@@ -64,6 +64,7 @@ PBR MATERIAL:
 ### ⑦ Sampling
  - [x] Cos-Weighted Importance Sampling
  - [x] BRDF Importance Sampling
+ - [x] Multiple Importance Sampling
 ### ⑧ Light
  - [x] SphereLight (PointLight)
  - [x] AreaLight
@@ -91,7 +92,6 @@ PBR MATERIAL:
  - [ ] BSSRDF 
 ### ⑤ Sampling
  - [ ] Importance Sampling
- - [ ] Multiple Importance Sampling
 ### ⑥ Post process
  - [ ] TAA
 ### ⑦ Tool
