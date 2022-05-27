@@ -35,7 +35,7 @@ PBR MATERIAL:
 ### ① My Math Library --- TinyGlm
 ### ---Library Supported Data Types : Vec2 Vec3 Vec4 Mat4
 #### Vector Supported :
-##### - [x] Template
+ - [x] Template
 ##### - [x] Add / Sub / Div / Mul
 ##### - [x] Dot / Cross
 ##### - [x] Normalize / Length
