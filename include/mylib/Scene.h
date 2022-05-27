@@ -41,6 +41,6 @@ public:
 	Intersection GetIntersect(const Ray& ray) const;
 
 	//»ñÈ¡ÑÕÉ«
-	TinyGlm::vec3<float> GetColor(Ray& ray, int mis_weight, int current_depth=0,int recursive_max_depth=2);
+	TinyGlm::vec3<float> GetColor(Ray& ray,int current_depth=0,int recursive_max_depth=2);
 };
 #endif //_SCENE_

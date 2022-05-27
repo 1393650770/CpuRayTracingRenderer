@@ -64,7 +64,7 @@ Intersection Scene::GetIntersect(const Ray& ray) const
 }
 
 
-TinyGlm::vec3<float> Scene::GetColor(Ray& ray, int mis_weight,int current_depth, int recursive_max_depth)
+TinyGlm::vec3<float> Scene::GetColor(Ray& ray,int current_depth, int recursive_max_depth)
 {
 
 	//达到最大递归深度
@@ -86,7 +86,7 @@ TinyGlm::vec3<float> Scene::GetColor(Ray& ray, int mis_weight,int current_depth,
 	{
 		result = TinyGlm::vec3<float>(interToBvh.shader->emittion_color.x, interToBvh.shader->emittion_color.y, interToBvh.shader->emittion_color.z);
 		Utils::toon_mapping(result);
-		return  result * mis_weight;
+		return  result;
 	}
 
 #if  NormalSee == 1
@@ -178,13 +178,14 @@ TinyGlm::vec3<float> Scene::GetColor(Ray& ray, int mis_weight,int current_depth,
 
 	float in_light_and_hitpoint_dis = std::max((interToIndir.coords - interToBvh.coords).length(), 1.0f);
 
-	TinyGlm::vec3<float> indir_color = GetColor(indir_ray, Utils::get_mis_weight(indir_pdf, pdf_list),(current_depth + 1), recursive_max_depth) ;
+	TinyGlm::vec3<float> indir_color = GetColor(indir_ray, (current_depth + 1), recursive_max_depth) ;
 
 	TinyGlm::vec4<float> shading = interToBvh.shader->Shading(ray.direction , indir , interToBvh.normal);
 
 	TinyGlm::vec4<float> indir_color_vec4 = indir_color *
 		shading *
-		std::clamp(indir.dot(interToBvh.normal), -std::numeric_limits<float>::epsilon(), 1.0f) / 
+		std::clamp(indir.dot(interToBvh.normal), -std::numeric_limits<float>::epsilon(), 1.0f) *
+		Utils::get_mis_weight(indir_pdf, pdf_list) /  //多重重要性采样
 		 indir_pdf /
 		(in_light_and_hitpoint_dis* in_light_and_hitpoint_dis);
 
@@ -195,9 +196,8 @@ TinyGlm::vec3<float> Scene::GetColor(Ray& ray, int mis_weight,int current_depth,
 	//std::cout << "interToBvh.shader->GetPdf(indir, interToBvh.normal): " << interToBvh.shader->GetPdf(-(ray.direction), indir, interToBvh.normal) << std::endl;
 	//std::cout << "shading: " << shading.x << " " << shading.y << " " << shading.z <<  std::endl;
 	//std::cout << "indir: " << indir.x << " " << indir.y << " " << indir.z << std::endl << std::endl;
-
-	//std::cout << indir_pdf << "  : " << pdf << std::endl ;
-	//std::cout << Utils::get_mis_weight(indir_pdf, pdf_list) <<"  : " << Utils::get_mis_weight(pdf, pdf_list) << std::endl << std::endl;
+	std::cout << indir_pdf << "  : " << pdf << std::endl ;
+	std::cout << Utils::get_mis_weight(indir_pdf, pdf_list) <<"  : " << Utils::get_mis_weight(pdf, pdf_list) << std::endl << std::endl;
 	
 	
 	hit_color += indir_color_vec4 * 0.8f;
