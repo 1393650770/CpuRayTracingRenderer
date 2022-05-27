@@ -77,23 +77,23 @@ PBR MATERIAL:
 
 ## Feature(To done list)
 ### ① Light Transport Algorithm
- - [] BDPT, Bidirectional Path Tracing
- - [] MLT, Metropolis Light Transport
- - [] SPPM, Stochastic Progress Photon Mapping
+ - [ ] BDPT, Bidirectional Path Tracing
+ - [ ] MLT, Metropolis Light Transport
+ - [ ] SPPM, Stochastic Progress Photon Mapping
 ### ② Space Accelerating Structurer
- - [] SAH
- - [] Octree
+ - [ ] SAH
+ - [ ] Octree
 ### ③ Object(Maybe will do)
- - [] OBJLoader
- - [] Texture
+ - [ ] OBJLoader
+ - [ ] Texture
 ### ④ Material
- - [] Dielectrics
- - [] BSSRDF 
+ - [ ] Dielectrics
+ - [ ] BSSRDF 
 ### ⑤ Sampling
- - [] Importance Sampling
- - [] Multiple Importance Sampling
+ - [ ] Importance Sampling
+ - [ ] Multiple Importance Sampling
 ### ⑥ Post process
- - [] TAA
+ - [ ] TAA
 ### ⑦ Tool
 
 
