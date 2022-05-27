@@ -161,8 +161,8 @@ TinyGlm::vec3<float> Scene::GetColor(Ray& ray,int current_depth, int recursive_m
 
 	Intersection interToIndir = bvh->GetIntersection(indir_ray , bvh->root);
 	
-	//如果未打到其他物体或者打到光源则返回
-	if (interToIndir.hit == false || interToIndir.shader->is_emit_light)
+	//如果未打到其他物体则返回
+	if (interToIndir.hit == false )
 	{
 		result = TinyGlm::vec3<float>(hit_color.x, hit_color.y, hit_color.z);
 
