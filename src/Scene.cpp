@@ -101,7 +101,7 @@ TinyGlm::vec3<float> Scene::GetColor(Ray& ray, int mis_weight,int current_depth,
 	Intersection interToLight;
 	std::vector<float> pdf_list;
 	float pdf=0.0f;
-
+	float light_and_hitpoint_dis_noneclamp = 0;
 	float light_and_hitpoint_dis = 0;
 
 	//为了计算多重重要性采样，需要先求出pdf(目前场景只有一个光源先这么写，Todo: 多光源)
@@ -119,13 +119,13 @@ TinyGlm::vec3<float> Scene::GetColor(Ray& ray, int mis_weight,int current_depth,
 		Intersection light_sample= light_list[0]->GetSampleInfo();
 
 		light_dir = light_sample.coords - interToBvh.coords;
-		light_and_hitpoint_dis = std::max(light_dir.length(),1.0f);
+		light_and_hitpoint_dis_noneclamp = light_dir.length();
+		light_and_hitpoint_dis = std::max(light_and_hitpoint_dis_noneclamp, 1.0f);
 
 		light_dir = light_dir.normalize();
 
 		pdf = light_list[0]->GetPdf(-light_dir, light_and_hitpoint_dis);
 		
-		pdf_list.push_back(pdf);
 
 		Ray tolight_ray(interToBvh.coords + 0.001f * interToBvh.normal.normalize(), light_dir);
 
@@ -143,12 +143,17 @@ TinyGlm::vec3<float> Scene::GetColor(Ray& ray, int mis_weight,int current_depth,
 		if (hit_bool)
 		{
 			TinyGlm::vec4<float> shading = interToBvh.shader->Shading(ray.direction, light_dir, interToBvh.normal);
+			float light_n_dot_l = std::clamp(light_dir.dot(-interToLight.normal), -std::numeric_limits<float>::epsilon(), 1.0f);
 
+			pdf_list.push_back(pdf / light_n_dot_l);
+
+			float w_ems= Utils::get_mis_weight(pdf, pdf_list);
+				
 			hit_color = light_sample.emition *
 				shading *
 				std::clamp(light_dir.dot(interToBvh.normal), -std::numeric_limits<float>::epsilon(), 1.0f) *
-				std::clamp(light_dir.dot(-interToLight.normal), -std::numeric_limits<float>::epsilon(), 1.0f)* 
-				Utils::get_mis_weight(pdf, pdf_list) / 
+				std::clamp(light_dir.dot(-interToLight.normal), -std::numeric_limits<float>::epsilon(), 1.0f)/
+				//w_ems /  //(这个Utils::get_mis_weight(pdf, pdf_list)可能会很小然后让场景有黑点qwq)
 				(pdf)/  
 				(light_and_hitpoint_dis* light_and_hitpoint_dis);
 
@@ -156,13 +161,6 @@ TinyGlm::vec3<float> Scene::GetColor(Ray& ray, int mis_weight,int current_depth,
 			result = TinyGlm::vec3<float>(hit_color.x, hit_color.y, hit_color.z);
 			Utils::toon_mapping(result);
 			hit_color = TinyGlm::vec4<float>(result.x, result.y, result.z, hit_color.w);
-
-			//std::cout << "hit_color: " << hit_color.x << " " << hit_color.y << " " << hit_color.z << std::endl;
-			//std::cout << "interToLight.normal: " << interToLight.normal.x << " " << interToLight.normal.y << " " << interToLight.normal.z << std::endl;
-			//std::cout << "light_sample.emition: " << light_sample.emition.x << " " << light_sample.emition.y << " " << light_sample.emition.z << std::endl;
-			//std::cout << "light_dir.dot(interToBvh.normal): " << light_dir.dot(interToBvh.normal) << std::endl;
-			//std::cout << "light_dir.dot(interToLight.normal): " << light_dir.dot(-interToLight.normal) << std::endl;
-			//std::cout << "shading: " << shading.x << " " << shading.y << " " << shading.z << std::endl << std::endl;
 
 			
 		}
@@ -190,15 +188,6 @@ TinyGlm::vec3<float> Scene::GetColor(Ray& ray, int mis_weight,int current_depth,
 
 	indir_color_vec4 = TinyGlm::vec4<float>(std::max(indir_color_vec4.x,std::numeric_limits<float>::epsilon()), std::max(indir_color_vec4.y, std::numeric_limits<float>::epsilon()), std::max(indir_color_vec4.z, std::numeric_limits<float>::epsilon()));
 
-	//std::cout << "indir_color_vec4: " << indir_color_vec4.x << " " << indir_color_vec4.y << " " << indir_color_vec4.z << std::endl;
-	//std::cout << "indir.dot(interToBvh.normal): " << indir.dot(interToBvh.normal) << std::endl;
-	//std::cout << "interToBvh.shader->GetPdf(indir, interToBvh.normal): " << interToBvh.shader->GetPdf(-(ray.direction), indir, interToBvh.normal) << std::endl;
-	//std::cout << "shading: " << shading.x << " " << shading.y << " " << shading.z <<  std::endl;
-	//std::cout << "indir: " << indir.x << " " << indir.y << " " << indir.z << std::endl << std::endl;
-
-	//std::cout << indir_pdf << "  : " << pdf << std::endl ;
-	//std::cout << Utils::get_mis_weight(indir_pdf, pdf_list) <<"  : " << Utils::get_mis_weight(pdf, pdf_list) << std::endl << std::endl;
-	
 	
 	hit_color += indir_color_vec4 * 0.8f;
 

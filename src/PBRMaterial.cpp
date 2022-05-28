@@ -191,8 +191,6 @@ float PBRMaterial::GetPdf(const TinyGlm::vec3<float>& income_view, const TinyGlm
         float diffuse = (1.0f - ks) * l_dot_n / PI;
 
         float result = glossy + diffuse;
-        //std::cout <<" l_dot_h "<< l_dot_h << std::endl;
-        //std::cout << " n_dot_h " << n_dot_h << std::endl;
 
         return (result);
     }
