@@ -157,6 +157,7 @@ namespace TinyGlm
 		{
 			return vec3<T>(a.x * b.x, a.y * b.y, a.z * b.z);
 		};
+
 		vec3<T> operator *(T& b) const;
 		vec3<T> operator *(T& b) ;
 		vec3<T> operator *(const T& b) const;

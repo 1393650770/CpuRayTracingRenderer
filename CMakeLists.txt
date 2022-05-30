@@ -32,6 +32,7 @@ set(STATIC_LIB_SOURCES
     src/OBJLoader.cpp
     src/IShader.cpp
     src/PBRMaterial.cpp
+    src/BlendPostProcess.cpp
     src/DielectricMaterial.cpp
     src/DiffuseMaterial.cpp
 )

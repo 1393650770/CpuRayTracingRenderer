@@ -6,6 +6,7 @@
 
 #include "TinyGlm.h"
 #include <random>
+#include <algorithm>
 
 static std::random_device dev;
 static std::mt19937 random_seed(dev());

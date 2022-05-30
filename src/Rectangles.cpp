@@ -27,9 +27,9 @@ bool Rectangles::CheckIsIntersect(const Ray& ray)
 	}
 
 	TinyGlm::vec3<float> point = ray.origin + ray.direction * t;
-
-	TinyGlm::vec3<float> max_vec = TinyGlm::vec3<float>::max(TinyGlm::vec3<float>::max(A, B), TinyGlm::vec3<float>::max(C, D))+0.03f;
-	TinyGlm::vec3<float> min_vec = TinyGlm::vec3<float>::min(TinyGlm::vec3<float>::min(A, B), TinyGlm::vec3<float>::min(C, D))-0.03f;
+	TinyGlm::vec3 < float> bias(0.03f);
+	TinyGlm::vec3<float> max_vec = TinyGlm::vec3<float>::max(TinyGlm::vec3<float>::max(A, B), TinyGlm::vec3<float>::max(C, D)) + bias;
+	TinyGlm::vec3<float> min_vec = TinyGlm::vec3<float>::min(TinyGlm::vec3<float>::min(A, B), TinyGlm::vec3<float>::min(C, D)) -bias;
 
 	//如果不在矩形内
 	if (min_vec.x - point.x > -std::numeric_limits<float>::epsilon() || point.x - max_vec.x > -std::numeric_limits<float>::epsilon() ||
@@ -54,9 +54,9 @@ Intersection Rectangles::GetIntersection(Ray& ray)
 	}
 
 	TinyGlm::vec3<float> point = ray.origin + ray.direction * t;
-
-	TinyGlm::vec3<float> max_vec = TinyGlm::vec3<float>::max(TinyGlm::vec3<float>::max(A, B), TinyGlm::vec3<float>::max(C, D)) + 0.03f;
-	TinyGlm::vec3<float> min_vec = TinyGlm::vec3<float>::min(TinyGlm::vec3<float>::min(A, B), TinyGlm::vec3<float>::min(C, D)) - 0.03f;
+	TinyGlm::vec3 < float> bias(0.03f);
+	TinyGlm::vec3<float> max_vec = TinyGlm::vec3<float>::max(TinyGlm::vec3<float>::max(A, B), TinyGlm::vec3<float>::max(C, D)) + bias;
+	TinyGlm::vec3<float> min_vec = TinyGlm::vec3<float>::min(TinyGlm::vec3<float>::min(A, B), TinyGlm::vec3<float>::min(C, D)) - bias;
 
 	//如果不在矩形内
 	if (min_vec.x - point.x > -std::numeric_limits<float>::epsilon() || point.x - max_vec.x > -std::numeric_limits<float>::epsilon() ||

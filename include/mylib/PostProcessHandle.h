@@ -9,10 +9,13 @@ class IPostProcess;
 class PostProcessHandle
 {
 private:
-	std::vector<IPostProcess*> postprocess_list;
+	std::vector<std::shared_ptr<IPostProcess>> postprocess_list;
 public:
-	void AddPostProcess(IPostProcess* postprocess);
-	void Execute(std::vector<TinyGlm::vec3 <float>>& framebuffer);
+	PostProcessHandle() {};
+	virtual ~PostProcessHandle() {};
+
+	void AddPostProcess(std::shared_ptr<IPostProcess> postprocess);
+	void Execute(std::vector< std::vector<TinyGlm::vec3 <float>>>& framebuffer_list);
 };
 
 #endif //_IPOSTPROCESSHANDLE_

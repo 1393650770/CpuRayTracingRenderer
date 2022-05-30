@@ -6,6 +6,7 @@
 #include "Scene.h"
 #include "SDLWindows.h"
 #include "TinyGlm.h"
+#include "Utils.h"
 #include "PostProcessHandle.h"
 #include <thread>
 #include <queue>
@@ -15,6 +16,8 @@
 #include <cmath>
 #include <iostream>
 #include <fstream>
+
+#define MAXSPP 8
 
 float deg2rad(const float& deg) { return deg * 3.1415926f / 180.0f; }
 
@@ -40,7 +43,7 @@ void RenderFrame(std::pair<int, int> x, std::pair<int, int> y, Scene& scene, std
 {
 	
 	int m = 0;
-	int spp = 1;
+
 	float imageAspectRatio = scene.width / (float)scene.height;
 	float scale = tan(deg2rad(scene.fov * 0.5f));
 	int int_X = 0, int_Y = 0;
@@ -48,14 +51,14 @@ void RenderFrame(std::pair<int, int> x, std::pair<int, int> y, Scene& scene, std
 	{
 		m = j * scene.width + x.first;
 		for (int i = x.first; i < x.second; ++i) 
-		{
-			float dir_x = (2 * (i + 0.5f) / (float)scene.width - 1) * imageAspectRatio * scale;
-			float dir_y = (1 - 2 * (j + 0.5f) / (float)scene.height) * scale;
-			
-			TinyGlm::vec3 < float> dir = TinyGlm::vec3 < float>( dir_x, dir_y, 1).normalize();
-
-			for (int k = 0; k < spp; k++) 
+		{			
+			for (int k = 0; k < MAXSPP; k++)
 			{
+				float r1 = Utils::get_random_float() - 0.5f,r2= Utils::get_random_float() - 0.5f;
+				float dir_x = (2.f * (i + 0.5f+ r1) / (float)scene.width - 1.0f) * imageAspectRatio * scale;
+				float dir_y = (1.0f - 2.f * (j + 0.5f+r2) / (float)scene.height) * scale;
+			
+				TinyGlm::vec3 < float> dir = TinyGlm::vec3 < float>( dir_x, dir_y, 1).normalize();
 				Ray ray(scene.eye_pos, dir);
 				framebuffer[m] =scene.GetColor(ray,1.0f,0,5);
 			}			
@@ -89,6 +92,7 @@ void Renderer::DrawScreenPixel(std::vector<TinyGlm::vec3<float>>& framebuffer)
 	{
 		for (int i = 0; i < scene_width; ++i)
 		{
+
 			sdl_windows->DrawPixel(i, j, TinyGlm::vec4<float>(framebuffer[m].x, framebuffer[m].y, framebuffer[m].z));
 			m++;
 		}
@@ -123,7 +127,10 @@ void Renderer::WriteToPPM(std::vector<TinyGlm::vec3<float>>& framebuffer)
 
 Renderer::Renderer(int _scene_width, int _scene_height):scene_width(_scene_width), scene_height(_scene_height)
 {
-	framebuff_list.fill(std::vector<TinyGlm::vec3<float>>(scene_height * scene_width, TinyGlm::vec3<float>(0.0f, 0.0f, 0.0f)));
+	for (size_t i = 0; i < MAXSPP; i++)
+	{
+		framebuff_list.emplace_back(std::vector<TinyGlm::vec3<float>>(scene_height * scene_width, TinyGlm::vec3<float>(0.0f, 0.0f, 0.0f)));
+	}
 
 	SYSTEM_INFO sysInfo;
 	GetSystemInfo(&sysInfo);
@@ -162,27 +169,32 @@ Renderer::~Renderer()
 }
 
 
-void Renderer::tick(Scene& scene,bool use_postprocess, PostProcessHandle* postpocess_handle)
+void Renderer::tick(Scene& scene,bool use_postprocess, std::shared_ptr<PostProcessHandle> postpocess_handle)
 {
 	auto start = std::chrono::system_clock::now();
 	//Draw buffer in one frame 
-	DrawBuffer(scene, framebuff_list[0]);
+	DrawBuffer(scene, framebuff_list[current_frame_num]);
 
 	//Use PostProcess
 	if (use_postprocess)
 	{
-		std::copy(framebuff_list[0].begin(), framebuff_list[0].end(), framebuff_list[1].begin());
-		postpocess_handle->Execute(framebuff_list[1]);
-		DrawScreenPixel(framebuff_list[1]);
+		postpocess_handle->Execute(framebuff_list);
+		DrawScreenPixel(framebuff_list[framebuff_list.size()-1]);
 	}
 	else
 	{
-		DrawScreenPixel(framebuff_list[0]);
+		DrawScreenPixel(framebuff_list[current_frame_num]);
 	}
 	sdl_windows->Refresh();
 
+	current_frame_num++;
+	if (current_frame_num >= MAXSPP)
+	{
+		current_frame_num = 0;
+	}
+
 	auto stop = std::chrono::system_clock::now();
-	std::cout << "FPS: " << int(1.0f/(float(std::chrono::duration_cast<std::chrono::milliseconds>(stop - start).count())/1000.0f)) << "\n";
+	std::cout << "FPS: " << int(1.0f / (float(std::chrono::duration_cast<std::chrono::milliseconds>(stop - start).count()) / 1000.0f)) << "\n";
 	std::cout << "          : " << std::chrono::duration_cast<std::chrono::milliseconds>(stop - start).count() << " milliseconds\n";
 }
 

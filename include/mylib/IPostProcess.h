@@ -9,7 +9,7 @@ class IPostProcess
 {
 private:
 public:
-	virtual void ExecutePostProcess(std::vector<TinyGlm::vec3 <float>>& framebuffer)= 0;
+	virtual void ExecutePostProcess(std::vector< std::vector<TinyGlm::vec3 <float>>>& framebuffer)=0;
 };
 
 #endif //_IPOSTPROCESS_

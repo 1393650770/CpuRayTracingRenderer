@@ -3,7 +3,7 @@
 #define _RENDER_
 #include <vector>
 #include <array>
-
+#include<memory>
 namespace TinyGlm
 {
 	template<typename T>
@@ -25,8 +25,9 @@ private:
 	std::vector<std::pair<std::pair<int ,int >, std::pair<int,int>> > scene_tile;
 
 	SDLWindows* sdl_windows;
-	std::array<std::vector<TinyGlm::vec3<float>>, 3> framebuff_list;
+	std::vector<std::vector<TinyGlm::vec3<float>>> framebuff_list;
 
+	int current_frame_num = 0;
 	//Draw buffer in one frame 
 	void DrawBuffer(Scene& scene, std::vector<TinyGlm::vec3<float>>& framebuffer);
 
@@ -40,7 +41,7 @@ public:
 
 	Renderer(int scene_width,int scene_height);
 	virtual ~Renderer();
-	void tick( Scene& scene,bool use_postprocess=false, PostProcessHandle* postpocess_handle=nullptr);
+	void tick( Scene& scene,bool use_postprocess=false, std::shared_ptr<PostProcessHandle> postpocess_handle=nullptr);
 
 
 };

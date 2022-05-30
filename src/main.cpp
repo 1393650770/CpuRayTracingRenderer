@@ -10,6 +10,8 @@
 #include"PBRMaterial.h"
 #include"DiffuseMaterial.h"
 #include"InputHandle.h"
+#include"BlendPostProcess.h"
+#include "PostProcessHandle.h"
 #include"Renderer.h"
 #include"PublicSingleton.h"
 #include "Utils.h"
@@ -39,6 +41,11 @@ int main(int argc, char* argv[])
 
 	//-----------------Controller£¨·ÏÆú£©-----------------
 	InputHandle input;
+
+	//-----------------PostProcess-----------------
+	std::shared_ptr<PostProcessHandle> postpocess_handle = std::make_shared<PostProcessHandle>();
+	std::shared_ptr<BlendPostProcess> blend_postpocess = std::make_shared<BlendPostProcess>();
+
 
 	// Cornell Box Point
 	//       D__________C
@@ -122,15 +129,16 @@ int main(int argc, char* argv[])
 	//scene.AddLight(point_light);
 	scene.AddLight(rectangle_light);
 
-
 	scene.BuildBVH();
+
+	postpocess_handle->AddPostProcess(blend_postpocess);
 
 
 	while (input.is_runing)
 	{
 		input.ListenInput();
 
-		render.tick(scene);
+		render.tick(scene,false, postpocess_handle);
 	}
 	
 	//Wait and close the Thread Pool
