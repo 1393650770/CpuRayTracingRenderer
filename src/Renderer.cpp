@@ -17,7 +17,7 @@
 #include <iostream>
 #include <fstream>
 
-#define MAXSPP 8
+#define MAXSPP 1
 
 float deg2rad(const float& deg) { return deg * 3.1415926f / 180.0f; }
 
